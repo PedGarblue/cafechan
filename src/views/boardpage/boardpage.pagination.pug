@@ -1,0 +1,22 @@
+div.numeros
+    if page.actual <= 1
+        | &lt;&lt;&nbsp;
+    else
+        - let prev = (page.actual === 0)? page.actual - 1:'';
+        a.page-nav.page-nav-previous(href=`/${board.name}/${prev}`)
+            | &lt;&lt;
+
+    - let n = 1;
+    while n <= page.totalpages
+        if n === page.actual
+            span.numpage= n
+        else
+            a(href=`/${board.name}/${n}`)
+                span.numpage= n
+        - n++;
+
+    if page.actual >= page.totalpages
+        | &nbsp;&gt;&gt;
+    else
+        a.page-nav.page-nav-next(href=`/${board.name}/${page.actual + 1}`)
+            | &gt;&gt;

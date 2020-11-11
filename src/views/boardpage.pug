@@ -1,0 +1,10 @@
+extends layouts/mainpage.layout.pug
+
+block header 
+  include boardpage/boardpage.header.pug
+block contents
+  div#contents
+    each thread in threads
+      include layouts/thread.pug
+block footer
+  include boardpage/boardpage.footer.pug

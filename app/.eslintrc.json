@@ -1,0 +1,54 @@
+{
+  "env": {
+    "browser": true
+  },
+  "extends": [
+    "airbnb-base",
+    "plugin:vue/recommended",
+    "prettier/vue",
+    "plugin:prettier/recommended",
+    "plugin:jest/recommended",
+    "plugin:security/recommended"
+  ],
+  "plugins": ["import", "prettier", "jest", "security", "vue"],
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "parser": "babel-eslint",
+    "sourceType": "module"
+  },
+  "rules": {
+    "func-names": "off",
+    "no-underscore-dangle": "off",
+    "consistent-return": "off",
+    "jest/expect-expect": "off",
+    "security/detect-object-injection": "off",
+    "security/detect-non-literal-fs-filename": "off",
+    "no-shadow": "off",
+    "no-console": "off",
+    "vue/max-attributes-per-line": ["warn",{
+        "singleline": 7,
+        "multiline": {
+          "max": 1
+        }
+      }
+    ],
+    "import/extensions": ["error", "always", {
+      "js": "never",
+      "vue": "never"
+    }]
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["@", "./app"]
+        ],
+        "extensions": [
+          ".js",
+          ".vue"
+        ]
+      }
+    }
+  }
+}

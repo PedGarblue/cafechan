@@ -1,0 +1,26 @@
+{
+  "boards": {
+    "maxpages": 7,
+    "maxreplies": 200,
+    "postsperpage": 5,
+    "sections": ["regional", "ocio", "intereses"],
+    "anonymous":{
+      "forced": true,
+      "default": "Anonymous"
+    }
+  },
+  "posting":{
+    "name":{
+      "maxChars": 30
+    },
+    "title":{
+      "maxChars": 80
+    },
+    "message":{
+      "maxChars": 8000
+    }
+  },
+  "dirs":{
+    "boardnames": "/tablones.json"
+  }
+}

@@ -1,0 +1,52 @@
+<template>
+  <div class="navbar">
+    <div class="navbar-logo">
+      <div class="navbar-icon" />
+      <span class="navbar-title">Cacochan Panel</span>
+    </div>
+
+    <div v-if="isAuthenticated" class="navbar-user">
+      <div v-if="isProfileLoaded" class="navbar-user">
+        <div class="nav-link">
+          <router-link to="/">
+            Inicio
+          </router-link>
+        </div>
+        <div class="navbar-username">
+          <span class="username"> {{ profile.name }}, </span>
+          <span class="userrole">
+            {{ profile.role }}
+          </span>
+        </div>
+        <UserMenu />
+      </div>
+      <div v-else class="navbar-user">
+        <b>[...]</b>
+      </div>
+    </div>
+    <div v-else class="nav-link">
+      <router-link to="/login">
+        Ingresar
+      </router-link>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapState } from 'vuex';
+import UserMenu from './user-menu';
+
+export default {
+  components: {
+    UserMenu,
+  },
+  computed: {
+    ...mapState({
+      profile: state => state.user.profile,
+    }),
+    ...mapGetters(['isAuthenticated', 'isProfileLoaded']),
+  },
+};
+</script>
+
+<style scoped></style>

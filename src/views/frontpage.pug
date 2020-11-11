@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Cacochan, tablón de imágenes (imageboard) en español
+        link(rel="stylesheet", href="/css/hispachan.css")
+        link(rel="stylesheet", href="/css/site_hispachan.css")
+    body
+        div.logo-container
+            img.logo(src="/img/hispachan.png", alt="alt")
+        div.boards-head
+            | Cacochan es un tablón de imágenes (también llamado imageboard o chan) en español donde cualquiera puede escribir mensajes y compartir imágenes. 
+            | <br>Está especialmente dedicado a toda la comunidad hispanohablante de internet y no es necesario estar registrado para participar.
+            | <br>¡Lee las reglas, elige los tablones que más te interesen y participa!
+        div.boards-body
+            div.info
+                div.sub-title 
+                    b INFORMACION
+                a.board-link(href="/reglas") • Info/Reglas
+                a.board-link(href="/contacto") • Contacto
+            div.sections
+                each section in sections
+                    div.section
+                        div.sub-title
+                            b= section.name
+                        each board in section.boards
+                            div.board
+                                if board.flag
+                                    img(src=`/assets/countryballs/${board.flag}`, alt=`/${board.name}/`)
+                                    | &nbsp;
+                                a(href=`/${board.name}/`).board-desc= `${board.flag?'':'•'} ${board.desc}`
+                                span.board-name= ` /${board.name}/`
+        div.boards-footer
+            | Si eres menor de 18 años, abandona Cacochan. Todas las marcas y copyrights en esta página son propiedad de sus respectivos autores. Las opiniones publicadas en Cacochan no tienen por qué reflejar las opiniones de la administración. Cacochan está dirigido a personas habituadas al humor y la ironía. Nada de lo escrito en este sitio debe ser tomado en serio.
+        div.boards-copyright
+            a(href="/") Inicio
+            |  &nbsp;|&nbsp;
+            a(href="/reglas") Información
+            |  &nbsp;|&nbsp;
+            a(href="/contacto") Contacto
+            br
+            a(href="/") Cacochan
+            | &nbsp;&copy; 2020.
