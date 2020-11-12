@@ -2,7 +2,9 @@ const dotenv = require('dotenv');
 const path = require('path');
 const Joi = require('@hapi/joi');
 
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+if (process.env.HEROKU !== 'TRUE') {
+  dotenv.config({ path: path.join(__dirname, '../../.env') });
+}
 
 const envVarsSchema = Joi.object()
   .keys({
