@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+html(lang=es)
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width-device-width, initial-scale=1.0")
+    title Cacochan Panel
+    link(rel="stylesheet", href="/css/normalize.css")
+    link(rel="stylesheet", href="/css/main.panel.css")
+  body
+    div#panelapp
+      staff-panel
+    script(src=`/bundles/panel.bundle${env === 'development'?'.dev':''}.js`)

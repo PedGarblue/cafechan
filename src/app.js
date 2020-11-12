@@ -20,6 +20,9 @@ const AppError = require('./utils/AppError');
 
 const app = express();
 
+// express global variables
+app.locals.env = config.env;
+
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);

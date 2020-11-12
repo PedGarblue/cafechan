@@ -14,5 +14,6 @@ yarn-error.log
 # Code coverage
 coverage
 
-# frontend bundles
-public/bundles/
+# hide Dev frontend Builds
+/public/bundles/panel.bundle.dev.js
+/public/bundles/chan.bundle.dev.js
