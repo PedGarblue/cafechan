@@ -1,19 +1,12 @@
 <template>
-  <Page>
-    <div class="page-container">
-      <div class="page-header">
-        <h2 class="page-title">Posts Recientes</h2>
-      </div>
-      <div class="page-contents">
-        <div class="table-options">
-          <button class="update-table" @click="updatePosts">[Actualizar]</button>
-        </div>
-        <div class="posts-container">
-          <div v-for="post in posts" :key="`${post.id}`">
-            <Reply v-if="post.kind === 'Reply'" :data="post" :remove-post-function="removePost"></Reply>
-            <Thread v-else :data="post" :remove-post-function="removePost"></Thread>
-          </div>
-        </div>
+  <Page title="Recent Posts">
+    <div class="table-options">
+      <button class="update-table" @click="updatePosts">[Actualizar]</button>
+    </div>
+    <div class="posts-container">
+      <div v-for="post in posts" :key="`${post.id}`">
+        <Reply v-if="post.kind === 'Reply'" :data="post" :remove-post-function="removePost"></Reply>
+        <Thread v-else :data="post" :remove-post-function="removePost"></Thread>
       </div>
     </div>
   </Page>
@@ -22,7 +15,7 @@
 <script>
 import { getPosts, removePost } from '@/requests/post';
 import { mapGetters } from 'vuex';
-import Page from '../page';
+import Page from '../lib/page';
 import Reply from '../lib/reply';
 import Thread from '../lib/thread';
 
