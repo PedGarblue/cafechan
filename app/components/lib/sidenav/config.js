@@ -1,4 +1,4 @@
-import Roles from '../../config/roles';
+import Roles from '../../../config/roles';
 
 const sections = () => {
   return [
