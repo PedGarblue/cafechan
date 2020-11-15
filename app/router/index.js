@@ -5,7 +5,7 @@ import Roles from '../config/roles';
 import Login from '../components/login';
 import Home from '../components/home';
 import PageNotFound from '../components/lib/404';
-import Posts from '../components/recentPosts';
+import Posts from '../components/posts';
 import Staff from '../components/staff';
 import StaffList from '../components/staff/staff-list';
 import StaffAdd from '../components/staff/staff-add';

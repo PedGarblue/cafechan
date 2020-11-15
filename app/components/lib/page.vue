@@ -17,7 +17,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import SideBar from '../sidenav';
+import SideBar from './sidenav';
 
 export default {
   components: {

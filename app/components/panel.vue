@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Navbar from './navbar';
+import Navbar from './lib/navbar';
 import { AUTH_REFRESH_TOKENS } from '../store/actions/auth';
 import { USER_REQUEST } from '../store/actions/user';
 
