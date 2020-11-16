@@ -1,52 +1,38 @@
 <template>
-  <div class="login">
-    <div>
-      <router-link to="/board">
-        Regresar
-      </router-link>
+  <Form return-route="/board" title="Crear Tablón" @form-submit="createBoard">
+    <div class="form-block">
+      <label class="form-label" for="#name">Nombre</label>
+      <input
+        id="name"
+        v-model="name"
+        maxlength="4"
+        class="form-input"
+        type="text"
+        required
+        placeholder="Nombre del tablón"
+      />
     </div>
-    <div class="login-header">
-      <h3 class="title">Crear Tablón</h3>
+
+    <div class="form-block">
+      <label class="form-label" for="#desc">Descripción</label>
+      <input id="desc" v-model="desc" class="form-input" type="text" required placeholder="Descripción del tablón" />
     </div>
-    <div class="login-body">
-      <form action class="form" @submit.prevent="createBoard">
-        <div class="form-block">
-          <label class="form-label" for="#name">Nombre</label>
-          <input
-            id="name"
-            v-model="name"
-            maxlength="4"
-            class="form-input"
-            type="text"
-            required
-            placeholder="Nombre del tablón"
-          />
-        </div>
 
-        <div class="form-block">
-          <label class="form-label" for="#desc">Descripción</label>
-          <input id="desc" v-model="desc" class="form-input" type="text" required placeholder="Descripción del tablón" />
-        </div>
-
-        <div class="form-block">
-          <label class="form-label" for="#section">Sección</label>
-          <select id="section" v-model="section" class="form-input">
-            <option v-for="(sectionval, sectionkey) in sections" :key="sectionkey" :value="sectionval">
-              {{ sectionval }}
-            </option>
-          </select>
-        </div>
-
-        <input class="form-submit" type="submit" value="Crear" />
-      </form>
+    <div class="form-block">
+      <label class="form-label" for="#section">Sección</label>
+      <select id="section" v-model="section" class="form-input">
+        <option v-for="(sectionval, sectionkey) in sections" :key="sectionkey" :value="sectionval">
+          {{ sectionval }}
+        </option>
+      </select>
     </div>
-    <div class="login-footer"></div>
-  </div>
+  </Form>
 </template>
 
 <script>
 /* eslint-disable no-alert */
 import { createBoard } from '@/requests/board';
+import Form from '@/components/lib/form';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
@@ -55,6 +41,9 @@ const ERROR = 'ERROR';
 const sections = ['ocio', 'regional', 'intereses'];
 
 export default {
+  components: {
+    Form,
+  },
   data() {
     return {
       name: '',

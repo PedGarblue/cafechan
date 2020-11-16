@@ -35,4 +35,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.panel-container {
+  width: 80%;
+}
+</style>

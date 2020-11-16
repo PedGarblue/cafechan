@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { AUTH_LOGOUT } from '../../store/actions/auth';
+import { AUTH_LOGOUT } from '../../../store/actions/auth';
 
 export default {
   data() {
