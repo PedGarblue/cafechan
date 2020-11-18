@@ -2,47 +2,47 @@
   <div>
     <div class="table-options">
       <router-link to="/staff/add">
-        <button class="update-table">[Agregar Staff]</button>
+        <Button>Agregar Staff</Button>
       </router-link>
     </div>
-    <table>
-      <thead>
+    <div v-if="isLoading">Loading...</div>
+    <div v-else-if="hasError">Error: {{ errorMsg }}</div>
+    <Table v-else>
+      <template #head>
         <th>Usuario</th>
         <th>Rol</th>
-        <th>-</th>
-      </thead>
-      <tbody>
-        <tr v-if="isloading">
-          <td>[...]</td>
-          <td>[...]</td>
-          <td>[...]</td>
-        </tr>
-        <tr v-for="user in users" v-else-if="hasloaded" :key="user.id">
+        <th></th>
+      </template>
+      <template #body>
+        <tr v-for="user in users" :key="user.id">
           <td>{{ user.name }}</td>
           <td>{{ user.role }}</td>
-          <td>
-            <router-link :to="`/staff/edit/${user.id}`">[Edit]</router-link>
-            <a href="#" @click.prevent="deleteUser(user)">[X]</a>
+          <td class="buttons">
+            <router-link :to="`/staff/edit/${user.id}`">
+              <Button>Edit</Button>
+            </router-link>
+            <Button @click="deleteUser(user)">X</Button>
           </td>
         </tr>
-        <tr v-else>
-          <td colspan="3">
-            {{ errorMsg }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      </template>
+    </Table>
   </div>
 </template>
 
 <script>
 import { getStaffList, deleteStaff } from '@/requests/staff';
+import Table from '../lib/table';
+import Button from '../lib/button';
 
 const LOADING = 'ERROR';
 const SUCCESS = 'SUCCESS';
 const ERROR = 'ERROR';
 
 export default {
+  components: {
+    Table,
+    Button,
+  },
   data() {
     return {
       users: [],
@@ -51,13 +51,13 @@ export default {
     };
   },
   computed: {
-    isloading() {
+    isLoading() {
       return this.state === LOADING;
     },
-    hasloaded() {
+    hasLoaded() {
       return this.state === SUCCESS;
     },
-    haserror() {
+    hasError() {
       return this.state === ERROR;
     },
   },
@@ -92,3 +92,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.table-options {
+  margin-bottom: 0.5em;
+}
+.buttons {
+  width: 5em;
+  text-align: center;
+}
+</style>
