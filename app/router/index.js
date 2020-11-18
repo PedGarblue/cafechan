@@ -14,6 +14,9 @@ import BoardAdmin from '../components/board';
 import BoardList from '../components/board/board-list';
 import BoardAdd from '../components/board/board-add';
 import BoardEdit from '../components/board/board-edit';
+import Ban from '../components/bans';
+import BanList from '../components/bans/ban-list';
+import BanAdd from '../components/bans/ban-add';
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -101,6 +104,23 @@ const router = new Router({
           path: 'edit/:boardId',
           component: BoardEdit,
           meta: { authorize: [Roles.admin] },
+        },
+      ],
+    },
+    {
+      path: '/ban',
+      component: Ban,
+      meta: { authorize: [Roles.admin, Roles.modplus] },
+      children: [
+        {
+          name: 'ban-view',
+          path: '',
+          component: BanList,
+        },
+        {
+          name: 'ban-add',
+          path: 'add',
+          component: BanAdd,
         },
       ],
     },

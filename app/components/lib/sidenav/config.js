@@ -6,6 +6,11 @@ const sections = () => {
       name: 'MODERACION',
       pages: [
         {
+          name: 'ban-view',
+          title: 'Bans',
+          authorize: [Roles.admin, Roles.modplus],
+        },
+        {
           name: 'recent-posts',
           title: 'Posts Recientes',
           authorize: [Roles.admin],

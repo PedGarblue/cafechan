@@ -6,14 +6,14 @@ const banOne = {
   _id: Types.ObjectId().toHexString(),
   ip: faker.internet.ip(),
   reason: 'Shitposting',
-  until: banTimes.hour(),
+  until: Date.now() + banTimes.hour(),
 };
 
 const banTwo = {
   _id: Types.ObjectId().toHexString(),
   ip: faker.internet.ip(),
   reason: 'Shitposting',
-  until: banTimes.hour(),
+  until: Date.now() + banTimes.hour(),
 };
 
 module.exports = {
