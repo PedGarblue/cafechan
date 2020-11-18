@@ -1,20 +1,24 @@
 <template>
   <Page title="Recent Posts">
     <div class="table-options">
-      <button class="update-table" @click="updatePosts">[Actualizar]</button>
+      <Button @click="updatePosts">Actualizar</Button>
     </div>
-    <div class="posts-container">
-      <div v-for="post in posts" :key="`${post.id}`">
-        <Reply v-if="post.kind === 'Reply'" :data="post" :remove-post-function="removePost"></Reply>
-        <Thread v-else :data="post" :remove-post-function="removePost"></Thread>
-      </div>
-    </div>
+    <Table>
+      <template #body>
+        <tr v-for="post in posts" :key="`${post.id}`">
+          <Reply v-if="post.kind === 'Reply'" :data="post" :remove-post-function="removePost"></Reply>
+          <Thread v-else :data="post" :remove-post-function="removePost"></Thread>
+        </tr>
+      </template>
+    </Table>
   </Page>
 </template>
 
 <script>
 import { getPosts, removePost } from '@/requests/post';
 import { mapGetters } from 'vuex';
+import Button from '../lib/button';
+import Table from '../lib/table';
 import Page from '../lib/page';
 import Reply from '../lib/reply';
 import Thread from '../lib/thread';
@@ -28,6 +32,8 @@ export default {
     Page,
     Reply,
     Thread,
+    Table,
+    Button,
   },
   data() {
     return {
@@ -37,7 +43,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['tokens']),
+    ...mapGetters(['accessToken']),
   },
   mounted() {
     this.updatePosts();
@@ -45,7 +51,7 @@ export default {
   methods: {
     updatePosts() {
       this.status = LOADING;
-      getPosts(this.tokens.accessTokens)
+      getPosts(this.accessToken.token)
         .then(resp => {
           this.posts = resp;
           this.status = SUCCESS;
@@ -56,7 +62,7 @@ export default {
         });
     },
     removePost(post) {
-      removePost(this.tokens.accessTokens, post)
+      removePost(this.accessToken.token, post)
         .then(() => {
           this.updatePosts();
         })
@@ -69,4 +75,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-options {
+  margin-bottom: 0.5em;
+}
+</style>

@@ -1,9 +1,9 @@
 <template>
   <div class="table">
     <div class="table-options">
-      <PanelBtn @click="getBans">Update</PanelBtn>
+      <Button @click="getBans">Update</Button>
       <router-link to="/ban/add">
-        <PanelBtn>Add Ban</PanelBtn>
+        <Button>Add Ban</Button>
       </router-link>
     </div>
     <div v-if="isLoading">Loading...</div>
@@ -25,7 +25,7 @@
           <td class="ban-ip">{{ ban.ip }}</td>
           <td class="buttons">
             <span class="delete">
-              [X]
+              <Button>X</Button>
             </span>
           </td>
         </tr>
@@ -38,7 +38,7 @@
 import { mapGetters } from 'vuex';
 import { getBans } from '../../requests/ban';
 import Table from '../lib/table';
-import PanelBtn from '../lib/button';
+import Button from '../lib/button';
 
 const REQUEST = 'REQUEST';
 const SUCCESS = 'SUCCESS';
@@ -46,8 +46,8 @@ const ERROR = 'ERROR';
 
 export default {
   components: {
-    PanelBtn,
     Table,
+    Button,
   },
   data() {
     return {

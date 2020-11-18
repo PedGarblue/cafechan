@@ -2,45 +2,45 @@
   <div>
     <div class="table-options">
       <router-link to="/board/add">
-        <button class="update-table">[Agregar tablón]</button>
+        <Button>Add Board</Button>
       </router-link>
     </div>
-    <table>
-      <thead>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>-</th>
-      </thead>
-      <tbody>
-        <tr v-if="isLoading">
-          <td>[...]</td>
-        </tr>
-        <tr v-for="board in boards" v-else-if="isLoaded" :key="board._id">
+    <Table>
+      <template #head>
+        <th>Name</th>
+        <th>Description</th>
+        <th></th>
+      </template>
+      <template #body>
+        <tr v-for="board in boards" :key="board._id">
           <td>{{ board.name }}</td>
           <td>{{ board.desc }}</td>
-          <td>
-            <router-link :to="`/board/edit/${board._id}`">[Edit]</router-link>
-            <a href="#" @click.prevent="deleteBoard(board)">[X]</a>
+          <td class="buttons">
+            <router-link :to="`/board/edit/${board._id}`">
+              <Button>Edit</Button>
+            </router-link>
+            <Button @click="deleteBoard(board)">X</Button>
           </td>
         </tr>
-        <tr v-else>
-          <td colspan="3">
-            {{ errorMsg }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      </template>
+    </Table>
   </div>
 </template>
 
 <script>
 import { getBoards, deleteBoard } from '@/requests/board';
+import Table from '../lib/table';
+import Button from '../lib/button';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
 const ERROR = 'ERROR';
 
 export default {
+  components: {
+    Table,
+    Button,
+  },
   data() {
     return {
       boards: [],
@@ -91,4 +91,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-options {
+  margin-bottom: 0.5em;
+}
+.buttons {
+  width: 5em;
+  text-align: center;
+} 
+</style>

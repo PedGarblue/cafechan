@@ -2,15 +2,15 @@
   <div>
     <div class="table-options">
       <router-link to="/staff/add">
-        <Button>Agregar Staff</Button>
+        <Button>Add Staff</Button>
       </router-link>
     </div>
     <div v-if="isLoading">Loading...</div>
     <div v-else-if="hasError">Error: {{ errorMsg }}</div>
     <Table v-else>
       <template #head>
-        <th>Usuario</th>
-        <th>Rol</th>
+        <th>Username</th>
+        <th>Role</th>
         <th></th>
       </template>
       <template #body>
