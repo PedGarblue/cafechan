@@ -1,46 +1,54 @@
 <template>
   <div class="table">
     <div class="table-options">
-      <button @click="getBans">Update</button>
+      <PanelBtn @click="getBans">Update</PanelBtn>
       <router-link to="/ban/add">
-        <button>Add Ban</button>
+        <PanelBtn>Add Ban</PanelBtn>
       </router-link>
     </div>
-    <div class="table-item">
-      <div>ID</div>
-      <div>Reason</div>
-      <div>Expiration</div>
-      <div>IP</div>
-    </div>
-    <div v-if="isLoading">
-      [...]
-    </div>
-    <div v-else-if="hasError">
-      {{ errorMsg }}
-    </div>
-    <div v-for="ban in bansList" v-else :key="ban._id" class="table-item">
-      <div class="ban-id">{{ ban._id }}</div>
-      <div class="ban-reason">{{ ban.reason }}</div>
-      <div class="ban-until">{{ ban.until }}</div>
-      <div class="ban-ip">{{ ban.ip }}</div>
-      <div class="buttons">
-        <span class="delete">
-          [X]
-        </span>
-      </div>
-    </div>
+    <div v-if="isLoading">Loading...</div>
+    <div v-else-if="hasError">Error: {{ errorMsg }}</div>
+    <Table v-else>
+      <template #head>
+        <th>ID</th>
+        <th>Reason</th>
+        <th>Expiration</th>
+        <th>IP</th>
+        <th></th>
+      </template>
+
+      <template #body>
+        <tr v-for="ban in bansList" :key="ban._id" class="table-item">
+          <td class="ban-id">{{ ban._id }}</td>
+          <td class="ban-reason">{{ ban.reason }}</td>
+          <td class="ban-until">{{ ban.until }}</td>
+          <td class="ban-ip">{{ ban.ip }}</td>
+          <td class="buttons">
+            <span class="delete">
+              [X]
+            </span>
+          </td>
+        </tr>
+      </template>
+    </Table>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import { getBans } from '../../requests/ban';
+import Table from '../lib/table';
+import PanelBtn from '../lib/button';
 
 const REQUEST = 'REQUEST';
 const SUCCESS = 'SUCCESS';
 const ERROR = 'ERROR';
 
 export default {
+  components: {
+    PanelBtn,
+    Table,
+  },
   data() {
     return {
       bans: [],
@@ -90,12 +98,10 @@ export default {
 </script>
 
 <style scoped>
-.table {
-  display: block;
+.table-options {
+  margin-bottom: 0.5em;
 }
-.table-item {
-  display: grid;
-  grid-template-columns: auto auto auto auto 3em;
-  padding: 0.5em;
+.buttons {
+  text-align: center;
 }
 </style>
