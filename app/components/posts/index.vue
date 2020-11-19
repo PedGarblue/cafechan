@@ -3,6 +3,10 @@
     <div class="table-options">
       <Button @click="updatePosts">Actualizar</Button>
     </div>
+    <div v-if="isLoading">
+      Loading...
+    </div>
+    <div v-else-if="hasError">Error: {{ errMsg }}</div>
     <Table>
       <template #body>
         <tr v-for="post in posts" :key="`${post.id}`">
@@ -43,6 +47,15 @@ export default {
     };
   },
   computed: {
+    isLoading() {
+      return this.status === LOADING;
+    },
+    loaded() {
+      return this.status === SUCCESS;
+    },
+    hasError() {
+      return this.status === ERROR;
+    },
     ...mapGetters(['accessToken']),
   },
   mounted() {
