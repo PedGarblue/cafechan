@@ -1,31 +1,21 @@
 <template>
   <Form return-route="/board" title="Crear Tablón" @form-submit="createBoard">
-    <div class="form-block">
-      <label class="form-label" for="#name">Nombre</label>
-      <input
-        id="name"
-        v-model="name"
-        maxlength="4"
-        class="form-input"
-        type="text"
-        required
-        placeholder="Nombre del tablón"
-      />
-    </div>
+    <FormBlock name="#name" title="Name">
+      <input id="name" v-model="name" maxlength="4" class="form-input" type="text" required placeholder="Board name" />
+    </FormBlock>
 
-    <div class="form-block">
-      <label class="form-label" for="#desc">Descripción</label>
+    <FormBlock name="#desc" title="Board description">
       <input id="desc" v-model="desc" class="form-input" type="text" required placeholder="Descripción del tablón" />
-    </div>
+    </FormBlock>
 
-    <div class="form-block">
-      <label class="form-label" for="#section">Sección</label>
+    <FormBlock name="section" title="Board section">
       <select id="section" v-model="section" class="form-input">
         <option v-for="(sectionval, sectionkey) in sections" :key="sectionkey" :value="sectionval">
           {{ sectionval }}
         </option>
       </select>
-    </div>
+    </FormBlock>
+
     <template #footer>
       <div v-if="successRequest">Board Created!</div>
       <div v-else-if="isLoading"><Loading /></div>
@@ -38,6 +28,7 @@
 /* eslint-disable no-alert */
 import { createBoard } from '@/requests/board';
 import Form from '@/components/lib/form';
+import FormBlock from '@/components/lib/form-block';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
@@ -48,6 +39,7 @@ const sections = ['ocio', 'regional', 'intereses'];
 export default {
   components: {
     Form,
+    FormBlock,
   },
   data() {
     return {

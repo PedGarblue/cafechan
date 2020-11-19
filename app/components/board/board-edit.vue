@@ -1,53 +1,33 @@
 <template>
-  <div class="login">
-    <div>
-      <router-link to="/board">
-        Regresar
-      </router-link>
-    </div>
+  <Form return-route="/board" title="Edit Board" @form-submit="editBoard">
+    <FormBlock name="#name" title="Board Name">
+      <input id="name" v-model="name" class="form-input" type="text" placeholder="Nombre" />
+    </FormBlock>
 
-    <div class="login-header">
-      <h3 class="title">Editar tablón: {{ isLoaded ? desc : '[...]' }}</h3>
-    </div>
+    <FormBlock name="#desc" title="Board description">
+      <input id="desc" v-model="desc" class="form-input" type="text" placeholder="Descripción" />
+    </FormBlock>
 
-    <div class="login-body">
-      <form v-if="isLoaded" action class="form" @submit.prevent="editBoard">
-        <div class="form-block">
-          <label class="form-label" for="#name">Nombre</label>
-          <input id="name" v-model="name" class="form-input" type="text" placeholder="Nombre" />
-        </div>
-
-        <div class="form-block">
-          <label class="form-label" for="#desc">Descripción</label>
-          <input id="desc" v-model="desc" class="form-input" type="text" placeholder="Descripción" />
-        </div>
-
-        <div class="form-block">
-          <label class="form-label" for="#section">Sección</label>
-          <select id="section" v-model="section" class="form-input">
-            <option v-for="(sectionval, sectionkey) in sections" :key="sectionkey" :value="sectionval">
-              {{ sectionval }}
-            </option>
-          </select>
-        </div>
-
-        <input class="form-submit" type="submit" value="Crear" />
-      </form>
-    </div>
-    <div class="login-footer">
-      <div v-if="isLoading">
-        [...]
-      </div>
-      <div v-else-if="boardEditSuccess">
-        ¡TABLON EDITADO CORRECTAMENTE!
-      </div>
+    <FormBlock name="#section" title="Board section">
+      <select id="section" v-model="section" class="form-input">
+        <option v-for="(sectionval, sectionkey) in sections" :key="sectionkey" :value="sectionval">
+          {{ sectionval }}
+        </option>
+      </select>
+    </FormBlock>
+    <template #footer>
+      <div v-if="isLoading"><Loading /></div>
+      <div v-else-if="boardEditSuccess">¡TABLON EDITADO CORRECTAMENTE!</div>
       <div v-else-if="hasError">ERROR: {{ errorMsg }}</div>
-    </div>
-  </div>
+    </template>
+  </Form>
 </template>
 
 <script>
 import { editBoard, getBoard } from '@/requests/board';
+import Form from '@/components/lib/form';
+import FormBlock from '@/components/lib/form-block';
+import Loading from '@/components/lib/loading';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
@@ -56,6 +36,11 @@ const ERROR = 'ERROR';
 const sections = ['ocio', 'regional', 'intereses'];
 
 export default {
+  components: {
+    Form,
+    FormBlock,
+    Loading,
+  },
   data() {
     return {
       id: this.$route.params.boardId,

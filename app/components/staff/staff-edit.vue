@@ -1,49 +1,27 @@
 <template>
-  <div class="login">
-    <div>
-      <router-link to="/staff">
-        Regresar
-      </router-link>
-    </div>
+  <Form return-route="/staff/" title="Edit Staff" @form-submit="editStaff">
+    <FormBlock name="#email" title="Email">
+      <input id="email" v-model="email" class="form-input" type="email" disabled placeholder="Email" />
+    </FormBlock>
 
-    <div class="login-header">
-      <h3 class="title">Editar Usuario: {{ isLoaded ? username : '[...]' }}</h3>
-    </div>
+    <FormBlock name="#username">
+      <input id="username" v-model="username" class="form-input" type="text" disabled placeholder="Username" />
+    </FormBlock>
 
-    <div class="login-body">
-      <form v-if="isLoaded" action class="form" @submit.prevent="editUser">
-        <div class="form-block">
-          <label class="form-label" for="#email">Correo</label>
-          <input id="email" v-model="email" class="form-input" type="email" disabled placeholder="Email" />
-        </div>
+    <FormBlock name="#role" title="Role">
+      <select id="role" v-model="role" class="form-input">
+        <option v-for="(roleval, rolekey) in Roles" :key="rolekey" :value="roleval">
+          {{ rolekey }}
+        </option>
+      </select>
+    </FormBlock>
 
-        <div class="form-block">
-          <label class="form-label" for="#username">Usuario</label>
-          <input id="username" v-model="username" class="form-input" type="text" disabled placeholder="Username" />
-        </div>
-
-        <div class="form-block">
-          <label class="form-label" for="#role">Rol</label>
-          <select id="role" v-model="role" class="form-input">
-            <option v-for="(roleval, rolekey) in Roles" :key="rolekey" :value="roleval">
-              {{ rolekey }}
-            </option>
-          </select>
-        </div>
-
-        <input class="form-submit" type="submit" value="Modificar" />
-      </form>
-    </div>
-    <div class="login-footer">
-      <div v-if="isLoading">
-        [...]
-      </div>
-      <div v-else-if="userEditSuccess">
-        ¡USUARIO EDITADO CORRECTAMENTE!
-      </div>
+    <template #footer>
+      <div v-if="isLoading"><Loading /></div>
+      <div v-else-if="userEditSuccess">User edited!</div>
       <div v-else-if="hasError">ERROR: {{ error_msg }}</div>
-    </div>
-  </div>
+    </template>
+  </Form>
 </template>
 
 <script>

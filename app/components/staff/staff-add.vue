@@ -1,28 +1,25 @@
 <template>
   <Form return-route="/staff" title="Create Staff" @form-submit="createUser">
-    <div class="form-block">
-      <label class="form-label" for="#email">Correo</label>
+    <FormBlock name="#email" title="Email">
       <input id="email" v-model="email" class="form-input" type="email" required placeholder="Email" />
-    </div>
+    </FormBlock>
 
-    <div class="form-block">
-      <label class="form-label" for="#username">Usuario</label>
+    <FormBlock name="#username" title="Username">
       <input id="username" v-model="username" class="form-input" type="text" required placeholder="Username" />
-    </div>
+    </FormBlock>
 
-    <div class="form-block">
-      <label class="form-label" for="#role">Rol</label>
+    <FormBlock name="#role" title="Role">
       <select id="role" v-model="role" class="form-input">
         <option v-for="(roleval, rolekey) in Roles" :key="rolekey" :value="roleval">
           {{ rolekey }}
         </option>
       </select>
-    </div>
+    </FormBlock>
 
-    <div class="form-block">
-      <label class="form-label" for="#password">Contraseña</label>
+    <FormBlock name="#password" title="Password">
       <input id="password" v-model="password" class="form-input" type="password" placeholder="Password" />
-    </div>
+    </FormBlock>
+
     <template #footer>
       <div v-if="successRequest">Staff Created!</div>
       <div v-else-if="isLoading"><Loading /></div>
@@ -36,6 +33,8 @@
 import roles from '@/config/roles';
 import { createStaff } from '@/requests/staff';
 import Form from '@/components/lib/form';
+import FormBlock from '@/components/lib/form-block';
+import Loading from '@/components/lib/loading';
 
 const REQUEST = 'REQUEST';
 const SUCCESS = 'SUCCESS';
@@ -44,6 +43,8 @@ const ERROR = 'ERROR';
 export default {
   components: {
     Form,
+    FormBlock,
+    Loading,
   },
   data() {
     return {
