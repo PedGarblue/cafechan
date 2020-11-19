@@ -2,7 +2,7 @@
   <div class="navbar">
     <div class="navbar-logo">
       <div class="navbar-icon" />
-      <span class="navbar-title">Cacochan Panel</span>
+      <span class="navbar-title">Caféchan Panel</span>
     </div>
 
     <div v-if="isAuthenticated" class="navbar-user">

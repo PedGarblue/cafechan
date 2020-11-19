@@ -17,7 +17,7 @@ body{
 
 .panel-contents{
     display: flex;
-    min-height: 89.5vh;
+    min-height: 89.7vh;
 }
 
 /* LOGIN */
@@ -102,7 +102,7 @@ body{
 }
 
 .navbar-icon::before{
-    content: "\e605";
+    content: "\e9a2";
 }
 
 .navbar-title{
@@ -134,12 +134,10 @@ body{
     line-height: 1;
     padding: 0.2em 0.2em;
     font-size: 1.5em;
-    border: solid 1px;
-    border-radius: 3px 3px 3px 3px;
 }
 
 .navbar-settings-icon::before{
-    content: "\e994";
+    content: "\e9bd";
 }
 
 .nav-link {
@@ -168,8 +166,6 @@ body{
 	line-height: 1;
 	padding: 0.5em 0.5em;
 	font-size: 2em;
-	border: solid 1px;
-	border-radius: 3px 3px 3px 3px;
 	cursor: pointer;
 }
 
