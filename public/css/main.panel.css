@@ -17,6 +17,7 @@ body{
 
 .panel-contents{
     display: flex;
+    min-height: 89.5vh;
 }
 
 /* LOGIN */
@@ -202,7 +203,6 @@ body{
 
 .menu{
     width: 20%;
-    height: 100vh;
     background-color: #1D1F21;
     color: #FFF9C4;
     display: inline-block;

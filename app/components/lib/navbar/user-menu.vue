@@ -35,4 +35,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.navbar-settings-list {
+  position: fixed;
+  left: 81.2vw;
+}
+</style>
