@@ -18,6 +18,7 @@
 
     <template #footer>
       <div v-if="successRequest">Ban Created!</div>
+      <div v-else-if="isLoading"><Loading /></div>
       <div v-else-if="hasError">Error: {{ errorMsg }}</div>
     </template>
   </Form>
@@ -29,6 +30,7 @@ import Form from '@/components/lib/form';
 import FormBlock from '@/components/lib/form-block';
 import banReasons from '@/config/banReasons';
 import { sendBan } from '@/requests/ban';
+import Loading from '@/components/lib/loading';
 
 const REQUEST = 'REQUEST';
 const SUCCESS = 'SUCCESS';
@@ -38,6 +40,7 @@ export default {
   components: {
     Form,
     FormBlock,
+    Loading,
   },
   data() {
     return {
@@ -49,6 +52,9 @@ export default {
     };
   },
   computed: {
+    isLoading() {
+      return this.status === REQUEST;
+    },
     successRequest() {
       return this.status === SUCCESS;
     },

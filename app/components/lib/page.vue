@@ -1,16 +1,16 @@
 <template>
   <div v-if="isAuthenticated" class="panel-contents">
     <SideBar />
-    <div v-if="isProfileLoaded" class="panel-container">
+    <div class="panel-container">
       <div class="page-header">
         <h2 class="page-title">{{ title }}</h2>
       </div>
-      <div class="page-contents">
+      <div v-if="isProfileLoaded" class="page-contents">
         <slot />
       </div>
-    </div>
-    <div v-else>
-      [...]
+      <div v-else>
+        <Loading />
+      </div>
     </div>
   </div>
 </template>
@@ -18,9 +18,11 @@
 <script>
 import { mapGetters } from 'vuex';
 import SideBar from './sidenav';
+import Loading from './loading';
 
 export default {
   components: {
+    Loading,
     SideBar,
   },
   props: {

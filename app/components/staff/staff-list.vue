@@ -5,7 +5,7 @@
         <Button>Add Staff</Button>
       </router-link>
     </div>
-    <div v-if="isLoading">Loading...</div>
+    <div v-if="isLoading"><Loading /></div>
     <div v-else-if="hasError">Error: {{ errorMsg }}</div>
     <Table v-else>
       <template #head>
@@ -33,6 +33,7 @@
 import { getStaffList, deleteStaff } from '@/requests/staff';
 import Table from '../lib/table';
 import Button from '../lib/button';
+import Loading from '../lib/loading';
 
 const LOADING = 'ERROR';
 const SUCCESS = 'SUCCESS';
@@ -42,6 +43,7 @@ export default {
   components: {
     Table,
     Button,
+    Loading,
   },
   data() {
     return {

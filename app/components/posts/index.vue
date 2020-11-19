@@ -4,10 +4,10 @@
       <Button @click="updatePosts">Actualizar</Button>
     </div>
     <div v-if="isLoading">
-      Loading...
+      <Loading />
     </div>
     <div v-else-if="hasError">Error: {{ errMsg }}</div>
-    <Table>
+    <Table v-else>
       <template #body>
         <tr v-for="post in posts" :key="`${post.id}`">
           <Reply v-if="post.kind === 'Reply'" :data="post" :remove-post-function="removePost"></Reply>
@@ -26,6 +26,7 @@ import Table from '../lib/table';
 import Page from '../lib/page';
 import Reply from '../lib/reply';
 import Thread from '../lib/thread';
+import Loading from '../lib/loading';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
@@ -38,6 +39,7 @@ export default {
     Thread,
     Table,
     Button,
+    Loading,
   },
   data() {
     return {

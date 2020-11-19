@@ -23,6 +23,11 @@
       <label class="form-label" for="#password">Contraseña</label>
       <input id="password" v-model="password" class="form-input" type="password" placeholder="Password" />
     </div>
+    <template #footer>
+      <div v-if="successRequest">Staff Created!</div>
+      <div v-else-if="isLoading"><Loading /></div>
+      <div v-else-if="hasError">Error: {{ errorMsg }}</div>
+    </template>
   </Form>
 </template>
 
@@ -31,6 +36,10 @@
 import roles from '@/config/roles';
 import { createStaff } from '@/requests/staff';
 import Form from '@/components/lib/form';
+
+const REQUEST = 'REQUEST';
+const SUCCESS = 'SUCCESS';
+const ERROR = 'ERROR';
 
 export default {
   components: {
@@ -42,10 +51,20 @@ export default {
       username: '',
       role: '',
       password: '',
-      state: '',
+      status: '',
+      errMsg: '',
     };
   },
   computed: {
+    successRequest() {
+      return this.status === SUCCESS;
+    },
+    isLoading() {
+      return this.status === REQUEST;
+    },
+    hasError() {
+      return this.status === ERROR;
+    },
     Roles() {
       return roles;
     },
@@ -58,12 +77,14 @@ export default {
         role: this.role,
         password: this.password,
       };
+      this.status = REQUEST;
       createStaff(data)
         .then(() => {
-          alert(`USUARIO CREADO!`);
+          this.status = SUCCESS;
         })
         .catch(err => {
-          alert(`Error! ${err.message}`);
+          this.errMsg = err.message;
+          this.status = ERROR;
         });
     },
   },

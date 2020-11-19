@@ -21,7 +21,7 @@
       </li>
     </ul>
     <div v-else>
-      <b>[...]</b>
+      <Loading />
     </div>
   </div>
 </template>
@@ -29,10 +29,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import config from './config';
+import Loading from '../loading';
 
 const EMPTY = 0;
 
 export default {
+  components: {
+    Loading,
+  },
   computed: {
     ...mapGetters({ profile: 'getProfile', isProfileLoaded: 'isProfileLoaded' }),
     sections() {
@@ -51,4 +55,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.loading-msg {
+  margin-top: 1em;
+}
+</style>

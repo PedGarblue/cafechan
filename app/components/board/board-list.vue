@@ -5,7 +5,9 @@
         <Button>Add Board</Button>
       </router-link>
     </div>
-    <Table>
+    <div v-if="isLoading"><Loading /></div>
+    <div v-else-if="hasError">Error {{ errMsg }}</div>
+    <Table v-else>
       <template #head>
         <th>Name</th>
         <th>Description</th>
@@ -31,6 +33,7 @@
 import { getBoards, deleteBoard } from '@/requests/board';
 import Table from '../lib/table';
 import Button from '../lib/button';
+import Loading from '../lib/loading';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
@@ -40,11 +43,12 @@ export default {
   components: {
     Table,
     Button,
+    Loading,
   },
   data() {
     return {
       boards: [],
-      errorMsg: '',
+      errMsg: '',
       status: '',
     };
   },
@@ -98,5 +102,5 @@ export default {
 .buttons {
   width: 5em;
   text-align: center;
-} 
+}
 </style>

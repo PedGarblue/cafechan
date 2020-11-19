@@ -21,7 +21,7 @@
         <UserMenu />
       </div>
       <div v-else class="navbar-user">
-        <b>[...]</b>
+        <Loading />
       </div>
     </div>
     <div v-else class="nav-link">
@@ -35,10 +35,12 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 import UserMenu from './user-menu';
+import Loading from '../loading';
 
 export default {
   components: {
     UserMenu,
+    Loading,
   },
   computed: {
     ...mapState({
@@ -49,4 +51,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.loading-msg {
+  padding: 1em;
+  margin-right: 0.5em;
+}
+</style>

@@ -6,7 +6,7 @@
         <Button>Add Ban</Button>
       </router-link>
     </div>
-    <div v-if="isLoading">Loading...</div>
+    <div v-if="isLoading"><Loading /></div>
     <div v-else-if="hasError">Error: {{ errorMsg }}</div>
     <Table v-else>
       <template #head>
@@ -39,6 +39,7 @@ import { mapGetters } from 'vuex';
 import { getBans } from '../../requests/ban';
 import Table from '../lib/table';
 import Button from '../lib/button';
+import Loading from '../lib/loading';
 
 const REQUEST = 'REQUEST';
 const SUCCESS = 'SUCCESS';
@@ -48,6 +49,7 @@ export default {
   components: {
     Table,
     Button,
+    Loading,
   },
   data() {
     return {

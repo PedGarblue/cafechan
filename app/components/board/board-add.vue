@@ -26,6 +26,11 @@
         </option>
       </select>
     </div>
+    <template #footer>
+      <div v-if="successRequest">Board Created!</div>
+      <div v-else-if="isLoading"><Loading /></div>
+      <div v-else-if="hasError">Error: {{ errorMsg }}</div>
+    </template>
   </Form>
 </template>
 
@@ -53,6 +58,15 @@ export default {
     };
   },
   computed: {
+    isLoading() {
+      return this.status === LOADING;
+    },
+    hasError() {
+      return this.status === ERROR;
+    },
+    successRequest() {
+      return this.status === SUCCESS;
+    },
     sections() {
       return sections;
     },
@@ -68,11 +82,9 @@ export default {
       createBoard(data)
         .then(() => {
           this.status = SUCCESS;
-          alert('TABLÓN CREADO');
         })
         .catch(() => {
           this.status = ERROR;
-          alert('No se pudo crear el tablón');
         });
     },
   },
