@@ -21,9 +21,9 @@
     </FormBlock>
 
     <template #footer>
-      <div v-if="successRequest">Staff Created!</div>
+      <div v-if="successRequest" class="form-success">Staff Created!</div>
       <div v-else-if="isLoading"><Loading /></div>
-      <div v-else-if="hasError">Error: {{ errorMsg }}</div>
+      <div v-else-if="hasError" class="form-error">Error: {{ errorMsg }}</div>
     </template>
   </Form>
 </template>

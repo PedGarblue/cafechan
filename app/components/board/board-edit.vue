@@ -17,8 +17,8 @@
     </FormBlock>
     <template #footer>
       <div v-if="isLoading"><Loading /></div>
-      <div v-else-if="boardEditSuccess">¡TABLON EDITADO CORRECTAMENTE!</div>
-      <div v-else-if="hasError">ERROR: {{ errorMsg }}</div>
+      <div v-else-if="boardEditSuccess" class="form-success">¡TABLON EDITADO CORRECTAMENTE!</div>
+      <div v-else-if="hasError" class="form-error">ERROR: {{ errorMsg }}</div>
     </template>
   </Form>
 </template>

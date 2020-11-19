@@ -18,8 +18,8 @@
 
     <template #footer>
       <div v-if="isLoading"><Loading /></div>
-      <div v-else-if="userEditSuccess">User edited!</div>
-      <div v-else-if="hasError">ERROR: {{ error_msg }}</div>
+      <div v-else-if="userEditSuccess" class="form-success">User edited!</div>
+      <div v-else-if="hasError" class="form-error">ERROR: {{ error_msg }}</div>
     </template>
   </Form>
 </template>

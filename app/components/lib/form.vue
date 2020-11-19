@@ -45,3 +45,25 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.form-submit {
+  background-color: #1d1f21;
+}
+.form-success {
+  background-color: #3b8a65;
+  color: aliceblue;
+  text-align: center;
+  margin: 0.5em 0;
+  padding: 1em 0;
+  border-radius: 3px;
+}
+.form-error {
+  background-color: #e30303;
+  color: whitesmoke;
+  margin: 0.5em 0;
+  padding: 0.5em;
+  text-align: center;
+  border-radius: 3px;
+}
+</style>
