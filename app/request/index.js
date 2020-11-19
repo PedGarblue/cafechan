@@ -20,7 +20,7 @@ const onError = function(error) {
     console.error('Error Message:', error.message);
   }
 
-  return Promise.reject(error.response || error.message);
+  return Promise.reject(error.response.data || error);
 };
 
 const request = options => {

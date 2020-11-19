@@ -71,7 +71,7 @@ export default {
           this.status = SUCCESS;
         })
         .catch(err => {
-          this.errorMsg = err.data.message || err;
+          this.errorMsg = err.message;
           this.status = ERROR;
         });
     },
@@ -83,7 +83,7 @@ export default {
           this.getBoards();
         })
         .catch(err => {
-          this.errorMsg = err.data.message || err;
+          this.errorMsg = err.message;
           this.status = ERROR;
         });
     },

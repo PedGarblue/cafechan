@@ -55,7 +55,7 @@ export default {
           }
         })
         .catch(err => {
-          this.errorMsg = err.data.message;
+          this.errorMsg = err.message;
         });
     },
   },

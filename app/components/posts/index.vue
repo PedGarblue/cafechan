@@ -70,7 +70,7 @@ export default {
           this.status = SUCCESS;
         })
         .catch(err => {
-          this.errMsg = err.message || err;
+          this.errMsg = err.message;
           this.status = ERROR;
         });
     },
@@ -80,7 +80,7 @@ export default {
           this.updatePosts();
         })
         .catch(err => {
-          this.errMsg = err.message || err;
+          this.errMsg = err.message;
           this.status = ERROR;
         });
     },

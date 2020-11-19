@@ -63,7 +63,7 @@ export default {
           alert(`USUARIO CREADO!`);
         })
         .catch(err => {
-          alert(`Error! ${err.data.message}`);
+          alert(`Error! ${err.message}`);
         });
     },
   },

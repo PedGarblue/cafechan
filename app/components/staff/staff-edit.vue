@@ -106,7 +106,7 @@ export default {
           this.status = SUCCESS;
         })
         .catch(err => {
-          this.error_msg = err.data.message || err;
+          this.error_msg = err.message;
           this.status = ERROR;
         });
     },
@@ -122,7 +122,7 @@ export default {
           this.status = SUCCESS;
         })
         .catch(err => {
-          this.error_msg = err.data.message || err;
+          this.error_msg = err.message;
           this.status = ERROR;
         });
     },

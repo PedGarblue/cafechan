@@ -72,9 +72,9 @@ export default {
           this.state = SUCCESS;
           this.users = response;
         })
-        .catch(error => {
+        .catch(err => {
           this.state = ERROR;
-          this.errorMsg = error.message || error;
+          this.errorMsg = err.message || err;
         });
     },
     deleteUser(user) {
