@@ -1,13 +1,17 @@
 const dotenv = require('dotenv');
 const path = require('path');
 const Joi = require('@hapi/joi');
+const fs = require('fs');
 
-if (process.env.HEROKU !== 'TRUE') {
-  dotenv.config({ path: path.join(__dirname, '../../.env') });
+const envPath = path.join(__dirname, '../../.env');
+
+if (fs.existsSync(envPath)) {
+  dotenv.config({ envPath });
 }
 
 const envVarsSchema = Joi.object()
   .keys({
+    PAGE_NAME: Joi.string().default('Cafechan'),
     NODE_ENV: Joi.string()
       .valid('production', 'development', 'test')
       .required(),
@@ -46,6 +50,7 @@ module.exports = {
     url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
     options: { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true },
   },
+  site_name: envVars.SITE_NAME,
   site_url: envVars.SITE_URL,
   jwt: {
     secret: envVars.JWT_SECRET,
