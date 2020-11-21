@@ -6,7 +6,6 @@ const httpStatus = require('http-status');
 const { getQueryOptions } = require('../utils/service.util');
 const { Post, Thread, Reply } = require('../models');
 const AppError = require('../utils/AppError');
-const postValidate = require('../utils/postValidation');
 // const Logger = require('../config/logger');
 
 const getPosts = async query => {
@@ -52,11 +51,6 @@ const createThread = async (board, threadBody) => {
     board,
   };
   const thread = new Thread(Object.assign(threadBody, cryptedData));
-  try {
-    (await postValidate.validate(thread)).inPostRatio(60 * 1000).notDuplicated();
-  } catch (error) {
-    throw new AppError(httpStatus.BAD_REQUEST, error.message);
-  }
   await thread.save();
   return thread.transform();
 };
@@ -69,11 +63,6 @@ const createReply = async (board, thread, replyBody) => {
     thread,
   };
   const reply = new Reply(Object.assign(replyBody, parsedData));
-  try {
-    (await postValidate.validate(reply)).inPostRatio(30 * 1000).notDuplicated();
-  } catch (error) {
-    throw new AppError(httpStatus.BAD_REQUEST, error.message);
-  }
   await reply.save();
   thread.lastbump = Date.now();
   await thread.save();
