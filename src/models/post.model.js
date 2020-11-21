@@ -79,7 +79,6 @@ postSchema.methods.transform = function() {
   let post = this;
   post = post.toJSON();
   post.timestamp = dateUtil.formatTimestamp(post.created_at);
-  post.message = unescape(post.message);
   return post;
 };
 

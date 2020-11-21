@@ -523,6 +523,7 @@ padding-left: 4px;
 
 blockquote {
   word-wrap: break-word;
+  white-space: pre-line;
 }
 
 /* Centramos el post baneado */

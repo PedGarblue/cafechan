@@ -7,6 +7,7 @@ const auth = require('../middlewares/auth');
 const cache = require('../middlewares/cache');
 const ban = require('../middlewares/ban');
 const postingValidation = require('../middlewares/postingValidation');
+const postingParse = require('../middlewares/postingParse');
 
 const router = express.Router({ strict: true });
 
@@ -28,12 +29,18 @@ router.route('/').get(cache.middleware(), frontController.frontPage);
 router
   .route('/:boardname/:page?/')
   .get(cache.middleware(), postController.getBoardPage)
-  .post(ban.check, validate(postRequestValidation.thread), postingValidation.thread, postController.postThread);
+  .post(
+    ban.check,
+    validate(postRequestValidation.thread),
+    postingValidation.thread,
+    postingParse,
+    postController.postThread
+  );
 
 // threadpage
 router
   .route('/:boardname/thread/:threadid/')
   .get(cache.middleware(), postController.getThread)
-  .post(ban.check, validate(postRequestValidation.reply), postingValidation.reply, postController.postReply);
+  .post(ban.check, validate(postRequestValidation.reply), postingValidation.reply, postingParse, postController.postReply);
 
 module.exports = router;

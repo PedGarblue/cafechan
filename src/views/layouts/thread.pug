@@ -19,7 +19,7 @@ div.thread(data-contents=thread)
             span.responder
                 a( href = `/${board.name}/thread/${thread.seq_id}/` )#botonresp Responder
     blockquote
-        = thread.message
+        != thread.message
     div.replies
         each reply in thread.replies
             include reply.pug
