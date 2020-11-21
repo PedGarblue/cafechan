@@ -116,7 +116,7 @@ export default {
         })
         .catch(err => {
           this.status = ERROR;
-          this.errorMsg = err.data !== undefined ? err.data.message : err;
+          this.errorMsg = err.message;
         });
     },
   },
