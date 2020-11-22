@@ -9,11 +9,10 @@ html(lang="en")
         link(rel="stylesheet", href="/css/site_hispachan.css")
     body
         div.logo-container
-            img.logo(src="/img/hispachan.png", alt="alt")
+          div.site-name= _siteName
+          div.page-icon
         div.boards-head
-            | Cacochan es un tablón de imágenes (también llamado imageboard o chan) en español donde cualquiera puede escribir mensajes y compartir imágenes. 
-            | <br>Está especialmente dedicado a toda la comunidad hispanohablante de internet y no es necesario estar registrado para participar.
-            | <br>¡Lee las reglas, elige los tablones que más te interesen y participa!
+          include layouts/site_description.pug
         div.boards-body
             div.info
                 div.sub-title 
@@ -33,7 +32,7 @@ html(lang="en")
                                 a(href=`/${board.name}/`).board-desc= `${board.flag?'':'•'} ${board.desc}`
                                 span.board-name= ` /${board.name}/`
         div.boards-footer
-            | Si eres menor de 18 años, abandona Cacochan. Todas las marcas y copyrights en esta página son propiedad de sus respectivos autores. Las opiniones publicadas en Cacochan no tienen por qué reflejar las opiniones de la administración. Cacochan está dirigido a personas habituadas al humor y la ironía. Nada de lo escrito en este sitio debe ser tomado en serio.
+          include layouts/disclaimer.pug
         div.boards-copyright
             a(href="/") Inicio
             |  &nbsp;|&nbsp;
@@ -41,5 +40,5 @@ html(lang="en")
             |  &nbsp;|&nbsp;
             a(href="/contacto") Contacto
             br
-            a(href="/") Cacochan
+            a(href="/")= _siteName
             | &nbsp;&copy; 2020.
