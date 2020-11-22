@@ -5,18 +5,18 @@ const fs = require('fs');
 
 const envPath = path.join(__dirname, '../../.env');
 
-if (fs.existsSync(envPath)) {
+if (fs.existsSync(envPath) || process.env.DOTENV !== 'FALSE') {
   dotenv.config({ envPath });
 }
 
 const envVarsSchema = Joi.object()
   .keys({
-    PAGE_NAME: Joi.string().default('Cafechan'),
     NODE_ENV: Joi.string()
       .valid('production', 'development', 'test')
       .required(),
     PORT: Joi.number().default(3000),
     SITE_URL: Joi.string(),
+    SITE_NAME: Joi.string().default('Cafechan'),
     MONGODB_URL: Joi.string()
       .required()
       .description('Mongo DB url'),

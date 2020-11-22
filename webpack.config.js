@@ -1,8 +1,12 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { DefinePlugin } = require('webpack');
+const { pick } = require('lodash');
 const config = require('./src/config/envConfig');
 
 const isDev = config.env === 'development';
+const envClient = pick(config, ['site_url', 'site_name']);
+
 module.exports = {
   mode: config.env,
   entry: {
@@ -37,5 +41,5 @@ module.exports = {
       '@': path.resolve(__dirname, 'app'),
     },
   },
-  plugins: [new VueLoaderPlugin()],
+  plugins: [new VueLoaderPlugin(), new DefinePlugin({ 'process.env': JSON.stringify(envClient) })],
 };

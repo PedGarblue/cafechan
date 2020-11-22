@@ -2,7 +2,7 @@
   <div class="navbar">
     <div class="navbar-logo">
       <div class="navbar-icon" />
-      <span class="navbar-title">Caféchan Panel</span>
+      <span class="navbar-title">{{ title }} Panel</span>
     </div>
 
     <div v-if="isAuthenticated" class="navbar-user">
@@ -34,6 +34,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import { siteName } from '@/config/config';
 import UserMenu from './user-menu';
 import Loading from '../loading';
 
@@ -41,6 +42,14 @@ export default {
   components: {
     UserMenu,
     Loading,
+  },
+  props: {
+    title: {
+      type: String,
+      default() {
+        return siteName;
+      },
+    },
   },
   computed: {
     ...mapState({

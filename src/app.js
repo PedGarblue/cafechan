@@ -22,6 +22,8 @@ const app = express();
 
 // express global variables
 app.locals.env = config.env;
+app.locals._siteName = config.site_name;
+app.locals._siteUrl = config.site_url;
 
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
