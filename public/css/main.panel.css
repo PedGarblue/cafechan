@@ -19,7 +19,14 @@ body{
     display: flex;
     min-height: 89.7vh;
 }
-
+.greentext {
+  background-color: inherit;
+  color: #1a7d24;
+}
+.redtext {
+  background-color: inherit;
+  color: #da5364;
+}
 /* LOGIN */
 
 .login{

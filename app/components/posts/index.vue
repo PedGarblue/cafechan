@@ -10,8 +10,8 @@
     <Table v-else>
       <template #body>
         <tr v-for="post in posts" :key="`${post.id}`">
-          <Reply v-if="post.kind === 'Reply'" :data="post" :remove-post-function="removePost"></Reply>
-          <Thread v-else :data="post" :remove-post-function="removePost"></Thread>
+          <Reply v-if="post.kind === 'Reply'" :data="post" @delete-post="removePost(post)"></Reply>
+          <Thread v-else :data="post" @delete-post="removePost(post)"></Thread>
         </tr>
       </template>
     </Table>

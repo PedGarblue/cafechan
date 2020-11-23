@@ -16,16 +16,12 @@
           <a href="#" @click.prevent="removePost(data)">[X]</a>
         </span>
       </span>
-      <blockquote class="message">
-        {{ data.message }}
-      </blockquote>
+      <blockquote class="message" v-html="data.message"></blockquote>
     </div>
   </div>
 </template>
 
 <script>
-import { removePost } from '@/requests/post';
-
 export default {
   props: {
     data: {
@@ -39,17 +35,18 @@ export default {
         };
       },
     },
-    removePostFunction: {
-      type: Function,
-      default: removePost,
-    },
   },
   methods: {
     removePost(data) {
-      this.removePostFunction(data);
+      this.$emit('delete-post', data);
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.message {
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+</style>
