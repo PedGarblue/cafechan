@@ -1,6 +1,5 @@
 const request = require('supertest');
 const httpStatus = require('http-status');
-const bcrypt = require('bcryptjs');
 const faker = require('faker');
 const app = require('../../../src/app');
 const setupTestDB = require('../utils/setupTestDB');
@@ -104,7 +103,7 @@ describe('Post Management Routes', () => {
   describe('DELETE /posts/thread/:threadid', () => {
     test('should return 204 and delete thread if data is ok', async () => {
       const ip = faker.internet.ip();
-      threadOne.ip = await bcrypt.hash(ip, 8);
+      threadOne.ip = ip;
       await insertBoards([boardOne]);
       await insertThreads([threadOne]);
 
@@ -122,7 +121,7 @@ describe('Post Management Routes', () => {
 
     test('should return 204 and delete thread and their replies if data is ok', async () => {
       const ip = faker.internet.ip();
-      threadOne.ip = await bcrypt.hash(ip, 8);
+      threadOne.ip = ip;
       await insertBoards([boardOne]);
       await insertThreads([threadOne]);
       await insertReplies([replyOne, replyTwo]);
@@ -145,9 +144,8 @@ describe('Post Management Routes', () => {
 
     test('should return 403 if non-OP user is trying to delete the thread', async () => {
       const ip = faker.internet.ip();
-      threadOne.ip = await bcrypt.hash(ip, 8);
+      threadOne.ip = ip;
       await insertThreads([threadOne]);
-
       await request(app)
         .delete(`/posts/thread/${threadOne._id}`)
         .set('Accept', 'application/json')
@@ -175,7 +173,7 @@ describe('Post Management Routes', () => {
   describe('DELETE /posts/reply/:replyid', () => {
     test('should return 204 and delete reply if data is ok', async () => {
       const ip = faker.internet.ip();
-      replyOne.ip = await bcrypt.hash(ip, 8);
+      replyOne.ip = ip;
       await insertBoards([boardOne]);
       await insertThreads([threadOne]);
       await insertReplies([replyOne]);
@@ -194,7 +192,7 @@ describe('Post Management Routes', () => {
 
     test('should return 403 if is not the reply author', async () => {
       const ip = faker.internet.ip();
-      replyOne.ip = await bcrypt.hash(ip, 8);
+      replyOne.ip = ip;
       await insertThreads([threadOne]);
       await insertReplies([replyOne]);
 
