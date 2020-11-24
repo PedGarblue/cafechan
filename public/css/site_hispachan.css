@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'icomoon';
-    src:url('fonts/icomoon.eot?bvm0cn');
-    src:url('fonts/icomoon.eot?bvm0cn#iefix') format('embedded-opentype'),
-        url('fonts/icomoon.ttf?bvm0cn') format('truetype'),
-        url('fonts/icomoon.woff?bvm0cn') format('woff'),
-        url('fonts/icomoon.svg?bvm0cn#icomoon') format('svg');
+    src:url('/css/fonts/icomoon.eot?j9mch');
+    src:url('/css/fonts/icomoon.eot?j9mch#iefix') format('embedded-opentype'),
+        url('/css/fonts/icomoon.ttf?j9mch') format('truetype'),
+        url('/css/fonts/icomoon.woff?j9mch') format('woff'),
+        url('/css/fonts/icomoon.svg?j9mch#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: block;
@@ -12,7 +12,7 @@
 
 @font-face {
   font-family: Righteous;
-  src: url(/css/fonts/Righteous.ttf);
+  src: url(/css/fonts/Righteous.ttf) format('truetype');
   font-display: block;
 }
 
