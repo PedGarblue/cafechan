@@ -57,7 +57,7 @@ const boardShema = new Schema({
   },
   allowedfiletypes: {
     type: Array,
-    default: ['png', 'jpg'],
+    default: ['image/png', 'image/jpeg'],
   },
   maxfilesize: {
     type: Number,

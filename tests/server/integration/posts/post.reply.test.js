@@ -216,7 +216,8 @@ describe('POST /:board/thread/:threadid/', () => {
         .field('board', board.id)
         .field('thread', thread.id)
         .field('message', newReply.message)
-        .attach('postfile', filePath);
+        .attach('postfile', filePath)
+        .expect(httpStatus.CREATED);
 
       expect(res.body.file).toBeDefined();
       expect(res.body.file).toEqual({
@@ -237,6 +238,32 @@ describe('POST /:board/thread/:threadid/', () => {
 
       expect(fs.existsSync(path.join(__dirname, `../../../../public/${board.name}/gondola.jpg`))).toBeTruthy();
       expect(fs.existsSync(path.join(__dirname, `../../../../public/${board.name}/thumb-gondola.jpg`))).toBeTruthy();
+    });
+
+    test('should return 400 if file size is greater than board max file size', async () => {
+      board.set('maxfilesize', 0);
+      await board.save();
+      await request(app)
+        .post(`/${board.name}/thread/${thread.seq_id}/`)
+        .set('Accept', 'application/json')
+        .field('board', board.id)
+        .field('thread', thread.id)
+        .field('message', newReply.message)
+        .attach('postfile', filePath)
+        .expect(httpStatus.BAD_REQUEST);
+    });
+
+    test('should return 400 if file mime type is not allowed by the board', async () => {
+      board.set('allowedfiletypes', []);
+      await board.save();
+      await request(app)
+        .post(`/${board.name}/thread/${thread.seq_id}/`)
+        .set('Accept', 'application/json')
+        .field('board', board.id)
+        .field('thread', thread.id)
+        .field('message', newReply.message)
+        .attach('postfile', filePath)
+        .expect(httpStatus.BAD_REQUEST);
     });
   });
 });
