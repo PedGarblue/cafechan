@@ -1,7 +1,7 @@
 const { pick } = require('lodash');
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { postService, boardService, boardpageService, cacheService } = require('../services');
+const { uploadService, postService, boardService, boardpageService, cacheService } = require('../services');
 
 const getPosts = catchAsync(async (req, res) => {
   const posts = await postService.getPosts(req.query);
@@ -82,9 +82,15 @@ const postReply = catchAsync(async (req, res) => {
   const posterData = { ip: req.ip };
   const replyBody = Object.assign(postData, posterData);
   const thread = await postService.getThreadById(threadid);
+  let fileData;
 
+  if (req.files) {
+    fileData = await uploadService.uploadFile(req.files.postfile, {
+      storagePath: `/${board.name}`,
+    });
+    replyBody.file = fileData;
+  }
   const reply = await postService.createReply(board, thread, replyBody);
-
   await cacheService.refreshBoardCache(board);
   await cacheService.refreshThreadCache(thread, board);
 

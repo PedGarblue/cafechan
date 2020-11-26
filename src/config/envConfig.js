@@ -17,6 +17,11 @@ const envVarsSchema = Joi.object()
     PORT: Joi.number().default(3000),
     SITE_URL: Joi.string(),
     SITE_NAME: Joi.string().default('Cafechan'),
+    STORAGE_CLIENT: Joi.string()
+      .valid('LOCAL', 'FILESTACK')
+      .default('LOCAL')
+      .description('the client for uploading files from post'),
+    STORAGE_CLIENT_API_KEY: Joi.string().description('the client API key if is using a third-party client'),
     MONGODB_URL: Joi.string()
       .required()
       .description('Mongo DB url'),
@@ -52,6 +57,8 @@ module.exports = {
   },
   site_name: envVars.SITE_NAME,
   site_url: envVars.SITE_URL,
+  storage_client: envVars.STORAGE_CLIENT,
+  storage_client_api_key: envVars.STORAGE_CLIENT_API_KEY,
   jwt: {
     secret: envVars.JWT_SECRET,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,

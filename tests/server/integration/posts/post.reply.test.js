@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const request = require('supertest');
 const faker = require('faker');
 const httpStatus = require('http-status');
@@ -11,6 +13,7 @@ const { createBoard } = require('../../fixtures/board.fixture');
 const { createThread, insertReplies, replyOne } = require('../../fixtures/post.fixture');
 const { Reply, Ban } = require('../../../../src/models');
 const appConfig = require('../../../../src/config/appConfig');
+const envConfig = require('../../../../src/config/envConfig');
 
 setupTestCache();
 setupTestDB();
@@ -187,5 +190,53 @@ describe('POST /:board/thread/:threadid/', () => {
       .set('Accept', 'application/json')
       .send(newReply)
       .expect(httpStatus.BAD_REQUEST);
+  });
+
+  describe('File posting', () => {
+    let thread;
+    let board;
+    const filePath = `${__dirname}/../../fixtures/images/gondola.jpg`;
+
+    beforeEach(async () => {
+      thread = await createThread();
+      board = await createBoard();
+      newReply = {
+        message: faker.lorem.paragraph(),
+      };
+    });
+
+    afterEach(() => {
+      fs.rmdirSync(path.join(__dirname, `../../../../public/${board.name}`), { recursive: true });
+    });
+
+    test('should return 201 and sucessfully store the uploaded image correctly', async () => {
+      const res = await request(app)
+        .post(`/${board.name}/thread/${thread.seq_id}/`)
+        .set('Accept', 'application/json')
+        .field('board', board.id)
+        .field('thread', thread.id)
+        .field('message', newReply.message)
+        .attach('postfile', filePath);
+
+      expect(res.body.file).toBeDefined();
+      expect(res.body.file).toEqual({
+        mimeType: 'image/jpeg',
+        name: 'gondola.jpg',
+        size: expect.anything(),
+        url: `${envConfig.site_url}/${board.name}/gondola.jpg`,
+      });
+
+      const replyDb = await Reply.findById(res.body._id);
+      expect(replyDb).toBeDefined();
+      expect(replyDb.file).toMatchObject({
+        mimeType: 'image/jpeg',
+        name: 'gondola.jpg',
+        size: expect.anything(),
+        url: `${envConfig.site_url}/${board.name}/gondola.jpg`,
+      });
+
+      expect(fs.existsSync(path.join(__dirname, `../../../../public/${board.name}/gondola.jpg`))).toBeTruthy();
+      expect(fs.existsSync(path.join(__dirname, `../../../../public/${board.name}/thumb-gondola.jpg`))).toBeTruthy();
+    });
   });
 });

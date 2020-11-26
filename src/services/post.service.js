@@ -1,12 +1,9 @@
 /* eslint-disable no-param-reassign */
 const { pick } = require('lodash');
-const bcrypt = require('bcryptjs');
 const httpStatus = require('http-status');
-// const boardService = require('./board.service');
 const { getQueryOptions } = require('../utils/service.util');
 const { Post, Thread, Reply } = require('../models');
 const AppError = require('../utils/AppError');
-// const Logger = require('../config/logger');
 
 const getPosts = async query => {
   const filter = pick(query, ['board', 'kind', 'stickied', 'locked']);
