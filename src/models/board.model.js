@@ -55,6 +55,14 @@ const boardShema = new Schema({
   flag: {
     type: String,
   },
+  allowedfiletypes: {
+    type: Array,
+    default: ['png', 'jpg'],
+  },
+  maxfilesize: {
+    type: Number,
+    default: 1 * 100 * 1000 * 10,
+  },
 });
 
 boardShema.methods.toJSON = function() {
