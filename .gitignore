@@ -17,3 +17,6 @@ coverage
 # hide Dev frontend Builds
 /public/bundles/panel.bundle.dev.js
 /public/bundles/chan.bundle.dev.js
+
+# media storage
+/public/media/

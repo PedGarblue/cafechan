@@ -34,6 +34,7 @@ router
     ban.check,
     validate(postRequestValidation.thread),
     postingValidation.thread,
+    uploadValidation,
     postingParse,
     postController.postThread
   );

@@ -195,6 +195,8 @@ describe('POST /:board/thread/:threadid/', () => {
   describe('File posting', () => {
     let thread;
     let board;
+    const boardsMediaPath = path.join(__dirname, `../../../../public/media`);
+    const boardsMediaURL = `${envConfig.site_url}/media`;
     const filePath = `${__dirname}/../../fixtures/images/gondola.jpg`;
 
     beforeEach(async () => {
@@ -206,7 +208,7 @@ describe('POST /:board/thread/:threadid/', () => {
     });
 
     afterEach(() => {
-      fs.rmdirSync(path.join(__dirname, `../../../../public/${board.name}`), { recursive: true });
+      fs.rmdirSync(boardsMediaPath, { recursive: true });
     });
 
     test('should return 201 and sucessfully store the uploaded image correctly', async () => {
@@ -224,7 +226,7 @@ describe('POST /:board/thread/:threadid/', () => {
         mimeType: 'image/jpeg',
         name: 'gondola.jpg',
         size: expect.anything(),
-        url: `${envConfig.site_url}/${board.name}/gondola.jpg`,
+        url: `${boardsMediaURL}/${board.name}/gondola.jpg`,
       });
 
       const replyDb = await Reply.findById(res.body._id);
@@ -233,11 +235,11 @@ describe('POST /:board/thread/:threadid/', () => {
         mimeType: 'image/jpeg',
         name: 'gondola.jpg',
         size: expect.anything(),
-        url: `${envConfig.site_url}/${board.name}/gondola.jpg`,
+        url: `${boardsMediaURL}/${board.name}/gondola.jpg`,
       });
 
-      expect(fs.existsSync(path.join(__dirname, `../../../../public/${board.name}/gondola.jpg`))).toBeTruthy();
-      expect(fs.existsSync(path.join(__dirname, `../../../../public/${board.name}/thumb-gondola.jpg`))).toBeTruthy();
+      expect(fs.existsSync(`${boardsMediaPath}/${board.name}/gondola.jpg`)).toBeTruthy();
+      expect(fs.existsSync(`${boardsMediaPath}/${board.name}/thumb-gondola.jpg`)).toBeTruthy();
     });
 
     test('should return 400 if file size is greater than board max file size', async () => {

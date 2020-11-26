@@ -50,6 +50,7 @@ const getThread = catchAsync(async (req, res) => {
 });
 
 const postThread = catchAsync(async (req, res) => {
+  let fileData;
   const { boardname } = req.params;
   const { board: boardid } = req.body;
   const board = await boardService.getBoardById(boardid);
@@ -57,8 +58,14 @@ const postThread = catchAsync(async (req, res) => {
   const posterData = { ip: req.ip };
   const threadBody = Object.assign(postData, posterData);
 
-  const thread = await postService.createThread(board, threadBody);
+  if (req.files) {
+    fileData = await uploadService.uploadFile(req.files.postfile, {
+      storagePath: `/media/${board.name}`,
+    });
+    threadBody.file = fileData;
+  }
 
+  const thread = await postService.createThread(board, threadBody);
   await cacheService.refreshBoardCache(board);
 
   res.status(httpStatus.CREATED).format({
@@ -86,7 +93,7 @@ const postReply = catchAsync(async (req, res) => {
 
   if (req.files) {
     fileData = await uploadService.uploadFile(req.files.postfile, {
-      storagePath: `/${board.name}`,
+      storagePath: `/media/${board.name}`,
     });
     replyBody.file = fileData;
   }

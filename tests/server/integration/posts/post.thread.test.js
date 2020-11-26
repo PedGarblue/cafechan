@@ -3,6 +3,9 @@ const faker = require('faker');
 const httpStatus = require('http-status');
 const { omit } = require('lodash');
 const mcache = require('memory-cache');
+const path = require('path');
+const fs = require('fs');
+const envConfig = require('../../../../src/config/envConfig');
 const app = require('../../../../src/app');
 const banTimes = require('../../../../src/config/banTimes');
 const setupTestDB = require('../../utils/setupTestDB');
@@ -174,5 +177,82 @@ describe('POST /:board/', () => {
       .set('Accept', 'application/json')
       .send(duplicated)
       .expect(httpStatus.BAD_REQUEST);
+  });
+
+  describe('File posting', () => {
+    let thread;
+    let board;
+    const boardsMediaPath = path.join(__dirname, `../../../../public/media`);
+    const boardsMediaURL = `${envConfig.site_url}/media`;
+    const filePath = `${__dirname}/../../fixtures/images/gondola.jpg`;
+
+    beforeEach(async () => {
+      board = await createBoard();
+      newThread = {
+        title: faker.lorem.words(10),
+        message: faker.lorem.paragraph(),
+      };
+    });
+
+    afterEach(() => {
+      fs.rmdirSync(boardsMediaPath, { recursive: true });
+    });
+
+    test('should return 201 and sucessfully store the uploaded image correctly', async () => {
+      const res = await request(app)
+        .post(`/${board.name}/`)
+        .set('Accept', 'application/json')
+        .field('board', board.id)
+        .field('message', newThread.message)
+        .field('title', newThread.title)
+        .attach('postfile', filePath)
+        .expect(httpStatus.CREATED);
+
+      expect(res.body.file).toBeDefined();
+      expect(res.body.file).toEqual({
+        mimeType: 'image/jpeg',
+        name: 'gondola.jpg',
+        size: expect.anything(),
+        url: `${boardsMediaURL}/${board.name}/gondola.jpg`,
+      });
+
+      const threadDb = await Thread.findById(res.body._id);
+      expect(threadDb).toBeDefined();
+      expect(threadDb.file).toMatchObject({
+        mimeType: 'image/jpeg',
+        name: 'gondola.jpg',
+        size: expect.anything(),
+        url: `${boardsMediaURL}/${board.name}/gondola.jpg`,
+      });
+
+      expect(fs.existsSync(`${boardsMediaPath}/${board.name}/gondola.jpg`)).toBeTruthy();
+      expect(fs.existsSync(`${boardsMediaPath}/${board.name}/thumb-gondola.jpg`)).toBeTruthy();
+    });
+
+    test('should return 400 if file size is greater than board max file size', async () => {
+      board.set('maxfilesize', 0);
+      await board.save();
+      await request(app)
+        .post(`/${board.name}/`)
+        .set('Accept', 'application/json')
+        .field('board', board.id)
+        .field('message', newThread.message)
+        .field('title', newThread.title)
+        .attach('postfile', filePath)
+        .expect(httpStatus.BAD_REQUEST);
+    });
+
+    test('should return 400 if file mime type is not allowed by the board', async () => {
+      board.set('allowedfiletypes', []);
+      await board.save();
+      await request(app)
+        .post(`/${board.name}/`)
+        .set('Accept', 'application/json')
+        .field('board', board.id)
+        .field('message', newThread.message)
+        .field('title', newThread.title)
+        .attach('postfile', filePath)
+        .expect(httpStatus.BAD_REQUEST);
+    });
   });
 });
