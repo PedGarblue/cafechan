@@ -214,6 +214,7 @@ describe('POST /:board/', () => {
         name: 'gondola.jpg',
         size: expect.anything(),
         url: `${boardsMediaURL}/${board.name}/gondola.jpg`,
+        thumbnailUrl: `${boardsMediaURL}/${board.name}/thumb_gondola.jpg`,
       });
 
       const threadDb = await Thread.findById(res.body._id);
@@ -223,10 +224,11 @@ describe('POST /:board/', () => {
         name: 'gondola.jpg',
         size: expect.anything(),
         url: `${boardsMediaURL}/${board.name}/gondola.jpg`,
+        thumbnailUrl: `${boardsMediaURL}/${board.name}/thumb_gondola.jpg`,
       });
 
       expect(fs.existsSync(`${boardsMediaPath}/${board.name}/gondola.jpg`)).toBeTruthy();
-      expect(fs.existsSync(`${boardsMediaPath}/${board.name}/thumb-gondola.jpg`)).toBeTruthy();
+      expect(fs.existsSync(`${boardsMediaPath}/${board.name}/thumb_gondola.jpg`)).toBeTruthy();
     });
 
     test('should return 400 if file size is greater than board max file size', async () => {

@@ -226,6 +226,7 @@ describe('POST /:board/thread/:threadid/', () => {
         mimeType: 'image/jpeg',
         name: 'gondola.jpg',
         size: expect.anything(),
+        thumbnailUrl: `${boardsMediaURL}/${board.name}/thumb_gondola.jpg`,
         url: `${boardsMediaURL}/${board.name}/gondola.jpg`,
       });
 
@@ -235,11 +236,12 @@ describe('POST /:board/thread/:threadid/', () => {
         mimeType: 'image/jpeg',
         name: 'gondola.jpg',
         size: expect.anything(),
+        thumbnailUrl: `${boardsMediaURL}/${board.name}/thumb_gondola.jpg`,
         url: `${boardsMediaURL}/${board.name}/gondola.jpg`,
       });
 
       expect(fs.existsSync(`${boardsMediaPath}/${board.name}/gondola.jpg`)).toBeTruthy();
-      expect(fs.existsSync(`${boardsMediaPath}/${board.name}/thumb-gondola.jpg`)).toBeTruthy();
+      expect(fs.existsSync(`${boardsMediaPath}/${board.name}/thumb_gondola.jpg`)).toBeTruthy();
     });
 
     test('should return 400 if file size is greater than board max file size', async () => {

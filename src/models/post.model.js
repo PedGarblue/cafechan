@@ -35,6 +35,7 @@ const postSchema = new Schema(
       mimeType: String,
       url: String,
       size: String,
+      thumbnailUrl: String,
     },
     tripcode: String,
     email: String,

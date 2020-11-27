@@ -1,4 +1,7 @@
 div.thread(data-contents=thread)
+    if thread.file
+      span.thumb
+        img(src=thread.file.thumbnailUrl)
     div.thread-head
         span.threadinfo
             input(type="checkbox", value=thread.seq_id)

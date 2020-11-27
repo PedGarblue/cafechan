@@ -18,6 +18,12 @@
             </td>
           </tr>
           <tr>
+            <td class="postblock">Archivo</td>
+            <td>
+              <input ref="postfile" type="file" name="postfile" @change="handleFileUpload" />
+            </td>
+          </tr>
+          <tr>
             <td v-if="hasError" colspan="2" class="postblock">
               {{ errorMsg }}
             </td>
@@ -78,6 +84,7 @@ export default {
     return {
       title: '',
       message: '',
+      file: '',
       errorMsg: '',
       status: '',
     };
@@ -97,14 +104,18 @@ export default {
     },
   },
   methods: {
+    handleFileUpload() {
+      const [file] = this.$refs.postfile.files;
+      this.file = file;
+    },
     sendPost() {
       this.status = LOADING;
       let request = sendPost(this.boardname, this.boardid);
 
       if (this.postType === 'Thread') {
-        request = request.thread(this.title, this.message);
+        request = request.thread(this.title, this.message, this.file);
       } else {
-        request = request.reply(this.threadid, this.threadseqid, this.message);
+        request = request.reply(this.threadid, this.threadseqid, this.message, this.file);
       }
       request
         .then(() => {

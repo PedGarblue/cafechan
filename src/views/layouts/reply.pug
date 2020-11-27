@@ -3,6 +3,7 @@ div( id = reply.seq_id ).reply-container
     div.doubledash &gt;&gt;
     div.reply
         a(name=reply.seq_id)
+
         span.replyinfo
             input(type="checkbox" value=reply.seq_id)
             span.postername
@@ -16,5 +17,10 @@ div( id = reply.seq_id ).reply-container
                 ).reflink2 /#/
                 a.reflinks
                     = reply.seq_id
-        blockquote.message
+        div
+          if thread.file
+            a(href="#")
+              span.thumb
+                img(src=thread.file.thumbnailUrl)
+          blockquote.message
             != reply.message

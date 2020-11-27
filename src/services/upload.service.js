@@ -4,28 +4,28 @@ const config = require('../config/envConfig');
 
 const StorageClients = {
   LOCAL: {
-    upload: (postfile, options) =>
+    upload: async (postfile, options) =>
       new Promise(resolve => {
         const { storagePath } = options;
         const uploadPath = path.join(__dirname, `../../public`, storagePath);
         const postPath = `${uploadPath}/${postfile.name}`;
         const postURL = `${config.site_url}${storagePath}/${postfile.name}`;
-        const thumbPath = `${uploadPath}/thumb-${postfile.name}`;
-        const thumbURL = `${config.site_url}${storagePath}/thumb-${postfile.name}`;
+        const thumbPath = `${uploadPath}/thumb_${postfile.name}`;
+        const thumbURL = `${config.site_url}${storagePath}/thumb_${postfile.name}`;
 
         postfile.mv(postPath);
         sharp(postfile.data)
           .resize(150)
           .toFile(thumbPath, err => {
             if (err) throw err;
+            resolve({
+              name: postfile.name,
+              mimeType: postfile.mimetype,
+              size: postfile.size,
+              thumbnailUrl: thumbURL,
+              url: postURL,
+            });
           });
-        resolve({
-          name: postfile.name,
-          mimeType: postfile.mimetype,
-          size: postfile.size,
-          thumbnailUrl: thumbURL,
-          url: postURL,
-        });
       }),
   },
   FILESTACK: {},

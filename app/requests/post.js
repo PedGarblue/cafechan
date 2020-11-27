@@ -33,7 +33,10 @@ export const sendPost = (boardname, boardid) => {
     throw new Error('Invalid argument');
   const sendPostPromise = (url, data) =>
     new Promise((resolve, reject) => {
-      request({ url, method: 'POST', data })
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      };
+      request({ url, method: 'POST', data }, headers)
         .then(resp => {
           savePost(resp);
           resolve(resp);
@@ -43,19 +46,22 @@ export const sendPost = (boardname, boardid) => {
         });
     });
   let url = `/${boardname}/`;
-  let data = {
-    board: boardid,
-  };
+  const data = new FormData();
+  data.append('board', boardid);
 
   return {
-    thread: (title, message) => {
+    thread: (title, message, postfile) => {
       if (!message) throw new Error('To post a thread in this board you need a message');
-      data = Object.assign(data, { title, message });
+      data.append('title', title);
+      data.append('message', message);
+      data.append('postfile', postfile);
       return sendPostPromise(url, data);
     },
-    reply: (thread, threadseqid, message) => {
+    reply: (thread, threadseqid, message, postfile) => {
       if (!message) throw new Error('To reply this thread you need a message');
-      data = Object.assign(data, { thread, message });
+      data.append('thread', thread);
+      data.append('message', message);
+      data.append('postfile', postfile);
       url = `${url}thread/${threadseqid}/`;
       return sendPostPromise(url, data);
     },
