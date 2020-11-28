@@ -131,7 +131,7 @@ describe('Post Parsing middleware', () => {
     req.body = post;
 
     await expect(PostParsing(req, res, next)).resolves.toBeUndefined();
-    expect(req.body.message).toMatch('<span class="greentext">>test\n</span>');
+    expect(req.body.message).toMatch('<span class="greentext">>test</span>');
   });
 
   test('should add <span> with red text color to every line that stars with "<"', async () => {
@@ -143,6 +143,6 @@ describe('Post Parsing middleware', () => {
     req.body = post;
 
     await expect(PostParsing(req, res, next)).resolves.toBeUndefined();
-    expect(req.body.message).toMatch('<span class="redtext"><test\n</span>');
+    expect(req.body.message).toMatch('<span class="redtext">&lt;test</span>');
   });
 });

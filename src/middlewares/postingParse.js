@@ -4,7 +4,7 @@ const parseGreentext = post =>
     const _post = post;
     _post.message = post.message.replace(regex, match => {
       const noBreaksLines = match.replace('\n', '');
-      return `<span class="greentext">${noBreaksLines}\n</span>`;
+      return `<span class="greentext">${noBreaksLines}</span>`;
     });
     resolve(_post);
   });
@@ -14,8 +14,8 @@ const parseRedtext = post =>
     const regex = /^(<|&lt;).+\n?/gm;
     const _post = post;
     _post.message = post.message.replace(regex, match => {
-      const noBreaksLines = match.replace('\n', '');
-      return `<span class="redtext">${noBreaksLines}\n</span>`;
+      const textFiltered = match.replace('\n', '').replace('<', '&lt;');
+      return `<span class="redtext">${textFiltered}</span>`;
     });
     resolve(_post);
   });
