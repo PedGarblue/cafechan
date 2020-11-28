@@ -1,26 +1,24 @@
-
 div( id = reply.seq_id ).reply-container
-    div.doubledash &gt;&gt;
-    div.reply
-        a(name=reply.seq_id)
-
-        span.replyinfo
-            input(type="checkbox" value=reply.seq_id)
-            span.postername
-                = reply.name.length > 0?reply.name:'Anonymous'
-            span.timer
-                = reply.timestamp
-            span.reflink
-                a( 
-                    href=`/${board.name}/thread/${thread.seq_id}#${reply.seq_id}`
-                    title='Obtener link a este post'
-                ).reflink2 /#/
-                a.reflinks
-                    = reply.seq_id
-        div
-          if thread.file
-            a(href="#")
-              span.thumb
-                img(src=thread.file.thumbnailUrl)
-          blockquote.message
-            != reply.message
+  div.doubledash &gt;&gt;
+  div.reply
+    a(name=reply.seq_id)
+    span.replyinfo
+      input(type="checkbox" value=reply.seq_id)
+      span.postername
+        = reply.name.length > 0?reply.name:'Anonymous'
+      span.timestamp
+        = reply.timestamp
+      span.reflink
+        a( 
+          href=`/${board.name}/thread/${thread.seq_id}#${reply.seq_id}`
+          title='Obtener link a este post'
+        ) /#/
+      span.post-id
+        = reply.seq_id
+    div.post-contents
+      if reply.file
+        a(href=reply.file.url, target="_blank").post-file
+          span.thumb
+            img(src=reply.file.thumbnailUrl)
+      blockquote.post-message
+        != reply.message

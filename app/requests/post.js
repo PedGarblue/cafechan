@@ -54,14 +54,14 @@ export const sendPost = (boardname, boardid) => {
       if (!message) throw new Error('To post a thread in this board you need a message');
       data.append('title', title);
       data.append('message', message);
-      data.append('postfile', postfile);
+      if (postfile) data.append('postfile', postfile);
       return sendPostPromise(url, data);
     },
     reply: (thread, threadseqid, message, postfile) => {
       if (!message) throw new Error('To reply this thread you need a message');
       data.append('thread', thread);
       data.append('message', message);
-      data.append('postfile', postfile);
+      if (postfile) data.append('postfile', postfile);
       url = `${url}thread/${threadseqid}/`;
       return sendPostPromise(url, data);
     },
