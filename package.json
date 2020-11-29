@@ -1,10 +1,10 @@
 {
-  "name": "cacochan-backend",
+  "name": "cafechan",
   "version": "0.1.0",
   "description": "An imageboard, just that.",
   "main": "src/index.js",
-  "repository": "",
-  "author": "budare",
+  "repository": "https://github.com/PedGarblue/cafechan",
+  "author": "PedGarblue",
   "license": "MIT",
   "engines": {
     "node": ">=12.0.0"
@@ -12,7 +12,8 @@
   "nodemonConfig": {
     "ignore": [
       "app/",
-      "public/bundles/"
+      "public/bundles/",
+      "tests/"
     ]
   },
   "scripts": {
@@ -23,10 +24,6 @@
     "test": "jest -i",
     "test:watch": "jest -i --watchAll",
     "coverage": "jest -i --coverage",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "prettier": "prettier --check **/*.js",
-    "prettier:fix": "prettier --write **/*.js"
   },
   "dependencies": {
     "@babel/core": "^7.11.6",
