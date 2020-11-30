@@ -22,6 +22,27 @@ describe('GET /:board/thread/:threadid/', () => {
       .send()
       .expect(httpStatus.OK);
 
+    expect(res.body).toHaveProperty('board');
+    expect(res.body.board).toEqual({
+      __v: expect.anything(),
+      _id: expect.anything(),
+      id: expect.anything(),
+      allowed_filetypes: ['PNG', 'JPG'],
+      allowedfiletypes: ['image/png', 'image/jpeg'],
+      anonymous: 'Anonymous',
+      forcedanon: true,
+      locked: false,
+      max_file_size: '10 MB',
+      maxfilesize: 1024 * 1024 * 10,
+      maxpages: 7,
+      maxreplies: 200,
+      nsfw: false,
+      postsperpage: 5,
+      screened: false,
+      section: 'ocio',
+      name: board.name,
+      desc: board.desc,
+    });
     expect(res.body).toHaveProperty('thread');
     expect(res.body.thread).not.toHaveProperty('ip');
     expect(res.body.thread).not.toHaveProperty('password');

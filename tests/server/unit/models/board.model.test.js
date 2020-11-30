@@ -24,13 +24,11 @@ describe('Board Model', () => {
       const board = new Board(newBoard);
       expect(board.transform().max_file_size).toMatch('10 MB');
     });
-  });
 
-  describe('Board transform()', () => {
     test('should return parsed value of allowedfiletypes', () => {
       newBoard.allowedfiletypes = ['image/jpeg', 'image/png'];
       const board = new Board(newBoard);
-      expect(board.transform().allowedfiletypes).toEqual(['JPG', 'PNG']);
+      expect(board.transform().allowed_filetypes).toEqual(['JPG', 'PNG']);
     });
   });
 });

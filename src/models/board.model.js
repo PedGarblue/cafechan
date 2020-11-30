@@ -71,6 +71,10 @@ boardShema.virtual('max_file_size').get(function() {
   return formatBytes(this.maxfilesize);
 });
 
+boardShema.virtual('allowed_filetypes').get(function() {
+  return this.allowedfiletypes.map(mimeType => mimeTypesValues[mimeType]);
+});
+
 boardShema.methods.toJSON = function() {
   const board = this;
   return board.toObject({ virtuals: true });
@@ -78,7 +82,6 @@ boardShema.methods.toJSON = function() {
 
 boardShema.methods.transform = function() {
   const board = this;
-  board.allowedfiletypes = board.allowedfiletypes.map(mimeType => mimeTypesValues[mimeType]);
   return board.toJSON();
 };
 
