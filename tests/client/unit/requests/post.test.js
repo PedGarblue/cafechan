@@ -55,13 +55,14 @@ describe('Posts Requests', () => {
       beforeEach(() => {
         request.mockImplementation(options => {
           const boardURLmatcher = /^\/\w+\/$/gm;
-          return new Promise((resolve, reject) => {
-            if (!boardURLmatcher.test(options.url)) reject(new Error(`Unexpected URL: ${options.url}`));
-            if (options.method !== 'POST') reject(new Error(`Unexpected request method: ${options.method}`));
-            if (typeof options.data !== 'object') reject(new Error(`Unexpected data: ${options.data}`));
-            if (options.data.board !== boardOne._id) reject(new Error(`Unexpected board: ${options.data.board}`));
-            if (options.data.title !== threadOne.title) reject(new Error(`Unexpected title: ${options.data.title}`));
-            if (options.data.message !== threadOne.message) reject(new Error(`Unexpected message: ${options.data.board}`));
+          return new Promise(resolve => {
+            expect(boardURLmatcher.test(options.url)).toBeTruthy();
+            expect(options.method).toBe('POST');
+            // eslint-disable-next-line no-undef
+            expect(options.data).toBeInstanceOf(FormData);
+            expect(options.data.get('board')).toBe(threadOne.board);
+            expect(options.data.get('title')).toBe(threadOne.title);
+            expect(options.data.get('message')).toBe(threadOne.message);
             resolve(threadOne);
           });
         });
@@ -86,10 +87,11 @@ describe('Posts Requests', () => {
           return new Promise(resolve => {
             expect(boardURLmatcher.test(options.url)).toBeTruthy();
             expect(options.method).toBe('POST');
-            expect(options.data).toBeInstanceOf(Object);
-            expect(options.data.board).toBe(replyOne.board);
-            expect(options.data.thread).toBe(replyOne.thread);
-            expect(options.data.message).toBe(replyOne.message);
+            // eslint-disable-next-line no-undef
+            expect(options.data).toBeInstanceOf(FormData);
+            expect(options.data.get('board')).toBe(replyOne.board);
+            expect(options.data.get('thread')).toBe(replyOne.thread);
+            expect(options.data.get('message')).toBe(replyOne.message);
             resolve(replyOne);
           });
         });
