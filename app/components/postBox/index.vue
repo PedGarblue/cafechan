@@ -79,6 +79,18 @@ export default {
         return '';
       },
     },
+    maxFilesize: {
+      type: Number,
+      default() {
+        return 1024 * 1024 * 10;
+      },
+    },
+    allowedFiletypes: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   data() {
     return {

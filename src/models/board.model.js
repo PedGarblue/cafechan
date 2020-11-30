@@ -1,6 +1,8 @@
 const { Schema, model } = require('mongoose');
 const { pick } = require('lodash');
+const formatBytes = require('../utils/formatBytes');
 const appConfig = require('../config/appConfig');
+const { mimeTypesValues } = require('../config/filetypes');
 const Thread = require('./thread.model');
 
 const boardShema = new Schema({
@@ -61,17 +63,22 @@ const boardShema = new Schema({
   },
   maxfilesize: {
     type: Number,
-    default: 1 * 100 * 1000 * 10,
+    default: 1 * 1024 * 1024 * 10,
   },
+});
+
+boardShema.virtual('max_file_size').get(function() {
+  return formatBytes(this.maxfilesize);
 });
 
 boardShema.methods.toJSON = function() {
   const board = this;
-  return board.toObject();
+  return board.toObject({ virtuals: true });
 };
 
 boardShema.methods.transform = function() {
   const board = this;
+  board.allowedfiletypes = board.allowedfiletypes.map(mimeType => mimeTypesValues[mimeType]);
   return board.toJSON();
 };
 

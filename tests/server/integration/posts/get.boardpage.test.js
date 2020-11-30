@@ -23,7 +23,22 @@ describe('GET /:board/', () => {
 
     expect(res.body).toBeInstanceOf(Object);
     expect(res.body).toHaveProperty('board');
-    expect(res.body.board).toMatchObject({
+    expect(res.body.board).toEqual({
+      __v: expect.anything(),
+      _id: expect.anything(),
+      id: expect.anything(),
+      allowedfiletypes: ['PNG', 'JPG'],
+      anonymous: 'Anonymous',
+      forcedanon: true,
+      locked: false,
+      max_file_size: '10 MB',
+      maxfilesize: 1024 * 1024 * 10,
+      maxpages: 7,
+      maxreplies: 200,
+      nsfw: false,
+      postsperpage: 5,
+      screened: false,
+      section: 'ocio',
       name: board.name,
       desc: board.desc,
     });
