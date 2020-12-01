@@ -15,6 +15,7 @@ const { createBoard } = require('../../fixtures/board.fixture');
 const { insertThreads, threadOne, threadTwo } = require('../../fixtures/post.fixture');
 const { Thread, Ban } = require('../../../../src/models');
 const appConfig = require('../../../../src/config/appConfig');
+const { encrypt } = require('../../../../src/utils/crypt');
 
 setupTestDB();
 setupTestCache();
@@ -50,6 +51,11 @@ describe('POST /:board/', () => {
       name: board.anonymous,
       title: newThread.title,
       message: newThread.message,
+      ip: {
+        $init: expect.anything(),
+        iv: expect.anything(),
+        content: expect.anything(),
+      },
     });
   });
 
@@ -169,7 +175,7 @@ describe('POST /:board/', () => {
 
   test('should return 400 error if thread send is duplicated', async () => {
     const board = await createBoard();
-    const toDuplicate = Object.assign(newThread, { board: board.id, timestamp: Date.now() - 1000 });
+    const toDuplicate = Object.assign(newThread, { board: board.id, ip: encrypt(faker.internet.ip()), timestamp: Date.now() - 1000 });
     const duplicated = newThread;
     duplicated.board = board.id;
     await insertThreads([toDuplicate]);
@@ -181,7 +187,6 @@ describe('POST /:board/', () => {
   });
 
   describe('File posting', () => {
-    let thread;
     let board;
     const boardsMediaPath = path.join(__dirname, `../../../../public/media`);
     const boardsMediaURL = `${envConfig.site_url}/media`;

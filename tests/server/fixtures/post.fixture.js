@@ -2,6 +2,7 @@ const faker = require('faker');
 const mongoose = require('mongoose');
 const { boardOne } = require('./board.fixture');
 const { Thread, Reply } = require('../../../src/models');
+const { encrypt } = require('../../../src/utils/crypt');
 
 const threadOne = {
   _id: mongoose.Types.ObjectId(),
@@ -10,6 +11,7 @@ const threadOne = {
   message: faker.lorem.paragraph(),
   timestamp: Date.now() - 180000,
   lastbump: Date.now() - 180000,
+  ip: encrypt(faker.internet.ip()),
 };
 
 const threadTwo = {
@@ -19,6 +21,7 @@ const threadTwo = {
   message: faker.lorem.paragraph(),
   timestamp: Date.now() - 100000,
   lastbump: Date.now() - 100000,
+  ip: encrypt(faker.internet.ip()),
 };
 
 const replyOne = {
@@ -27,6 +30,7 @@ const replyOne = {
   thread: threadOne._id,
   message: faker.lorem.paragraph(),
   timestamp: Date.now() - 80000,
+  ip: encrypt(faker.internet.ip()),
 };
 
 const replyTwo = {
@@ -35,6 +39,7 @@ const replyTwo = {
   thread: threadOne._id,
   message: faker.lorem.paragraph(),
   timestamp: Date.now() - 40000,
+  ip: encrypt(faker.internet.ip()),
 };
 
 const createThread = async (thread = threadOne) => {

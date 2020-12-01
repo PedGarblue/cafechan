@@ -46,6 +46,11 @@ describe('POST /:board/thread/:threadid/', () => {
 
     let replydb = await Reply.findById(res.body.id);
     expect(replydb).toBeDefined();
+    expect(replydb.ip).toEqual({
+      $init: expect.anything(),
+      iv: expect.anything(),
+      content: expect.anything(),
+    });
     replydb = replydb.transform();
     expect(replydb.kind).toBe('Reply');
     expect(replydb.board.toHexString()).toBe(res.body.board.id);

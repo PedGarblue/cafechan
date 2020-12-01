@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-sequence')(mongoose);
-const { omit, unescape } = require('lodash');
+const { omit } = require('lodash');
+
 const dateUtil = require('../utils/date.util');
 const appConfig = require('../config/appConfig');
 
@@ -40,7 +41,16 @@ const postSchema = new Schema(
     tripcode: String,
     email: String,
     password: String,
-    ip: String,
+    ip: {
+      iv: {
+        type: String,
+        required: true,
+      },
+      content: {
+        type: String,
+        required: true,
+      },
+    },
     created_at: {
       type: Number,
       alias: 'timestamp',

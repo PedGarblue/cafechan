@@ -1,6 +1,8 @@
 const faker = require('faker');
 const { escape } = require('lodash');
 const { ObjectId } = require('mongoose').Types;
+
+const { encrypt } = require('../../../../src/utils/crypt');
 const { Thread, Reply, Board } = require('../../../../src/models');
 const appConfig = require('../../../../src/config.json');
 // const Logger = require('../../../src/config/logger');
@@ -19,7 +21,7 @@ describe('Thread Model', () => {
     });
     newThread = {
       board,
-      ip: faker.internet.ip(),
+      ip: encrypt(faker.internet.ip()),
       timestamp: Date.now() / 1000,
       password: 'asd123dsa',
     };
@@ -74,18 +76,16 @@ describe('Thread Model', () => {
         await Reply.create({
           board: board.id,
           thread: thread.id,
-          ip: faker.internet.ip(),
+          ip: encrypt(faker.internet.ip()),
           message: faker.lorem.paragraph(),
           timestamp: Date.now() / 1000,
-          password: 'A123564a2',
         }),
         await Reply.create({
           board: board.id,
           thread: thread.id,
           message: faker.lorem.paragraph(),
-          ip: faker.internet.ip(),
+          ip: encrypt(faker.internet.ip()),
           timestamp: Date.now() / 1000,
-          password: 'A2d21ksa2',
         }),
       ];
       await expect(thread.getReplies()).resolves.toStrictEqual(replies.map(reply => reply.transform()));

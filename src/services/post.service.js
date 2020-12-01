@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 const { pick } = require('lodash');
 const httpStatus = require('http-status');
+
+const { encrypt, decrypt } = require('../utils/crypt');
 const { getQueryOptions } = require('../utils/service.util');
 const { Post, Thread, Reply } = require('../models');
 const AppError = require('../utils/AppError');
@@ -44,7 +46,7 @@ const getThread = async (board, _id, addReplies = true) => {
 const createThread = async (board, threadBody) => {
   if (board.locked) throw new AppError(httpStatus.FORBIDDEN, 'The board is closed');
   const cryptedData = {
-    ip: threadBody.ip,
+    ip: pick(encrypt(threadBody.ip), ['iv', 'content']),
     board,
   };
   const thread = new Thread(Object.assign(threadBody, cryptedData));
@@ -55,7 +57,7 @@ const createThread = async (board, threadBody) => {
 const createReply = async (board, thread, replyBody) => {
   if (board.locked) throw new AppError(httpStatus.FORBIDDEN, 'The board is closed');
   const parsedData = {
-    ip: replyBody.ip,
+    ip: pick(encrypt(replyBody.ip), ['iv', 'content']),
     board,
     thread,
   };
@@ -69,7 +71,8 @@ const createReply = async (board, thread, replyBody) => {
 const deleteThread = async (threadid, ip) => {
   const thread = await Thread.findById(threadid);
   if (!thread) throw new AppError(httpStatus.NOT_FOUND, 'Thread not found');
-  if (ip !== thread.ip) throw new AppError(httpStatus.FORBIDDEN, `No puedes borrar este post`);
+  if (ip !== decrypt(pick(thread.ip, ['iv', 'content'])))
+    throw new AppError(httpStatus.FORBIDDEN, `No puedes borrar este post`);
   await thread.delete();
   return thread;
 };
@@ -77,7 +80,8 @@ const deleteThread = async (threadid, ip) => {
 const deleteReply = async (replyid, ip) => {
   const reply = await Reply.findById(replyid);
   if (!reply) throw new AppError(httpStatus.NOT_FOUND, 'Reply not found');
-  if (ip !== reply.ip) throw new AppError(httpStatus.FORBIDDEN, `No puedes borrar este post`);
+  if (ip !== decrypt(pick(reply.ip, ['iv', 'content'])))
+    throw new AppError(httpStatus.FORBIDDEN, `No puedes borrar este post`);
   await reply.delete();
   return reply;
 };

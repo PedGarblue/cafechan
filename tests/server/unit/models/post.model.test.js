@@ -1,5 +1,7 @@
 const faker = require('faker');
 const { ObjectId } = require('mongoose').Types;
+
+const { encrypt } = require('../../../../src/utils/crypt');
 const { Post } = require('../../../../src/models');
 const appConfig = require('../../../../src/config.json');
 const setupTestDB = require('../../utils/setupTestDB');
@@ -16,7 +18,7 @@ describe('Post model', () => {
       newPost = {
         board: boardFixtures.boardOne._id,
         thread: postFixtures.threadOne._id,
-        ip: faker.internet.ip(),
+        ip: encrypt(faker.internet.ip()),
         timestamp: Date.now() / 1000,
       };
     });
@@ -61,9 +63,8 @@ describe('Post model', () => {
     const newPost = {
       board: ObjectId(),
       thread: ObjectId(),
-      ip: faker.internet.ip(),
+      ip: encrypt(faker.internet.ip()),
       timestamp: Date.now() / 1000,
-      password: 'A232dksa2',
     };
 
     test('should not return post password when toJSON is called', () => {
