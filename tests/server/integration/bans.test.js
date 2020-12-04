@@ -6,6 +6,8 @@ const setupTestDB = require('../utils/setupTestDB');
 const { banOne, banTwo, insertBans, createBan } = require('../fixtures/ban.fixture');
 const { adminAccessToken, userOneAccessToken } = require('../fixtures/token.fixture');
 const { admin, userOne, insertUsers } = require('../fixtures/user.fixture');
+const { createThread } = require('../fixtures/post.fixture');
+const { decrypt } = require('../../../src/utils/crypt');
 const banTimes = require('../../../src/config/banTimes');
 const { Ban } = require('../../../src/models');
 
@@ -92,6 +94,34 @@ describe('Bans routes', () => {
       expect(banDb.until).toEqual(newBan.until);
     });
 
+    test('should return 201 and create ban using post id', async () => {
+      await insertUsers([admin]);
+      const thread = await createThread();
+      delete newBan.ip;
+      newBan.post = thread._id;
+      const res = await request(app)
+        .post('/ban/')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .send(newBan);
+      expect(res.body).toBeInstanceOf(Object);
+      expect(res.body).toEqual({
+        ip: decrypt(thread.ip),
+        reason: newBan.reason,
+        until: newBan.until,
+        post: expect.anything(),
+        __v: expect.anything(),
+        createdAt: expect.anything(),
+        updatedAt: expect.anything(),
+        _id: expect.anything(),
+      });
+
+      const banDb = await Ban.findById(res.body._id);
+
+      expect(banDb).toBeDefined();
+      expect(banDb.ip).toEqual(decrypt(thread.ip));
+      expect(banDb.reason).toEqual(newBan.reason);
+      expect(banDb.until).toEqual(newBan.until);
+    });
     test('should return 401 if access token is missing', async () => {
       await request(app)
         .post('/ban/')
