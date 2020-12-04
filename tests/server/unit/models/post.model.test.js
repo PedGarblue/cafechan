@@ -71,8 +71,10 @@ describe('Post model', () => {
       expect(new Post(newPost).toJSON()).not.toHaveProperty('password');
     });
 
-    test('should not return ip when toJSON is called', () => {
-      expect(new Post(newPost).toJSON()).not.toHaveProperty('ip');
+    test('should return only the ip hash when toJSON is called', () => {
+      const post = new Post(newPost).toJSON();
+      expect(post).toBeDefined();
+      expect(post.ip).toEqual(newPost.ip.content);
     });
   });
 });

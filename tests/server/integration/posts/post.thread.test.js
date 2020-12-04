@@ -39,8 +39,6 @@ describe('POST /:board/', () => {
       .set('Accept', 'application/json')
       .send(newThread)
       .expect(httpStatus.CREATED);
-    expect(res.body).not.toHaveProperty('password');
-    expect(res.body).not.toHaveProperty('ip');
     expect(res.body).toMatchObject({
       title: newThread.title,
       message: newThread.message,

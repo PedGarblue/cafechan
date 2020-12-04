@@ -45,12 +45,10 @@ describe('Thread Model', () => {
   });
 
   describe('Thread to JSON', () => {
-    test('should not return post password when toJSON is called', () => {
-      expect(new Thread(newThread).toJSON()).not.toHaveProperty('password');
-    });
-
     test('should not return ip when toJSON is called', () => {
-      expect(new Thread(newThread).toJSON()).not.toHaveProperty('ip');
+      const thread = new Thread(newThread).toJSON();
+      expect(thread).toBeDefined();
+      expect(thread.ip).toEqual(newThread.ip.content);
     });
 
     test('should not return thread (property) when toJSON is called', () => {

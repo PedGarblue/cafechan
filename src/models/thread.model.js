@@ -50,8 +50,9 @@ threadSchema.methods.delete = async function() {
 };
 
 threadSchema.methods.toJSON = function() {
-  const post = this;
-  return omit(post.toObject({ virtuals: true }), ['ip', 'password', 'thread']);
+  const post = omit(this.toObject({ virtuals: true }), ['thread']);
+  post.ip = post.ip.content;
+  return post;
 };
 
 threadSchema.methods.transform = function() {

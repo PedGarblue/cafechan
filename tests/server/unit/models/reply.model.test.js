@@ -47,8 +47,10 @@ describe('Reply Model', () => {
       expect(new Reply(newReply).toJSON()).not.toHaveProperty('password');
     });
 
-    test('should not return ip when toJSON is called', () => {
-      expect(new Reply(newReply).toJSON()).not.toHaveProperty('ip');
+    test('should return ip hash when toJSON is called', () => {
+      const reply = new Reply(newReply).toJSON();
+      expect(reply).toBeDefined();
+      expect(reply.ip).toEqual(newReply.ip.content);
     });
   });
 });

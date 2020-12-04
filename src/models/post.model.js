@@ -76,8 +76,9 @@ postSchema.methods.delete = async function() {
 };
 
 postSchema.methods.toJSON = function() {
-  const post = this;
-  return omit(post.toObject(), ['ip', 'password']);
+  const post = this.toObject();
+  post.ip = this.ip.content;
+  return post;
 };
 
 postSchema.methods.transform = function() {

@@ -38,8 +38,6 @@ describe('POST /:board/thread/:threadid/', () => {
       .send(newReply)
       .expect(httpStatus.CREATED);
 
-    expect(res.body).not.toHaveProperty('ip');
-    expect(res.body).not.toHaveProperty('password');
     expect(res.body).toMatchObject({
       message: newReply.message,
     });

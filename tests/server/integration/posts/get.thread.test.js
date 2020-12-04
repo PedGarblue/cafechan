@@ -44,8 +44,6 @@ describe('GET /:board/thread/:threadid/', () => {
       desc: board.desc,
     });
     expect(res.body).toHaveProperty('thread');
-    expect(res.body.thread).not.toHaveProperty('ip');
-    expect(res.body.thread).not.toHaveProperty('password');
     expect(res.body.thread).toHaveProperty('replies');
     expect(res.body.thread.replies).toBeInstanceOf(Array);
     expect(res.body).toHaveProperty('sections');
