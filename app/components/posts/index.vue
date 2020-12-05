@@ -10,8 +10,13 @@
     <Table v-else>
       <template #body>
         <tr v-for="post in posts" :key="`${post.id}`">
-          <Reply v-if="post.kind === 'Reply'" :data="post" @delete-post="removePost(post)"></Reply>
-          <Thread v-else :data="post" @delete-post="removePost(post)"></Thread>
+          <Reply
+            v-if="post.kind === 'Reply'"
+            :data="post"
+            @delete-post="removePost(post)"
+            @ban-poster="banPoster(post)"
+          ></Reply>
+          <Thread v-else :data="post" @delete-post="removePost(post)" @ban-poster="banPoster(post)"></Thread>
         </tr>
       </template>
     </Table>
@@ -85,6 +90,9 @@ export default {
           this.errMsg = err.message;
           this.status = ERROR;
         });
+    },
+    banPoster(data) {
+      this.$router.push({ name: 'ban-add', query: { post: data.id } });
     },
   },
 };

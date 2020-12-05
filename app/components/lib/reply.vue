@@ -12,6 +12,9 @@
         <span>
           <a href="#" @click.prevent="deletePost(data)">[X]</a>
         </span>
+        <span>
+          <a href="#" @click.prevent="banPoster(data)">[B]</a>
+        </span>
       </span>
       <blockquote class="message" v-html="data.message"></blockquote>
     </div>
@@ -29,6 +32,7 @@ export default {
           name: '',
           timestamp: '',
           message: '',
+          ip: '',
         };
       },
     },
@@ -36,6 +40,9 @@ export default {
   methods: {
     deletePost(data) {
       this.$emit('delete-post', data);
+    },
+    banPoster(data) {
+      this.$emit('ban-poster', data);
     },
   },
 };

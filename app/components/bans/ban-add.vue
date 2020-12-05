@@ -1,7 +1,11 @@
 <template>
   <Form return-route="/ban" title="Add Ban" @form-submit="sendBan">
-    <FormBlock name="#ip" title="Poster IP">
+    <FormBlock v-if="!post" name="#ip" title="Poster IP">
       <input id="#ip" v-model="ip" class="form-input" type="text" required />
+    </FormBlock>
+
+    <FormBlock v-if="post" name="#post" title="Post id">
+      <input id="#post" :value="post" class="form-input" type="text" disabled />
     </FormBlock>
 
     <FormBlock name="#reasons" title="Ban Reason">
@@ -47,6 +51,7 @@ export default {
       ip: '',
       reason: '',
       until: '',
+      post: '',
       status: '',
       errorMsg: '',
     };
@@ -66,13 +71,17 @@ export default {
     },
     ...mapGetters(['accessToken']),
   },
+  mounted() {
+    this.post = this.$route.query.post;
+  },
   methods: {
     sendBan() {
       const data = {
-        ip: this.ip,
         reason: this.reason,
         until: new Date(this.until).getTime(),
       };
+      if (this.post) data.post = this.post;
+      else data.ip = this.ip;
       this.$emit('form-submit-request');
       this.status = REQUEST;
       return sendBan(this.accessToken.token, data)

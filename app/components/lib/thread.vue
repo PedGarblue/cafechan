@@ -15,6 +15,9 @@
         <span>
           <a href="#" @click.prevent="removePost(data)">[X]</a>
         </span>
+        <span>
+          <a href="#" @click.prevent="banPoster(data)">[B]</a>
+        </span>
       </span>
       <blockquote class="message" v-html="data.message"></blockquote>
     </div>
@@ -39,6 +42,9 @@ export default {
   methods: {
     removePost(data) {
       this.$emit('delete-post', data);
+    },
+    banPoster(data) {
+      this.$emit('ban-poster', data);
     },
   },
 };
