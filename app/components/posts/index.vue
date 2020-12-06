@@ -10,13 +10,7 @@
     <Table v-else>
       <template #body>
         <tr v-for="post in posts" :key="`${post.id}`">
-          <Reply
-            v-if="post.kind === 'Reply'"
-            :data="post"
-            @delete-post="removePost(post)"
-            @ban-poster="banPoster(post)"
-          ></Reply>
-          <Thread v-else :data="post" @delete-post="removePost(post)" @ban-poster="banPoster(post)"></Thread>
+          <Post :data="post" @delete-post="removePost(post)" @ban-poster="banPoster(post)"></Post>
         </tr>
       </template>
     </Table>
@@ -29,8 +23,7 @@ import { mapGetters } from 'vuex';
 import Button from '../lib/button';
 import Table from '../lib/table';
 import Page from '../lib/page';
-import Reply from '../lib/reply';
-import Thread from '../lib/thread';
+import Post from '../lib/post';
 import Loading from '../lib/loading';
 
 const LOADING = 'LOADING';
@@ -40,11 +33,10 @@ const ERROR = 'ERROR';
 export default {
   components: {
     Page,
-    Reply,
-    Thread,
     Table,
     Button,
     Loading,
+    Post,
   },
   data() {
     return {
