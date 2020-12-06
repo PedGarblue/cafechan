@@ -25,7 +25,7 @@
           <td class="ban-ip">{{ ban.ip }}</td>
           <td class="buttons">
             <span class="delete">
-              <Button>X</Button>
+              <Button @click="deleteBan(ban)">X</Button>
             </span>
           </td>
         </tr>
@@ -36,7 +36,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { getBans } from '../../requests/ban';
+
+import { getBans, deleteBan } from '../../requests/ban';
 import Table from '../lib/table';
 import Button from '../lib/button';
 import Loading from '../lib/loading';
@@ -94,6 +95,12 @@ export default {
           this.errorMsg = err.message;
           this.status = ERROR;
         });
+    },
+    deleteBan(ban) {
+      const data = {
+        id: ban._id,
+      };
+      deleteBan(this.accessToken.token, data).then(() => this.getBans());
     },
   },
 };
