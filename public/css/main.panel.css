@@ -1,4 +1,11 @@
-
+:root {
+  --primary-color: #665540;
+  --primary-light-color: #93816c;
+  --secondary-color: #38393e;
+  --secondary-light-color: #5e5e5e;
+  --dark: #1D1F21;
+  --text-color: #fcfdfb;
+}
 body{
     background: #FFFFEE;
     color: #800000;
@@ -73,58 +80,6 @@ body{
 	margin-top: 0.4em;
 	color: #fff;
 	border-radius: 4px;
-}
-
-/* NAVBAR */
-
-
-
-
-/* MENU */
-
-.menu{
-    width: 20%;
-    background-color: #1D1F21;
-    color: #FFF9C4;
-    display: inline-block;
-}
-
-.menu-header{
-    text-align: center;
-    padding: 1em;
-    font-weight: bold;
-    font-size: 1.05em;
-    background-color: #38393e;
-}
-
-.menu a{
-    text-decoration: none;
-    color: #FFF9C4;
-    font-weight: bold;
-}
-
-.menu-sections{
-    margin: 0;
-    list-style: none;
-}
-
-.menu-section{
-    padding: 0.7em 0;
-}
-
-
-.sub-section{
-    transition: all 0.1s;
-    opacity: 0;
-    display: none;
-    visibility: hidden;
-    list-style: none;
-}
-.menu-section:hover .sub-section{
-    opacity: 1;
-    display: block;
-    visibility: visible;
-    padding-top: 0.7em;
 }
 
 .page {

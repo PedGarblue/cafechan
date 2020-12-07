@@ -12,12 +12,6 @@
             Inicio
           </router-link>
         </div>
-        <div class="navbar-username">
-          <span class="username"> {{ profile.name }}, </span>
-          <span class="userrole">
-            {{ profile.role }}
-          </span>
-        </div>
         <UserMenu />
       </div>
       <div v-else class="navbar-user">
@@ -62,8 +56,8 @@ export default {
 
 <style scoped>
 .navbar {
-  background: #bd0003;
-  color: #fff9c4;
+  background: var(--primary-color);
+  color: var(--text-color);
   display: flex;
 }
 
@@ -102,7 +96,7 @@ export default {
 }
 
 .nav-link:hover {
-  background-color: #bb3f3f;
+  background-color: var(--primary-light-color);
 }
 
 .navbar a {

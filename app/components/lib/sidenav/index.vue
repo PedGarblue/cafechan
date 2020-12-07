@@ -59,4 +59,48 @@ export default {
 .loading-msg {
   margin-top: 1em;
 }
+
+.menu {
+  width: 20%;
+  background-color: var(--dark);
+  color: var(--text-color);
+  display: inline-block;
+}
+
+.menu-header {
+  text-align: center;
+  padding: 1em;
+  font-weight: bold;
+  font-size: 1.05em;
+  background-color: var(--secondary-color);
+}
+
+.menu a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: bold;
+}
+
+.menu-sections {
+  margin: 0;
+  list-style: none;
+}
+
+.menu-section {
+  padding: 0.7em 0;
+}
+
+.sub-section {
+  transition: all 0.1s;
+  opacity: 0;
+  display: none;
+  visibility: hidden;
+  list-style: none;
+}
+.menu-section:hover .sub-section {
+  opacity: 1;
+  display: block;
+  visibility: visible;
+  padding-top: 0.7em;
+}
 </style>

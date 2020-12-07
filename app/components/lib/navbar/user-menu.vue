@@ -2,6 +2,12 @@
   <div class="user-menu">
     <div class="settings-icon" @click="openMenu" />
     <ul v-if="displayMenu" class="user-menu-list">
+      <div class="user-desc">
+        <span class="username"> {{ profile.name }}, </span>
+        <span class="userrole">
+          {{ profile.role }}
+        </span>
+      </div>
       <li class="user-menu-item" @click="logout">
         <span>Desconectar</span>
       </li>
@@ -13,6 +19,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { AUTH_LOGOUT } from '../../../store/actions/auth';
 
 export default {
@@ -20,6 +27,11 @@ export default {
     return {
       displayMenu: false,
     };
+  },
+  computed: {
+    ...mapState({
+      profile: state => state.user.profile,
+    }),
   },
   methods: {
     logout() {
@@ -43,7 +55,7 @@ export default {
 }
 
 .settings-icon:hover {
-  background-color: #b3282a;
+  background-color: var(--primary-light-color);
 }
 
 .user-menu {
@@ -58,10 +70,10 @@ export default {
   top: -1em;
   left: 81.2vw;
   width: 16.1em;
-  background-color: #38393e;
+  background-color: var(--secondary-color);
   height: 100vh;
   padding: 0;
-  box-shadow: -0.1em 0em 0.7em #373737;
+  box-shadow: -0.1em 0em 0.7em var(--secondary-color);
 }
 
 .user-menu-item {
@@ -71,10 +83,15 @@ export default {
 }
 
 .user-menu-item:hover {
-  background-color: #5e5e5e;
+  background-color: var(--secondary-light-color);
 }
 
 .user-menu-list span {
   padding-top: 0;
+}
+
+.user-desc {
+  padding: 1em;
+  font-weight: bold;
 }
 </style>
