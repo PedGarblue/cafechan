@@ -1,18 +1,27 @@
 <template>
   <Page title="Welcome">
     <p>Hi, welcome to Cafechan, the simple <del>and shitty</del> imageboard.</p>
-    <p><router-link to="/posts">View Bans and Recent Post</router-link></p>
-    <p><router-link to="/staff">Create and edit Staff users</router-link></p>
-    <p><router-link to="/ban">Create and edit Boards</router-link></p>
+    <div v-if="getProfile.role === 'admin' || getProfile.role === 'modplus'" id="mod-pages">
+      <router-link to="/posts"><Button>View Bans and Recent Post</Button></router-link>
+      <router-link to="/staff"><Button>Create and edit Staff users</Button></router-link>
+      <router-link to="/ban"><Button>View and Create Bans</Button></router-link>
+    </div>
   </Page>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import Page from './lib/page';
+import Button from './lib/button';
 
 export default {
   components: {
     Page,
+    Button,
+  },
+  computed: {
+    ...mapGetters(['getProfile']),
   },
 };
 </script>
