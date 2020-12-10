@@ -6,7 +6,7 @@ import { AUTH_LOGOUT } from '../actions/auth';
 
 const state = {
   status: '',
-  profile: {},
+  profile: JSON.parse(sessionStorage.getItem('user')) || {},
   hasLoadedOnce: false,
 };
 
@@ -28,11 +28,13 @@ const actions = {
       request({ url: `/user/${userid}`, method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
         .then(user => {
           localStorage.setItem('user', user.id);
+          sessionStorage.setItem('user', JSON.stringify(user));
           commit(USER_SUCCESS, user);
           resolve(user);
         })
         .catch(err => {
           localStorage.removeItem('user');
+          sessionStorage.removeItem('user');
           commit(USER_ERROR);
           dispatch(AUTH_LOGOUT);
           reject(err);
@@ -41,6 +43,7 @@ const actions = {
   },
   [USER_LOGOUT]: ({ commit }) => {
     localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
     commit(USER_LOGOUT);
   },
 };

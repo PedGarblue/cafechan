@@ -18,23 +18,6 @@ import Ban from '../components/bans';
 import BanList from '../components/bans/ban-list';
 import BanAdd from '../components/bans/ban-add';
 
-const ifNotAuthenticated = (to, from, next) => {
-  if (!store.getters.isAuthenticated) {
-    next();
-    return;
-  }
-  next('/');
-};
-
-const ifAuthenticated = (to, from, next) => {
-  if (store.getters.isAuthenticated) {
-    next();
-    return;
-  }
-  store.dispatch(AUTH_LOGOUT);
-  next('/login');
-};
-
 const router = new Router({
   mode: 'history',
   base: '/panel/',
@@ -43,13 +26,13 @@ const router = new Router({
       name: 'home',
       path: '/',
       component: Home,
-      beforeEnter: ifAuthenticated,
+      meta: { authorize: [] },
     },
     {
       name: 'login',
       path: '/login',
       component: Login,
-      beforeEnter: ifNotAuthenticated,
+      meta: { allowUnauthenticated: true },
     },
     {
       name: 'recent-posts',
@@ -116,11 +99,13 @@ const router = new Router({
           name: 'ban-view',
           path: '',
           component: BanList,
+          meta: { authorize: [Roles.admin, Roles.modplus] },
         },
         {
           name: 'ban-add',
           path: 'add',
           component: BanAdd,
+          meta: { authorize: [Roles.admin, Roles.modplus] },
         },
       ],
     },
@@ -133,23 +118,22 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const { authorize } = to.meta;
+  const { authorize, allowUnauthenticated } = to.meta;
   const currentUser = store.getters.getProfile;
-
+  const { isAuthenticated } = store.getters;
+  if (!isAuthenticated && !allowUnauthenticated) {
+    // not logged in so redirect to login page with the return url
+    return next({ path: '/login' });
+  }
   if (authorize) {
-    if (!currentUser) {
-      // not logged in so redirect to login page with the return url
-      return next({ path: '/login', query: { nextUrl: to.path } });
-    }
-
     // check if route is restricted by role
     if (authorize.length && !authorize.includes(currentUser.role)) {
       // role not authorised so redirect to home page
+      console.log('si', currentUser);
       return next({ path: '/' });
     }
   }
-
-  next();
+  return next();
 });
 
 export default router;
