@@ -1,0 +1,345 @@
+:root {
+  --primary-color: #665540;
+  --primary-light-color: #93816c;
+  --secondary-color: #38393e;
+  --secondary-light-color: #5e5e5e;
+  --dark: #1d1f21;
+  --text-color: #fcfdfb;
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src: url('/css/fonts/icomoon.eot?j9mch');
+  src: url('/css/fonts/icomoon.eot?j9mch#iefix') format('embedded-opentype'),
+    url('/css/fonts/icomoon.ttf?j9mch') format('truetype'), url('/css/fonts/icomoon.woff?j9mch') format('woff'),
+    url('/css/fonts/icomoon.svg?j9mch#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: Righteous;
+  src: url(/css/fonts/Righteous.ttf) format('truetype');
+  font-display: block;
+}
+
+body {
+  font-family: sans-serif;
+  font-size: 75%;
+  background: #ffffee;
+  color: #800000;
+  margin: 0 auto;
+  max-width: 1000px;
+  font-size: 14px;
+}
+.site-name {
+  font-family: Righteous;
+  font-size: 5em;
+  display: inline;
+  margin-right: 1rem;
+}
+.page-icon {
+  font-family: 'icomoon';
+  display: inline;
+  font-size: 4em;
+}
+.page-icon:before {
+  content: '\e9a2';
+}
+a {
+  color: #e60000;
+  text-decoration: none;
+}
+a:hover {
+  color: #1f8f2a;
+  text-decoration: none;
+}
+.reflink a {
+  color: #e60000;
+  text-decoration: none;
+}
+.reflink a:hover {
+  color: #1f8f2a;
+  text-decoration: none;
+}
+h2 {
+  color: #e60000 !important;
+  margin-left: -6px;
+  margin-top: 0px !important;
+  background: #f2e1d6;
+  font-size: 110%;
+  padding: 6px !important;
+  border: 1px solid #ddbeab !important;
+  border-radius: 4px;
+}
+h2 a {
+  text-decoration: none;
+  color: #550;
+}
+
+h1,
+h3,
+.menu {
+  font-family: arial;
+  font-size: 120%;
+}
+h1 {
+  margin: 0;
+  color: #e60000 !important;
+  text-align: center;
+  margin-top: 1em;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+h3 {
+  margin: 0;
+  color: #000000;
+  text-align: center;
+  font-weight: normal;
+  font-size: medium;
+}
+.menu {
+  margin-top: 1em;
+  text-align: center;
+}
+.content {
+  margin-left: 5px;
+  text-align: justify;
+  padding-left: 4px;
+  line-height: 140%;
+  margin-right: 5px;
+}
+.newssub {
+  position: absolute;
+}
+
+.permalink {
+  text-align: right;
+  display: block;
+}
+
+.permalink a {
+  color: #800;
+  text-decoration: none;
+}
+
+.dc_mWin {
+  background-color: #ffffee;
+  border: 1px solid #ffffee;
+  padding-bottom: 17px;
+  border-radius: 4px;
+  line-height: 135%;
+}
+
+.dc_tBar {
+  background: #bd0003;
+  border: 1px solid #ffffee;
+  line-height: 135%;
+  text-align: center;
+  border-radius: 4px;
+  width: 98% !important;
+  color: #ffffee;
+  font-weight: bold;
+}
+
+.unkfunc {
+  background: inherit;
+  color: #1a7d24;
+}
+
+.redtext {
+  background: inherit;
+  color: #da5364;
+}
+
+.postlnk {
+  text-align: initial;
+}
+.postInfo > span {
+  display: block;
+  font-size: 90%;
+  line-height: 140%;
+}
+
+.postInfo > span > span,
+.postInfo > .rpdBefore {
+  color: #e60000;
+  font-weight: bold;
+}
+
+/* Nombre de archivo en el panel de reportas y posts recientes */
+.modnamefile {
+  padding-top: 4px;
+  opacity: 0.7;
+  font-size: 85%;
+}
+
+.navbar-mobile {
+  background: #bd0003;
+  color: #fff9c4;
+}
+
+.divboardphp {
+  font-family: sans-serif;
+  font-size: 140%;
+  line-height: 130%;
+  padding-top: 10px;
+}
+
+.filetitle {
+  background: inherit;
+  color: #a60000;
+  font-weight: bold;
+}
+
+.diverror {
+  border: 1px solid #ddbeab;
+  background: #f2e1d6;
+  line-height: 130%;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.login {
+  border-radius: 4px;
+  height: 80%;
+  border: 1px solid #ddbeab;
+  background: #f2e1d6;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.login input[type='submit'] {
+  background: #69b370;
+  color: #ffffff;
+  border-radius: 3px;
+  border: solid 0px #529e5a;
+  cursor: pointer;
+  padding: 9px 10px 9px 10px;
+}
+
+.login input[type='submit']:hover {
+  background: #69b370;
+}
+
+.login input[type='text'],
+.login input[type='password'] {
+  border: 1px solid #b3917b;
+  border-radius: 3px;
+  background-color: #fff;
+}
+.settings-btn {
+  display: inline-flex;
+  background-color: #b82100;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 2px 2px 2px 2px;
+}
+.settings-btn svg {
+  --settings-btn-size: 1.05em;
+  width: var(--settings-btn-size) !important;
+  height: var(--settings-btn-size) !important;
+}
+.settings-icon {
+  fill: white;
+  width: 10px;
+}
+.settings-btn:hover .settings-icon {
+  fill: #1f8f2a;
+}
+
+.refresh-recent-btn {
+  display: inline-flex;
+  border-radius: 3px;
+  background-color: #b82100;
+  color: whitesmoke;
+  padding: 3px 2px 4px 3px;
+  cursor: pointer;
+}
+.refresh-recent-btn:hover svg {
+  fill: #1f8f2a;
+}
+.refresh-recent-btn svg {
+  fill: white;
+  --recent-btn-size: 0.85em;
+  width: var(--recent-btn-size) !important;
+  height: var(--recent-btn-size) !important;
+}
+.logo-container {
+  margin-top: 2.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  cursor: default;
+}
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.boards-head {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  background-color: var(--primary-light-color);
+  padding: 8px;
+  line-height: 150%;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.boards-body {
+  display: flex;
+  font-size: 100%;
+  background-color: var(--primary-light-color);
+  border: 1px solid #ddbeab;
+  padding-top: 13px;
+  padding-bottom: 17px;
+  line-height: 140%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.boards-footer {
+  max-width: 969px;
+  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #ddbeab;
+  margin-bottom: 20px;
+  margin-top: 12px;
+  font-size: 0.89em;
+  line-height: 145%;
+  text-align: center;
+}
+
+.boards-copyright {
+  margin-bottom: 15px;
+  line-height: 145%;
+  text-align: center;
+}
+.info {
+  padding-left: 30px;
+  padding-right: 1.2em;
+  line-height: 155%;
+  border-right: 1px solid #ddbeab;
+}
+.sub-title {
+  margin-bottom: 4px;
+  margin-top: 2px;
+  font-size: 115%;
+  color: #b82100;
+  text-transform: uppercase;
+}
+.board-link {
+  display: block;
+}
+.sections {
+  display: flex;
+  padding-left: 1em;
+}
+.section {
+  padding-left: 2em;
+}
+.board-name {
+  font-size: 85%;
+  opacity: 0.8;
+}
