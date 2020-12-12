@@ -1,3 +1,12 @@
+:root {
+  --primary-color: #665540;
+  --primary-light-color: #93816c;
+  --secondary-color: #38393e;
+  --secondary-light-color: #5e5e5e;
+  --dark: #1D1F21;
+  --text-color: #fcfdfb;
+}
+
 @font-face {
     font-family: 'icomoon';
     src:url('/css/fonts/icomoon.eot?j9mch');

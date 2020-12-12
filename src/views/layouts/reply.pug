@@ -12,9 +12,8 @@ div( id = reply.seq_id ).reply-container
         a( 
           href=`/${board.name}/thread/${thread.seq_id}#${reply.seq_id}`
           title='Obtener link a este post'
-        ) /#/
-      span.post-id
-        = reply.seq_id
+        )
+          = `#${reply.seq_id}`
     div.post-contents
       if reply.file
         a(href=reply.file.url, target="_blank").post-file

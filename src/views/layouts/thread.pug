@@ -11,9 +11,8 @@ div.thread(data-contents=thread)
       a( 
         href = `/${board.name}/thread/${thread.seq_id}/`
         title = 'Obtener link a este post'
-      ) /#/
-    span.post-id
-      = thread.seq_id
+      )
+        = `#${thread.seq_id}`
     if page.key === 'boardpage'
       span.response-btn
         a( href = `/${board.name}/thread/${thread.seq_id}/` ) Responder
