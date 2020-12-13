@@ -11,12 +11,16 @@
       <template #head>
         <th>Name</th>
         <th>Description</th>
+        <th>Section</th>
+        <th>State</th>
         <th></th>
       </template>
       <template #body>
         <tr v-for="board in boards" :key="board._id">
           <td>{{ board.name }}</td>
           <td>{{ board.desc }}</td>
+          <td>{{ board.section }}</td>
+          <td :class="{ green: !board.locked, red: board.locked }">{{ board.locked ? 'Closed' : 'Open' }}</td>
           <td class="buttons">
             <router-link :to="`/board/edit/${board._id}`">
               <Button>Edit</Button>
@@ -102,5 +106,13 @@ export default {
 .buttons {
   width: 5em;
   text-align: center;
+}
+.red {
+  color: red;
+  font-weight: bold;
+}
+.green {
+  color: green;
+  font-weight: bold;
 }
 </style>
