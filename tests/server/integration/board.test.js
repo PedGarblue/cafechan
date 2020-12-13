@@ -19,13 +19,13 @@ describe('Board management routes', () => {
         desc: 'Testing',
         name: 'test',
         section: 'ocio',
+        maxfilesize: 20004400,
+        allowedfiletypes: ['image/png'],
       };
     });
 
     test('should return 201 and succesfully create a new board', async () => {
       await insertUsers([admin]);
-
-      newBoard = omit(boardOne, ['_id']);
 
       const res = await request(app)
         .post('/board/')
@@ -35,7 +35,23 @@ describe('Board management routes', () => {
 
       const boardDb = await Board.findById(res.body._id);
       expect(boardDb).toBeDefined();
-      expect(boardDb).toMatchObject(newBoard);
+      expect(boardDb.toObject()).toEqual({
+        __v: 0,
+        _id: expect.anything(),
+        name: newBoard.name,
+        desc: newBoard.desc,
+        section: newBoard.section,
+        maxfilesize: newBoard.maxfilesize,
+        allowedfiletypes: newBoard.allowedfiletypes,
+        anonymous: 'Anonymous',
+        forcedanon: true,
+        locked: false,
+        maxpages: 7,
+        maxreplies: 200,
+        nsfw: false,
+        postsperpage: 5,
+        screened: false,
+      });
     });
 
     test('should return 401 if Authorization token is missing', async () => {
@@ -202,14 +218,18 @@ describe('Board management routes', () => {
     let updateBoard;
 
     beforeEach(() => {
-      updateBoard = omit(boardOne, ['_id']);
+      updateBoard = {
+        name: 'tst',
+        desc: 'Tests',
+        section: 'ocio',
+        maxfilesize: 10000000,
+        allowedfiletypes: ['image/png', 'image/jpeg'],
+      };
     });
 
     test('should return 200 and successfully update a board as authorized user', async () => {
       await insertUsers([admin]);
       await insertBoards([boardOne]);
-
-      updateBoard.desc = 'Testeos';
 
       const res = await request(app)
         .patch(`/board/${boardOne._id}`)

@@ -32,6 +32,8 @@ const createBoard = {
       .required(),
     nsfw: Joi.boolean(),
     flag: Joi.string(),
+    maxfilesize: Joi.number(),
+    allowedfiletypes: Joi.array().items(Joi.string()),
   }),
 };
 
@@ -50,6 +52,8 @@ const editBoard = {
     section: Joi.string().valid(...appConfig.boards.sections),
     nsfw: Joi.boolean(),
     flag: Joi.string(),
+    maxfilesize: Joi.number(),
+    allowedfiletypes: Joi.array().items(Joi.string()),
   }),
 };
 

@@ -24,6 +24,8 @@ const createBoard = async body => {
     'section',
     'nsfw',
     'flag',
+    'maxfilesize',
+    'allowedfiletypes',
   ]);
   const board = await Board.create(data);
   return board;
