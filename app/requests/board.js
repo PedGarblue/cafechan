@@ -43,16 +43,11 @@ export const createBoard = board => {
   });
 };
 
-export const editBoard = board => {
+export const editBoard = (id, data) => {
   const accessToken = store.getters.accessToken.token;
-  const data = {
-    name: board.name,
-    desc: board.desc,
-    section: board.section,
-  };
 
   return new Promise((resolve, reject) => {
-    request({ url: `/board/${board.id}`, method: 'PATCH', data, headers: { Authorization: `Bearer ${accessToken}` } })
+    request({ url: `/board/${id}`, method: 'PATCH', data, headers: { Authorization: `Bearer ${accessToken}` } })
       .then(resp => {
         resolve(resp);
       })
