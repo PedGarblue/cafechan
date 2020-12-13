@@ -26,7 +26,7 @@ html(lang="en")
                         each board in section.boards
                             div.board
                                 if board.flag
-                                    img(src=`/assets/countryballs/${board.flag}`, alt=`/${board.name}/`)
+                                    img(src=`/assets/countryballs/${board.flag}.png`, alt=`/${board.name}/`)
                                     | &nbsp;
                                 a(href=`/${board.name}/`).board-desc= `${board.flag?'':'•'} ${board.desc}`
                                 span.board-name= ` /${board.name}/`

@@ -26,7 +26,8 @@ const createBoard = {
     locked: Joi.boolean(),
     screened: Joi.boolean(),
     maxreplies: Joi.number(),
-    postperpage: Joi.number(),
+    postsperpage: Joi.number(),
+    maxpages: Joi.number(),
     section: Joi.string()
       .valid(...appConfig.boards.sections)
       .required(),
@@ -48,7 +49,8 @@ const editBoard = {
     locked: Joi.boolean(),
     screened: Joi.boolean(),
     maxreplies: Joi.number(),
-    postperpage: Joi.number(),
+    postsperpage: Joi.number(),
+    maxpages: Joi.number(),
     section: Joi.string().valid(...appConfig.boards.sections),
     nsfw: Joi.boolean(),
     flag: Joi.string(),
