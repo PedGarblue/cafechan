@@ -90,10 +90,11 @@ describe('Error middlewares', () => {
 
     test('should send proper error response and put the error message in res.locals', () => {
       const error = new AppError(httpStatus.BAD_REQUEST, 'Any error');
-      const res = httpMocks.createResponse();
-      const sendSpy = jest.spyOn(res, 'send');
+      const req = httpMocks.createRequest({ headers: { accept: 'application/json' } });
+      const res = httpMocks.createResponse({ req });
+      const sendSpy = jest.spyOn(res, 'json');
 
-      errorHandler(error, httpMocks.createRequest(), res);
+      errorHandler(error, req, res, jest.fn());
 
       expect(sendSpy).toHaveBeenCalledWith(expect.objectContaining({ code: error.statusCode, message: error.message }));
       expect(res.locals.errorMessage).toBe(error.message);
@@ -102,8 +103,9 @@ describe('Error middlewares', () => {
     test('should put the error stack in the response if in development mode', () => {
       config.env = 'development';
       const error = new AppError(httpStatus.BAD_REQUEST, 'Any error');
-      const res = httpMocks.createResponse();
-      const sendSpy = jest.spyOn(res, 'send');
+      const req = httpMocks.createRequest({ headers: { accept: 'application/json' } });
+      const res = httpMocks.createResponse({ req });
+      const sendSpy = jest.spyOn(res, 'json');
 
       errorHandler(error, httpMocks.createRequest(), res);
 
@@ -116,8 +118,9 @@ describe('Error middlewares', () => {
     test('should send internal server error status and message if in production mode and error is not operational', () => {
       config.env = 'production';
       const error = new AppError(httpStatus.BAD_REQUEST, 'Any error', false);
-      const res = httpMocks.createResponse();
-      const sendSpy = jest.spyOn(res, 'send');
+      const req = httpMocks.createRequest({ headers: { accept: 'application/json' } });
+      const res = httpMocks.createResponse({ req });
+      const sendSpy = jest.spyOn(res, 'json');
 
       errorHandler(error, httpMocks.createRequest(), res);
 
@@ -134,8 +137,9 @@ describe('Error middlewares', () => {
     test('should preserve original error status and message if in production mode and error is operational', () => {
       config.env = 'production';
       const error = new AppError(httpStatus.BAD_REQUEST, 'Any error');
-      const res = httpMocks.createResponse();
-      const sendSpy = jest.spyOn(res, 'send');
+      const req = httpMocks.createRequest({ headers: { accept: 'application/json' } });
+      const res = httpMocks.createResponse({ req });
+      const sendSpy = jest.spyOn(res, 'json');
 
       errorHandler(error, httpMocks.createRequest(), res);
 

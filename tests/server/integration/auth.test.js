@@ -51,6 +51,7 @@ describe('Auth routes', () => {
 
       const res = await request(app)
         .post('/auth/login')
+        .set('Accept', 'application/json')
         .send(loginCredentials)
         .expect(httpStatus.UNAUTHORIZED);
 
@@ -66,6 +67,7 @@ describe('Auth routes', () => {
 
       const res = await request(app)
         .post('/auth/login')
+        .set('Accept', 'application/json')
         .send(loginCredentials)
         .expect(httpStatus.UNAUTHORIZED);
 

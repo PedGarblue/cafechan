@@ -33,7 +33,17 @@ const errorHandler = (err, req, res, next) => {
     logger.error(err);
   }
 
-  res.status(statusCode).send(response);
+  res.status(statusCode).format({
+    html: () => {
+      res.render('error', response);
+    },
+    json: () => {
+      res.json(response);
+    },
+    default: () => {
+      res.send(response);
+    },
+  });
 };
 
 module.exports = {
