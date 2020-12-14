@@ -35,8 +35,20 @@ const middleware = () => (req, res, next) => {
   });
 };
 
+const findKeys = key => {
+  const keyRegex = new RegExp(key, 'g');
+  return mcache.keys().filter(cacheKey => keyRegex.test(cacheKey));
+};
+
+const delByKeys = key => {
+  const keys = findKeys(key);
+  keys.forEach(cacheKey => mcache.del(cacheKey));
+};
+
 module.exports = {
   middleware,
   put,
   del,
+  findKeys,
+  delByKeys,
 };

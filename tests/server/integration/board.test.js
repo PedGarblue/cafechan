@@ -1,14 +1,19 @@
 const request = require('supertest');
 const { omit } = require('lodash');
 const httpStatus = require('http-status');
+const cache = require('memory-cache');
+
 const app = require('../../../src/app');
+const { Board } = require('../../../src/models');
 const setupTestDB = require('../utils/setupTestDB');
+const setupTestCache = require('../utils/setupTestCache');
 const { boardOne, boardTwo, insertBoards } = require('../fixtures/board.fixture');
+const { threadOne, insertThreads } = require('../fixtures/post.fixture');
 const { admin, userOne, insertUsers } = require('../fixtures/user.fixture');
 const { adminAccessToken, userOneAccessToken } = require('../fixtures/token.fixture');
-const { Board } = require('../../../src/models');
 
 setupTestDB();
+setupTestCache();
 
 describe('Board management routes', () => {
   describe('POST /board/', () => {
@@ -52,6 +57,21 @@ describe('Board management routes', () => {
         postsperpage: 5,
         screened: false,
       });
+    });
+
+    test('should clean the frontpage cache', async () => {
+      cache.put('__express__/', 'TEST CACHE');
+
+      await insertUsers([admin]);
+      await insertBoards([boardOne]);
+
+      await request(app)
+        .post('/board/')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .send(newBoard)
+        .expect(httpStatus.CREATED);
+
+      expect(cache.get('__express__/')).toBeNull();
     });
 
     test('should return 401 if Authorization token is missing', async () => {
@@ -253,6 +273,28 @@ describe('Board management routes', () => {
       });
     });
 
+    test('should clean the frontpage and board cache', async () => {
+      cache.put('__express__/', 'TEST CACHE');
+      cache.put(`__express__/${boardOne.name}/`, 'TEST CACHE');
+      cache.put(`__express__/${boardOne.name}/thread/${threadOne.seq_id}/`, 'TEST CACHE');
+
+      await insertUsers([admin]);
+      await insertBoards([boardOne]);
+      await insertThreads([threadOne]);
+      // TODO: block name editing
+      updateBoard.name = boardOne.name;
+
+      await request(app)
+        .patch(`/board/${boardOne._id}`)
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .send(updateBoard)
+        .expect(httpStatus.OK);
+
+      expect(cache.get('__express__/')).toBeNull();
+      expect(cache.get(`__express__/${boardOne.name}/`)).toBeNull();
+      expect(cache.get(`__express__/${boardOne.name}/thread/${threadOne.seq_id}/`)).toBeNull();
+    });
+
     test('should return 401 if token is missing', async () => {
       await insertBoards([boardOne]);
 
@@ -329,6 +371,26 @@ describe('Board management routes', () => {
 
       const dbBoard = await Board.findById(boardOne._id);
       expect(dbBoard).toBeNull();
+    });
+
+    test('should clean the frontpage and board cache', async () => {
+      cache.put('__express__/', 'TEST CACHE');
+      cache.put(`__express__/${boardOne.name}/`, 'TEST CACHE');
+      cache.put(`__express__/${boardOne.name}/thread/${threadOne.seq_id}/`, 'TEST CACHE');
+
+      await insertUsers([admin]);
+      await insertBoards([boardOne]);
+      await insertThreads([threadOne]);
+
+      await request(app)
+        .delete(`/board/${boardOne._id}`)
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .send()
+        .expect(httpStatus.NO_CONTENT);
+
+      expect(cache.get('__express__/')).toBeNull();
+      expect(cache.get(`__express__/${boardOne.name}/`)).toBeNull();
+      expect(cache.get(`__express__/${boardOne.name}/thread/${threadOne.seq_id}/`)).toBeNull();
     });
 
     test('should return 401 if token is missing', async () => {
