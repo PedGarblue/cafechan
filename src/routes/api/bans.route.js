@@ -1,8 +1,9 @@
 const express = require('express');
-const bansController = require('../controllers/ban.controller');
-const validate = require('../middlewares/validate');
-const bansValidation = require('../validations/ban.validation');
-const auth = require('../middlewares/auth');
+
+const bansController = require('../../controllers/ban.controller');
+const validate = require('../../middlewares/validate');
+const bansValidation = require('../../validations/ban.validation');
+const auth = require('../../middlewares/auth');
 
 const router = express.Router();
 

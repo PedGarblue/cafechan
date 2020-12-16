@@ -2,14 +2,14 @@ const request = require('supertest');
 const httpStatus = require('http-status');
 const faker = require('faker');
 
-const { encrypt } = require('../../../src/utils/crypt');
-const app = require('../../../src/app');
-const setupTestDB = require('../utils/setupTestDB');
-const { admin, userOne, insertUsers } = require('../fixtures/user.fixture');
-const { Thread, Reply, Post } = require('../../../src/models');
-const { adminAccessToken, userOneAccessToken } = require('../fixtures/token.fixture');
-const { insertThreads, threadOne, threadTwo, insertReplies, replyOne, replyTwo } = require('../fixtures/post.fixture');
-const { boardOne, insertBoards } = require('../fixtures/board.fixture');
+const { encrypt } = require('../../../../src/utils/crypt');
+const app = require('../../../../src/app');
+const setupTestDB = require('../../utils/setupTestDB');
+const { admin, userOne, insertUsers } = require('../../fixtures/user.fixture');
+const { Thread, Reply, Post } = require('../../../../src/models');
+const { adminAccessToken, userOneAccessToken } = require('../../fixtures/token.fixture');
+const { insertThreads, threadOne, threadTwo, insertReplies, replyOne, replyTwo } = require('../../fixtures/post.fixture');
+const { boardOne, insertBoards } = require('../../fixtures/board.fixture');
 
 setupTestDB();
 
@@ -20,7 +20,7 @@ describe('Post Management Routes', () => {
       await insertThreads([threadOne, threadTwo]);
 
       const res = await request(app)
-        .get('/posts/')
+        .get('/api/posts/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.OK);
@@ -37,7 +37,7 @@ describe('Post Management Routes', () => {
 
     test('should return 401 if token is missing', async () => {
       await request(app)
-        .get('/posts/')
+        .get('/api/posts/')
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -46,7 +46,7 @@ describe('Post Management Routes', () => {
       await insertUsers([userOne]);
 
       await request(app)
-        .get('/posts/')
+        .get('/api/posts/')
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.FORBIDDEN);
@@ -58,7 +58,7 @@ describe('Post Management Routes', () => {
       await insertReplies([replyOne, replyTwo]);
 
       const res = await request(app)
-        .get('/posts/')
+        .get('/api/posts/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ sortBy: 'timestamp:asc' })
         .send()
@@ -74,7 +74,7 @@ describe('Post Management Routes', () => {
       await insertReplies([replyOne]);
 
       const res = await request(app)
-        .get('/posts/')
+        .get('/api/posts/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ kind: 'Thread' })
         .send()
@@ -94,7 +94,7 @@ describe('Post Management Routes', () => {
       await insertUsers([admin]);
 
       await request(app)
-        .get('/posts/')
+        .get('/api/posts/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ kind: 'wrong' })
         .send()
@@ -112,7 +112,7 @@ describe('Post Management Routes', () => {
       await thread.save();
 
       await request(app)
-        .delete(`/posts/thread/${threadOne._id}`)
+        .delete(`/api/posts/thread/${threadOne._id}`)
         .set('X-Forwarded-For', ip)
         .set('Accept', 'application/json')
         .send()
@@ -130,7 +130,7 @@ describe('Post Management Routes', () => {
       await insertReplies([replyOne, replyTwo]);
 
       await request(app)
-        .delete(`/posts/thread/${threadOne._id}`)
+        .delete(`/api/posts/thread/${threadOne._id}`)
         .set('X-Forwarded-For', ip)
         .set('Accept', 'application/json')
         .send()
@@ -150,7 +150,7 @@ describe('Post Management Routes', () => {
       threadOne.ip = encrypt(ip);
       await insertThreads([threadOne]);
       await request(app)
-        .delete(`/posts/thread/${threadOne._id}`)
+        .delete(`/api/posts/thread/${threadOne._id}`)
         .set('Accept', 'application/json')
         .send()
         .expect(httpStatus.FORBIDDEN);
@@ -158,7 +158,7 @@ describe('Post Management Routes', () => {
 
     test('should return 400 if boardid is not a mongoid string', async () => {
       await request(app)
-        .delete(`/posts/thread/invalid`)
+        .delete(`/api/posts/thread/invalid`)
         .set('Accept', 'application/json')
         .send()
         .expect(httpStatus.BAD_REQUEST);
@@ -166,7 +166,7 @@ describe('Post Management Routes', () => {
 
     test('should return 404 if thread is not found', async () => {
       await request(app)
-        .delete(`/posts/thread/${threadOne._id}`)
+        .delete(`/api/posts/thread/${threadOne._id}`)
         .set('Accept', 'application/json')
         .send()
         .expect(httpStatus.NOT_FOUND);
@@ -182,7 +182,7 @@ describe('Post Management Routes', () => {
       await insertReplies([replyOne]);
 
       await request(app)
-        .delete(`/posts/reply/${replyOne._id}`)
+        .delete(`/api/posts/reply/${replyOne._id}`)
         .set('X-Forwarded-For', ip)
         .set('Accept', 'application/json')
         .send()
@@ -200,7 +200,7 @@ describe('Post Management Routes', () => {
       await insertReplies([replyOne]);
 
       await request(app)
-        .delete(`/posts/reply/${replyOne._id}`)
+        .delete(`/api/posts/reply/${replyOne._id}`)
         .set('Accept', 'application/json')
         .send()
         .expect(httpStatus.FORBIDDEN);
@@ -208,7 +208,7 @@ describe('Post Management Routes', () => {
 
     test('should return 400 if replyid is not a mongoid string', async () => {
       await request(app)
-        .delete(`/posts/reply/invalid`)
+        .delete(`/api/posts/reply/invalid`)
         .set('Accept', 'application/json')
         .send()
         .expect(httpStatus.BAD_REQUEST);
@@ -216,7 +216,7 @@ describe('Post Management Routes', () => {
 
     test('should return 404 if reply is not found', async () => {
       await request(app)
-        .delete(`/posts/reply/${replyOne._id}`)
+        .delete(`/api/posts/reply/${replyOne._id}`)
         .set('Accept', 'application/json')
         .send()
         .expect(httpStatus.NOT_FOUND);
@@ -230,7 +230,7 @@ describe('Post Management Routes', () => {
       await insertThreads([threadOne]);
 
       await request(app)
-        .delete(`/posts/${threadOne._id}`)
+        .delete(`/api/posts/${threadOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .set('Accept', 'application/json')
         .send()
@@ -247,7 +247,7 @@ describe('Post Management Routes', () => {
       await insertReplies([replyOne, replyTwo]);
 
       await request(app)
-        .delete(`/posts/${threadOne._id}`)
+        .delete(`/api/posts/${threadOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .set('Accept', 'application/json')
         .send()
@@ -267,7 +267,7 @@ describe('Post Management Routes', () => {
       await insertReplies([replyOne]);
 
       await request(app)
-        .delete(`/posts/${replyOne._id}`)
+        .delete(`/api/posts/${replyOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .set('Accept', 'application/json')
         .send()
@@ -280,7 +280,7 @@ describe('Post Management Routes', () => {
     test('should return 400 if :postid is not a valid MongoId string', async () => {
       await insertUsers([admin]);
       await request(app)
-        .delete(`/posts/invalid`)
+        .delete(`/api/posts/invalid`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .set('Accept', 'application/json')
         .send()
@@ -289,7 +289,7 @@ describe('Post Management Routes', () => {
 
     test('should return 401 if access token is missing', async () => {
       await request(app)
-        .delete(`/posts/${threadOne._id}`)
+        .delete(`/api/posts/${threadOne._id}`)
         .set('Accept', 'application/json')
         .send()
         .expect(httpStatus.UNAUTHORIZED);
@@ -300,7 +300,7 @@ describe('Post Management Routes', () => {
       await insertThreads([threadOne]);
 
       await request(app)
-        .delete(`/posts/${threadOne._id}`)
+        .delete(`/api/posts/${threadOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .set('Accept', 'application/json')
         .send()
@@ -310,7 +310,7 @@ describe('Post Management Routes', () => {
     test('should return 404 if post is not found', async () => {
       await insertUsers([admin]);
       await request(app)
-        .delete(`/posts/${threadOne._id}`)
+        .delete(`/api/posts/${threadOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .set('Accept', 'application/json')
         .send()

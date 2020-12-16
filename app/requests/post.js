@@ -4,7 +4,11 @@ import { savePost } from '../utils/myPosts';
 export const getPosts = accessToken => {
   if (!accessToken || typeof accessToken !== 'string') throw new Error('Access token is not set');
   return new Promise((resolve, reject) => {
-    request({ url: '/posts/?sortBy=created_at:desc', method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
+    request({
+      url: '/api/posts/?sortBy=created_at:desc',
+      method: 'GET',
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
       .then(resp => {
         resolve(resp);
       })
@@ -18,7 +22,7 @@ export const removePost = (accessToken, post) => {
   if (!accessToken || typeof accessToken !== 'string') throw new Error('Access token is not set');
   if (!post || typeof post !== 'object') throw new Error('Post is not set');
   return new Promise((resolve, reject) => {
-    request({ url: `/posts/${post.id}`, method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } })
+    request({ url: `/api/posts/${post.id}`, method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } })
       .then(() => {
         resolve();
       })

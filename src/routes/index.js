@@ -1,17 +1,21 @@
 const express = require('express');
-const postRoute = require('./post.route');
+
+const postsRoute = require('./api/post.route');
+const userRoute = require('./api/user.route');
+const boardRoute = require('./api/board.route');
+const authRoute = require('./api/auth.route');
+const banRoute = require('./api/bans.route');
+const postingRoute = require('./post.route');
 const panelRoute = require('./panel.route');
-const authRoute = require('./auth.route');
-const userRoute = require('./user.route');
-const boardRoute = require('./board.route');
-const banRoute = require('./bans.route');
 
 const router = express.Router();
 
-router.use('/auth', authRoute);
-router.use('/board', boardRoute);
-router.use('/user', userRoute);
+router.use('/api/posts', postsRoute);
+router.use('/api/user', userRoute);
+router.use('/api/board', boardRoute);
+router.use('/api/auth', authRoute);
+router.use('/api/ban', banRoute);
 router.use('/panel', panelRoute);
-router.use('/ban/', banRoute);
-router.use('/', postRoute);
+router.use('/', postingRoute);
+
 module.exports = router;

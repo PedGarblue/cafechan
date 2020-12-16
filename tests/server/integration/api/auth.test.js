@@ -3,16 +3,17 @@ const httpStatus = require('http-status');
 const httpMocks = require('node-mocks-http');
 const moment = require('moment');
 const bcrypt = require('bcryptjs');
-const app = require('../../../src/app');
-const config = require('../../../src/config/envConfig');
-const auth = require('../../../src/middlewares/auth');
-const { tokenService, emailService } = require('../../../src/services');
-const AppError = require('../../../src/utils/AppError');
-const setupTestDB = require('../utils/setupTestDB');
-const { User, Token } = require('../../../src/models');
-const { roleRights } = require('../../../src/config/roles');
-const { userOne, admin, insertUsers } = require('../fixtures/user.fixture');
-const { userOneAccessToken, adminAccessToken } = require('../fixtures/token.fixture');
+
+const app = require('../../../../src/app');
+const config = require('../../../../src/config/envConfig');
+const auth = require('../../../../src/middlewares/auth');
+const { tokenService, emailService } = require('../../../../src/services');
+const AppError = require('../../../../src/utils/AppError');
+const setupTestDB = require('../../utils/setupTestDB');
+const { User, Token } = require('../../../../src/models');
+const { roleRights } = require('../../../../src/config/roles');
+const { userOne, admin, insertUsers } = require('../../fixtures/user.fixture');
+const { userOneAccessToken, adminAccessToken } = require('../../fixtures/token.fixture');
 
 setupTestDB();
 
@@ -26,7 +27,7 @@ describe('Auth routes', () => {
       };
 
       const res = await request(app)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send(loginCredentials)
         .expect(httpStatus.OK);
 
@@ -50,7 +51,7 @@ describe('Auth routes', () => {
       };
 
       const res = await request(app)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .set('Accept', 'application/json')
         .send(loginCredentials)
         .expect(httpStatus.UNAUTHORIZED);
@@ -66,7 +67,7 @@ describe('Auth routes', () => {
       };
 
       const res = await request(app)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .set('Accept', 'application/json')
         .send(loginCredentials)
         .expect(httpStatus.UNAUTHORIZED);
@@ -83,7 +84,7 @@ describe('Auth routes', () => {
       await tokenService.saveToken(refreshToken, userOne._id, expires, 'refresh');
 
       const res = await request(app)
-        .post('/auth/refresh-tokens')
+        .post('/api/auth/refresh-tokens')
         .send({ refreshToken })
         .expect(httpStatus.OK);
 
@@ -101,7 +102,7 @@ describe('Auth routes', () => {
 
     test('should return 400 error if refresh token is missing from request body', async () => {
       await request(app)
-        .post('/auth/refresh-tokens')
+        .post('/api/auth/refresh-tokens')
         .send()
         .expect(httpStatus.BAD_REQUEST);
     });
@@ -113,7 +114,7 @@ describe('Auth routes', () => {
       await tokenService.saveToken(refreshToken, userOne._id, expires, 'refresh');
 
       await request(app)
-        .post('/auth/refresh-tokens')
+        .post('/api/auth/refresh-tokens')
         .send({ refreshToken })
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -124,7 +125,7 @@ describe('Auth routes', () => {
       const refreshToken = tokenService.generateToken(userOne._id, expires);
 
       await request(app)
-        .post('/auth/refresh-tokens')
+        .post('/api/auth/refresh-tokens')
         .send({ refreshToken })
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -136,7 +137,7 @@ describe('Auth routes', () => {
       await tokenService.saveToken(refreshToken, userOne._id, expires, 'refresh', true);
 
       await request(app)
-        .post('/auth/refresh-tokens')
+        .post('/api/auth/refresh-tokens')
         .send({ refreshToken })
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -148,7 +149,7 @@ describe('Auth routes', () => {
       await tokenService.saveToken(refreshToken, userOne._id, expires, 'refresh');
 
       await request(app)
-        .post('/auth/refresh-tokens')
+        .post('/api/auth/refresh-tokens')
         .send({ refreshToken })
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -159,7 +160,7 @@ describe('Auth routes', () => {
       await tokenService.saveToken(refreshToken, userOne._id, expires, 'refresh');
 
       await request(app)
-        .post('/auth/refresh-tokens')
+        .post('/api/auth/refresh-tokens')
         .send({ refreshToken })
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -175,7 +176,7 @@ describe('Auth routes', () => {
       const sendResetPasswordEmailSpy = jest.spyOn(emailService, 'sendResetPasswordEmail');
 
       await request(app)
-        .post('/auth/forgot-password')
+        .post('/api/auth/forgot-password')
         .send({ email: userOne.email })
         .expect(httpStatus.NO_CONTENT);
 
@@ -189,14 +190,14 @@ describe('Auth routes', () => {
       await insertUsers([userOne]);
 
       await request(app)
-        .post('/auth/forgot-password')
+        .post('/api/auth/forgot-password')
         .send()
         .expect(httpStatus.BAD_REQUEST);
     });
 
     test('should return 404 if email does not belong to any user', async () => {
       await request(app)
-        .post('/auth/forgot-password')
+        .post('/api/auth/forgot-password')
         .send({ email: userOne.email })
         .expect(httpStatus.NOT_FOUND);
     });
@@ -210,7 +211,7 @@ describe('Auth routes', () => {
       await tokenService.saveToken(resetPasswordToken, userOne._id, expires, 'resetPassword');
 
       await request(app)
-        .post('/auth/reset-password')
+        .post('/api/auth/reset-password')
         .query({ token: resetPasswordToken })
         .send({ password: 'password2' })
         .expect(httpStatus.NO_CONTENT);
@@ -227,7 +228,7 @@ describe('Auth routes', () => {
       await insertUsers([userOne]);
 
       await request(app)
-        .post('/auth/reset-password')
+        .post('/api/auth/reset-password')
         .send({ password: 'password2' })
         .expect(httpStatus.BAD_REQUEST);
     });
@@ -239,7 +240,7 @@ describe('Auth routes', () => {
       await tokenService.saveToken(resetPasswordToken, userOne._id, expires, 'resetPassword', true);
 
       await request(app)
-        .post('/auth/reset-password')
+        .post('/api/auth/reset-password')
         .query({ token: resetPasswordToken })
         .send({ password: 'password2' })
         .expect(httpStatus.UNAUTHORIZED);
@@ -252,7 +253,7 @@ describe('Auth routes', () => {
       await tokenService.saveToken(resetPasswordToken, userOne._id, expires, 'resetPassword');
 
       await request(app)
-        .post('/auth/reset-password')
+        .post('/api/auth/reset-password')
         .query({ token: resetPasswordToken })
         .send({ password: 'password2' })
         .expect(httpStatus.UNAUTHORIZED);
@@ -264,7 +265,7 @@ describe('Auth routes', () => {
       await tokenService.saveToken(resetPasswordToken, userOne._id, expires, 'resetPassword');
 
       await request(app)
-        .post('/auth/reset-password')
+        .post('/api/auth/reset-password')
         .query({ token: resetPasswordToken })
         .send({ password: 'password2' })
         .expect(httpStatus.UNAUTHORIZED);
@@ -277,24 +278,24 @@ describe('Auth routes', () => {
       await tokenService.saveToken(resetPasswordToken, userOne._id, expires, 'resetPassword');
 
       await request(app)
-        .post('/auth/reset-password')
+        .post('/api/auth/reset-password')
         .query({ token: resetPasswordToken })
         .expect(httpStatus.BAD_REQUEST);
 
       await request(app)
-        .post('/auth/reset-password')
+        .post('/api/auth/reset-password')
         .query({ token: resetPasswordToken })
         .send({ password: 'short1' })
         .expect(httpStatus.BAD_REQUEST);
 
       await request(app)
-        .post('/auth/reset-password')
+        .post('/api/auth/reset-password')
         .query({ token: resetPasswordToken })
         .send({ password: 'password' })
         .expect(httpStatus.BAD_REQUEST);
 
       await request(app)
-        .post('/auth/reset-password')
+        .post('/api/auth/reset-password')
         .query({ token: resetPasswordToken })
         .send({ password: '11111111' })
         .expect(httpStatus.BAD_REQUEST);

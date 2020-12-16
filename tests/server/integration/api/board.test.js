@@ -3,14 +3,14 @@ const { omit } = require('lodash');
 const httpStatus = require('http-status');
 const cache = require('memory-cache');
 
-const app = require('../../../src/app');
-const { Board } = require('../../../src/models');
-const setupTestDB = require('../utils/setupTestDB');
-const setupTestCache = require('../utils/setupTestCache');
-const { boardOne, boardTwo, insertBoards } = require('../fixtures/board.fixture');
-const { threadOne, insertThreads } = require('../fixtures/post.fixture');
-const { admin, userOne, insertUsers } = require('../fixtures/user.fixture');
-const { adminAccessToken, userOneAccessToken } = require('../fixtures/token.fixture');
+const app = require('../../../../src/app');
+const { Board } = require('../../../../src/models');
+const setupTestDB = require('../../utils/setupTestDB');
+const setupTestCache = require('../../utils/setupTestCache');
+const { boardOne, boardTwo, insertBoards } = require('../../fixtures/board.fixture');
+const { threadOne, insertThreads } = require('../../fixtures/post.fixture');
+const { admin, userOne, insertUsers } = require('../../fixtures/user.fixture');
+const { adminAccessToken, userOneAccessToken } = require('../../fixtures/token.fixture');
 
 setupTestDB();
 setupTestCache();
@@ -33,7 +33,7 @@ describe('Board management routes', () => {
       await insertUsers([admin]);
 
       const res = await request(app)
-        .post('/board/')
+        .post('/api/board/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newBoard)
         .expect(httpStatus.CREATED);
@@ -66,7 +66,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne]);
 
       await request(app)
-        .post('/board/')
+        .post('/api/board/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newBoard)
         .expect(httpStatus.CREATED);
@@ -76,7 +76,7 @@ describe('Board management routes', () => {
 
     test('should return 401 if Authorization token is missing', async () => {
       await request(app)
-        .post('/board/')
+        .post('/api/board/')
         .send(newBoard)
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -87,7 +87,7 @@ describe('Board management routes', () => {
       newBoard = omit(boardOne, ['_id']);
 
       await request(app)
-        .post('/board/')
+        .post('/api/board/')
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(newBoard)
         .expect(httpStatus.FORBIDDEN);
@@ -99,7 +99,7 @@ describe('Board management routes', () => {
       newBoard = omit(boardOne, ['_id', 'name']);
 
       await request(app)
-        .post('/board/')
+        .post('/api/board/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newBoard)
         .expect(httpStatus.BAD_REQUEST);
@@ -111,7 +111,7 @@ describe('Board management routes', () => {
       newBoard = omit(boardOne, ['_id', 'desc']);
 
       await request(app)
-        .post('/board/')
+        .post('/api/board/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newBoard)
         .expect(httpStatus.BAD_REQUEST);
@@ -123,7 +123,7 @@ describe('Board management routes', () => {
       newBoard = omit(boardOne, ['_id', 'section']);
 
       await request(app)
-        .post('/board/')
+        .post('/api/board/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newBoard)
         .expect(httpStatus.BAD_REQUEST);
@@ -136,7 +136,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne, boardTwo]);
 
       const res = await request(app)
-        .get('/board/')
+        .get('/api/board/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.OK);
@@ -154,7 +154,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne, boardTwo]);
 
       await request(app)
-        .get('/board/')
+        .get('/api/board/')
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -164,7 +164,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne, boardTwo]);
 
       await request(app)
-        .get('/board/')
+        .get('/api/board/')
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.FORBIDDEN);
@@ -177,7 +177,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne]);
 
       const res = await request(app)
-        .get(`/board/${boardOne._id}`)
+        .get(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.OK);
@@ -196,7 +196,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne]);
 
       await request(app)
-        .get(`/board/${boardOne._id}`)
+        .get(`/api/board/${boardOne._id}`)
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -206,7 +206,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne]);
 
       await request(app)
-        .get(`/board/${boardOne._id}`)
+        .get(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.FORBIDDEN);
@@ -217,7 +217,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne]);
 
       await request(app)
-        .get(`/board/wrong`)
+        .get(`/api/board/wrong`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.BAD_REQUEST);
@@ -227,7 +227,7 @@ describe('Board management routes', () => {
       await insertUsers([admin]);
 
       await request(app)
-        .get(`/board/${boardOne._id}`)
+        .get(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);
@@ -252,7 +252,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne]);
 
       const res = await request(app)
-        .patch(`/board/${boardOne._id}`)
+        .patch(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBoard)
         .expect(httpStatus.OK);
@@ -285,7 +285,7 @@ describe('Board management routes', () => {
       updateBoard.name = boardOne.name;
 
       await request(app)
-        .patch(`/board/${boardOne._id}`)
+        .patch(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBoard)
         .expect(httpStatus.OK);
@@ -301,7 +301,7 @@ describe('Board management routes', () => {
       updateBoard.desc = 'Testeos';
 
       await request(app)
-        .patch(`/board/${boardOne._id}`)
+        .patch(`/api/board/${boardOne._id}`)
         .send(updateBoard)
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -313,7 +313,7 @@ describe('Board management routes', () => {
       updateBoard.desc = 'Testeos';
 
       await request(app)
-        .patch(`/board/${boardOne._id}`)
+        .patch(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBoard)
         .expect(httpStatus.FORBIDDEN);
@@ -325,7 +325,7 @@ describe('Board management routes', () => {
       updateBoard.desc = 'Testeos';
 
       await request(app)
-        .patch(`/board/${boardOne._id}`)
+        .patch(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBoard)
         .expect(httpStatus.NOT_FOUND);
@@ -338,7 +338,7 @@ describe('Board management routes', () => {
       updateBoard.desc = 'Testeos';
 
       await request(app)
-        .patch(`/board/wrong`)
+        .patch(`/api/board/wrong`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBoard)
         .expect(httpStatus.BAD_REQUEST);
@@ -351,7 +351,7 @@ describe('Board management routes', () => {
       updateBoard.section = 'wrong';
 
       await request(app)
-        .patch(`/board/${boardOne._id}`)
+        .patch(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBoard)
         .expect(httpStatus.BAD_REQUEST);
@@ -364,7 +364,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne]);
 
       await request(app)
-        .delete(`/board/${boardOne._id}`)
+        .delete(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.NO_CONTENT);
@@ -383,7 +383,7 @@ describe('Board management routes', () => {
       await insertThreads([threadOne]);
 
       await request(app)
-        .delete(`/board/${boardOne._id}`)
+        .delete(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.NO_CONTENT);
@@ -397,7 +397,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne]);
 
       await request(app)
-        .delete(`/board/${boardOne._id}`)
+        .delete(`/api/board/${boardOne._id}`)
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -407,7 +407,7 @@ describe('Board management routes', () => {
       await insertBoards([boardOne]);
 
       await request(app)
-        .delete(`/board/${boardOne._id}`)
+        .delete(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.FORBIDDEN);
@@ -417,7 +417,7 @@ describe('Board management routes', () => {
       await insertUsers([admin]);
 
       await request(app)
-        .delete(`/board/wrong`)
+        .delete(`/api/board/wrong`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.BAD_REQUEST);
@@ -427,7 +427,7 @@ describe('Board management routes', () => {
       await insertUsers([admin]);
 
       await request(app)
-        .delete(`/board/${boardOne._id}`)
+        .delete(`/api/board/${boardOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);

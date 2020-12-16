@@ -30,7 +30,7 @@ const actions = {
     commit(AUTH_REQUEST);
 
     return new Promise((resolve, reject) => {
-      request({ url: '/auth/login', data: staff, method: 'POST' })
+      request({ url: '/api/auth/login', data: staff, method: 'POST' })
         .then(resp => {
           const { tokens, user } = resp;
 
@@ -52,7 +52,7 @@ const actions = {
   async [AUTH_REFRESH_TOKENS]({ state, dispatch, commit }) {
     const { token } = state.tokens.refresh;
     return new Promise((resolve, reject) => {
-      request({ url: '/auth/refresh-tokens', data: { refreshToken: token }, method: 'POST' })
+      request({ url: '/api/auth/refresh-tokens', data: { refreshToken: token }, method: 'POST' })
         .then(tokens => {
           localStorage.setItem('user-token', JSON.stringify(tokens));
           commit(AUTH_SUCCESS, tokens);

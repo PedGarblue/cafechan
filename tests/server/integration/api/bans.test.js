@@ -1,15 +1,16 @@
 const request = require('supertest');
 const httpStatus = require('http-status');
 const faker = require('faker');
-const app = require('../../../src/app');
-const setupTestDB = require('../utils/setupTestDB');
-const { banOne, banTwo, insertBans, createBan } = require('../fixtures/ban.fixture');
-const { adminAccessToken, userOneAccessToken } = require('../fixtures/token.fixture');
-const { admin, userOne, insertUsers } = require('../fixtures/user.fixture');
-const { createThread } = require('../fixtures/post.fixture');
-const { decrypt } = require('../../../src/utils/crypt');
-const banTimes = require('../../../src/config/banTimes');
-const { Ban } = require('../../../src/models');
+
+const app = require('../../../../src/app');
+const setupTestDB = require('../../utils/setupTestDB');
+const { banOne, banTwo, insertBans, createBan } = require('../../fixtures/ban.fixture');
+const { adminAccessToken, userOneAccessToken } = require('../../fixtures/token.fixture');
+const { admin, userOne, insertUsers } = require('../../fixtures/user.fixture');
+const { createThread } = require('../../fixtures/post.fixture');
+const { decrypt } = require('../../../../src/utils/crypt');
+const banTimes = require('../../../../src/config/banTimes');
+const { Ban } = require('../../../../src/models');
 
 setupTestDB();
 
@@ -20,7 +21,7 @@ describe('Bans routes', () => {
       await insertUsers([admin]);
 
       const res = await request(app)
-        .get('/ban/')
+        .get('/api/ban/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.OK);
@@ -41,7 +42,7 @@ describe('Bans routes', () => {
 
     test('should return 401 if the access token is missing', async () => {
       await request(app)
-        .get('/ban/')
+        .get('/api/ban/')
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -49,7 +50,7 @@ describe('Bans routes', () => {
     test('should return 403 if the user is not authorized', async () => {
       await insertUsers([userOne]);
       await request(app)
-        .get('/ban/')
+        .get('/api/ban/')
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.FORBIDDEN);
@@ -70,7 +71,7 @@ describe('Bans routes', () => {
     test('should return 201 and create ban', async () => {
       await insertUsers([admin]);
       const res = await request(app)
-        .post('/ban/')
+        .post('/api/ban/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newBan)
         .expect(httpStatus.CREATED);
@@ -100,7 +101,7 @@ describe('Bans routes', () => {
       delete newBan.ip;
       newBan.post = thread._id;
       const res = await request(app)
-        .post('/ban/')
+        .post('/api/ban/')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newBan);
       expect(res.body).toBeInstanceOf(Object);
@@ -124,7 +125,7 @@ describe('Bans routes', () => {
     });
     test('should return 401 if access token is missing', async () => {
       await request(app)
-        .post('/ban/')
+        .post('/api/ban/')
         .send(newBan)
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -132,7 +133,7 @@ describe('Bans routes', () => {
     test('should return 403 if the user is not authorized', async () => {
       await insertUsers([userOne]);
       await request(app)
-        .post('/ban/')
+        .post('/api/ban/')
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(newBan)
         .expect(httpStatus.FORBIDDEN);
@@ -144,7 +145,7 @@ describe('Bans routes', () => {
       await insertUsers([admin]);
       const ban = await createBan();
       await request(app)
-        .delete(`/ban/${ban.id}`)
+        .delete(`/api/ban/${ban.id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.NO_CONTENT);
@@ -155,7 +156,7 @@ describe('Bans routes', () => {
 
     test('should return 401 if access token is missing', async () => {
       await request(app)
-        .delete(`/ban/${banOne._id}`)
+        .delete(`/api/ban/${banOne._id}`)
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -163,7 +164,7 @@ describe('Bans routes', () => {
     test('should return 403 if the user is not authorized', async () => {
       await insertUsers([userOne]);
       await request(app)
-        .delete(`/ban/${banOne._id}`)
+        .delete(`/api/ban/${banOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.FORBIDDEN);
@@ -172,7 +173,7 @@ describe('Bans routes', () => {
     test('should return 404 if the ban is not found', async () => {
       await insertUsers([admin]);
       await request(app)
-        .delete(`/ban/${banOne._id}`)
+        .delete(`/api/ban/${banOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);

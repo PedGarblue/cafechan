@@ -25,7 +25,7 @@ const actions = {
       const accessToken = tokens.access.token;
       const userid = user.id || localStorage.getItem('user');
 
-      request({ url: `/user/${userid}`, method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
+      request({ url: `/api/user/${userid}`, method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
         .then(user => {
           localStorage.setItem('user', user.id);
           sessionStorage.setItem('user', JSON.stringify(user));
