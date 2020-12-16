@@ -19,7 +19,7 @@ const envConfig = require('../../../../src/config/envConfig');
 setupTestCache();
 setupTestDB();
 
-describe('POST /:board/thread/:threadid/', () => {
+describe('POST /post/reply', () => {
   let newReply;
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('POST /:board/thread/:threadid/', () => {
     const thread = await createThread();
     newReply = Object.assign(newReply, { board: board.id, thread: thread.id });
     const res = await request(app)
-      .post(`/${board.name}/thread/${thread.seq_id}/`)
+      .post(`/api/posts/reply/`)
       .set('Accept', 'application/json')
       .send(newReply)
       .expect(httpStatus.CREATED);
@@ -79,7 +79,7 @@ describe('POST /:board/thread/:threadid/', () => {
     expect(mcache.get(`__express__/${board.name}/thread/${thread.seq_id}/`)).toBe(resThread.text);
 
     await request(app)
-      .post(`/${board.name}/thread/${thread.seq_id}/`)
+      .post(`/api/posts/reply/`)
       .set('Accept', 'application/json')
       .send(newReply)
       .expect(httpStatus.CREATED);
@@ -93,7 +93,7 @@ describe('POST /:board/thread/:threadid/', () => {
     const thread = await createThread();
     newReply = Object.assign(newReply, { board: board.id, thread: thread.id });
     await request(app)
-      .post(`/${board.name}/thread/${thread.seq_id}/`)
+      .post(`/api/posts/reply/`)
       .set('Accept', 'text/html')
       .send(newReply)
       .expect(httpStatus.FOUND);
@@ -117,7 +117,7 @@ describe('POST /:board/thread/:threadid/', () => {
     });
     newReply = Object.assign(newReply, { board: board.id, thread: thread.id });
     await request(app)
-      .post(`/${board.name}/thread/${thread.seq_id}/`)
+      .post(`/api/posts/reply/`)
       .set('X-Forwarded-For', bannedIp)
       .send(newReply)
       .expect(httpStatus.BAD_REQUEST);
@@ -127,23 +127,25 @@ describe('POST /:board/thread/:threadid/', () => {
   });
 
   test('should return 400 if board is not set', async () => {
-    const board = await createBoard();
     const thread = await createThread();
     newReply = Object.assign(newReply, { thread: thread.id });
     newReply.message = '';
-    await request(app)
-      .post(`/${board.name}/thread/${thread.seq_id}/`)
-      .send(newReply)
-      .expect(httpStatus.BAD_REQUEST);
+    const res = await request(app)
+      .post(`/api/posts/reply/`)
+      .set('Accept', 'application/json')
+      .send(newReply);
+    expect(res.body).toEqual({
+      code: 400,
+      message: '"board" is required',
+    });
   });
 
   test('should return 400 if thread is not set', async () => {
     const board = await createBoard();
-    const thread = await createThread();
     newReply = Object.assign(newReply, { board: board.id });
     newReply.message = '';
     await request(app)
-      .post(`/${board.name}/thread/${thread.seq_id}/`)
+      .post(`/api/posts/reply/`)
       .send(newReply)
       .expect(httpStatus.BAD_REQUEST);
   });
@@ -154,7 +156,7 @@ describe('POST /:board/thread/:threadid/', () => {
     newReply = Object.assign(newReply, { board: board.id, thread: thread.id });
     newReply.message = '';
     await request(app)
-      .post(`/${board.name}/thread/${thread.seq_id}/`)
+      .post(`/api/posts/reply/`)
       .send(newReply)
       .expect(httpStatus.BAD_REQUEST);
   });
@@ -165,7 +167,7 @@ describe('POST /:board/thread/:threadid/', () => {
     newReply = Object.assign(newReply, { board: board.id, thread: thread.id });
     newReply.message = faker.lorem.words(appConfig.posting.message.maxChars);
     await request(app)
-      .post(`/${board.name}/thread/${thread.seq_id}/`)
+      .post(`/api/posts/reply/`)
       .send(newReply)
       .expect(httpStatus.BAD_REQUEST);
   });
@@ -177,7 +179,7 @@ describe('POST /:board/thread/:threadid/', () => {
     await insertReplies([replyOne]);
     newReply = Object.assign(newReply, { board: board.id, thread: thread.id });
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/reply/`)
       .set('Accept', 'application/json')
       .send(newReply)
       .expect(httpStatus.BAD_REQUEST);
@@ -190,7 +192,7 @@ describe('POST /:board/thread/:threadid/', () => {
     await insertReplies([replyOne]);
     newReply = Object.assign(replyOne, { board: board.id, thread: thread.id });
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/reply/`)
       .set('Accept', 'application/json')
       .send(newReply)
       .expect(httpStatus.BAD_REQUEST);
@@ -217,7 +219,7 @@ describe('POST /:board/thread/:threadid/', () => {
 
     test('should return 201 and sucessfully store the uploaded image correctly', async () => {
       const res = await request(app)
-        .post(`/${board.name}/thread/${thread.seq_id}/`)
+        .post(`/api/posts/reply/`)
         .set('Accept', 'application/json')
         .field('board', board.id)
         .field('thread', thread.id)
@@ -255,7 +257,7 @@ describe('POST /:board/thread/:threadid/', () => {
       board.set('maxfilesize', 0);
       await board.save();
       await request(app)
-        .post(`/${board.name}/thread/${thread.seq_id}/`)
+        .post(`/api/posts/reply/`)
         .set('Accept', 'application/json')
         .field('board', board.id)
         .field('thread', thread.id)
@@ -268,7 +270,7 @@ describe('POST /:board/thread/:threadid/', () => {
       board.set('allowedfiletypes', []);
       await board.save();
       await request(app)
-        .post(`/${board.name}/thread/${thread.seq_id}/`)
+        .post(`/api/posts/reply/`)
         .set('Accept', 'application/json')
         .field('board', board.id)
         .field('thread', thread.id)

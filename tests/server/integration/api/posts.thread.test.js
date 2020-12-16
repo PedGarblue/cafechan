@@ -35,7 +35,7 @@ describe('POST /:board/', () => {
     newThread = Object.assign(newThread, { board: board.id });
 
     const res = await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread`)
       .set('Accept', 'application/json')
       .send(newThread)
       .expect(httpStatus.CREATED);
@@ -65,7 +65,7 @@ describe('POST /:board/', () => {
     mcache.put(`__express__/${board.name}/`, 'some content');
 
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread/`)
       .set('Accept', 'application/json')
       .send(newThread)
       .expect(httpStatus.CREATED);
@@ -78,7 +78,7 @@ describe('POST /:board/', () => {
     newThread = Object.assign(newThread, { board: board.id });
 
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread/`)
       .set('Accept', 'text/html')
       .send(newThread)
       .expect(httpStatus.FOUND);
@@ -104,7 +104,7 @@ describe('POST /:board/', () => {
     newThread = Object.assign(newThread, { board: board.id });
 
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread/`)
       .set('X-Forwarded-For', bannedIp)
       .send(newThread)
       .expect(httpStatus.BAD_REQUEST);
@@ -120,7 +120,7 @@ describe('POST /:board/', () => {
     newThread = omit(newThread, ['board']);
 
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread/`)
       .send(newThread)
       .expect(httpStatus.BAD_REQUEST);
   });
@@ -132,7 +132,7 @@ describe('POST /:board/', () => {
     newThread = omit(newThread, ['title']);
 
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread/`)
       .send(newThread)
       .expect(httpStatus.BAD_REQUEST);
   });
@@ -143,7 +143,7 @@ describe('POST /:board/', () => {
     newThread.title = faker.lorem.words(appConfig.posting.title.maxChars);
 
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread/`)
       .send(newThread)
       .expect(httpStatus.BAD_REQUEST);
   });
@@ -154,7 +154,7 @@ describe('POST /:board/', () => {
     newThread.message = faker.lorem.words(appConfig.posting.message.maxChars);
 
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread/`)
       .send(newThread)
       .expect(httpStatus.BAD_REQUEST);
   });
@@ -165,7 +165,7 @@ describe('POST /:board/', () => {
     await insertThreads([threadOne]);
     newThread = Object.assign(newThread, { board: board.id });
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread/`)
       .set('Accept', 'application/json')
       .send(newThread)
       .expect(httpStatus.BAD_REQUEST);
@@ -173,12 +173,16 @@ describe('POST /:board/', () => {
 
   test('should return 400 error if thread send is duplicated', async () => {
     const board = await createBoard();
-    const toDuplicate = Object.assign(newThread, { board: board.id, ip: encrypt(faker.internet.ip()), timestamp: Date.now() - 1000 });
+    const toDuplicate = Object.assign(newThread, {
+      board: board.id,
+      ip: encrypt(faker.internet.ip()),
+      timestamp: Date.now() - 1000,
+    });
     const duplicated = newThread;
     duplicated.board = board.id;
     await insertThreads([toDuplicate]);
     await request(app)
-      .post(`/${board.name}/`)
+      .post(`/api/posts/thread/`)
       .set('Accept', 'application/json')
       .send(duplicated)
       .expect(httpStatus.BAD_REQUEST);
@@ -204,7 +208,7 @@ describe('POST /:board/', () => {
 
     test('should return 201 and sucessfully store the uploaded image correctly', async () => {
       const res = await request(app)
-        .post(`/${board.name}/`)
+        .post(`/api/posts/thread/`)
         .set('Accept', 'application/json')
         .field('board', board.id)
         .field('message', newThread.message)
@@ -241,7 +245,7 @@ describe('POST /:board/', () => {
       board.set('maxfilesize', 0);
       await board.save();
       await request(app)
-        .post(`/${board.name}/`)
+        .post(`/api/posts/thread/`)
         .set('Accept', 'application/json')
         .field('board', board.id)
         .field('message', newThread.message)
@@ -254,7 +258,7 @@ describe('POST /:board/', () => {
       board.set('allowedfiletypes', []);
       await board.save();
       await request(app)
-        .post(`/${board.name}/`)
+        .post(`/api/posts/thread/`)
         .set('Accept', 'application/json')
         .field('board', board.id)
         .field('message', newThread.message)
