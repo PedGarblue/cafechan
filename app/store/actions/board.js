@@ -1,0 +1,3 @@
+export const BOARD_REQUEST = 'BOARD_REQUEST';
+export const BOARD_SUCCESS = 'BOARD_SUCCESS';
+export const BOARD_ERROR = 'BOARD_ERROR';

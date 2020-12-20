@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
 import Vue from 'vue';
-import store from '@/store';
-import postbox from '@/components/postBox';
-import { POSTS_REQUEST } from '@/store/actions/posts';
+import VueRouter from 'vue-router';
+
+import store from '@/store/chan';
+import router from '@/router/chan';
+
+Vue.use(VueRouter);
 
 const app = new Vue({
   el: '#app',
-  components: {
-    postbox,
-  },
+  router,
   store,
 });
-
-app.$store.dispatch(POSTS_REQUEST);

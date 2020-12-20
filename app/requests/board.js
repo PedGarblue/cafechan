@@ -1,5 +1,5 @@
 import request from '@/request';
-import store from '../store';
+import store from '@/store/panel';
 
 export const getBoards = () => {
   const accessToken = store.getters.accessToken.token;

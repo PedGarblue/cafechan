@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import store from './store';
-import router from './router';
+
+import store from './store/panel';
+import router from './router/panel';
 import Panel from './components/panel';
 
 Vue.use(VueRouter);

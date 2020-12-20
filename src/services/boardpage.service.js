@@ -12,7 +12,7 @@ const getBoardPage = async (board, query) => {
   const totalpages = round((await Thread.countDocuments({ board })) / board.postsperpage);
   const page = {
     key: 'boardpage',
-    actual: parseInt(query.page, 10) || 0,
+    actual: parseInt(query.page, 10) || 1,
     totalpages,
   };
   return {

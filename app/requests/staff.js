@@ -1,5 +1,5 @@
-import request from '../request';
-import store from '../store';
+import request from '@/request';
+import store from '@/store/panel';
 
 export const getStaffList = () => {
   return new Promise((resolve, reject) => {

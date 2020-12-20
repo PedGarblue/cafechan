@@ -1,5 +1,5 @@
 import request from '@/request';
-import { savePost } from '../utils/myPosts';
+import { savePost } from '@/utils/myPosts';
 
 export const getPosts = accessToken => {
   if (!accessToken || typeof accessToken !== 'string') throw new Error('Access token is not set');
@@ -32,9 +32,18 @@ export const removePost = (accessToken, post) => {
   });
 };
 
-export const sendPost = (boardname, boardid) => {
-  if (!boardname || !boardid || typeof boardname !== 'string' || typeof boardid !== 'string')
-    throw new Error('Invalid argument');
+export const getThread = (boardname, threadid) =>
+  new Promise((resolve, reject) => {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    request({ url: `/${boardname}/thread/${threadid}/`, method: 'GET' }, headers)
+      .then(data => resolve(data.thread))
+      .catch(err => reject(err));
+  });
+
+export const sendPost = boardid => {
+  if (!boardid || typeof boardid !== 'string') throw new Error('Invalid argument');
   const sendPostPromise = (url, data) =>
     new Promise((resolve, reject) => {
       const headers = {
@@ -49,24 +58,25 @@ export const sendPost = (boardname, boardid) => {
           reject(err);
         });
     });
-  let url = `/${boardname}/`;
+  let url = `/api/posts`;
   const data = new FormData();
   data.append('board', boardid);
 
   return {
-    thread: (title, message, postfile) => {
-      if (!message) throw new Error('To post a thread in this board you need a message');
-      data.append('title', title);
-      data.append('message', message);
-      if (postfile) data.append('postfile', postfile);
+    thread: post => {
+      if (!post.message) throw new Error('To post a thread in this board you need a message');
+      data.append('title', post.title);
+      data.append('message', post.message);
+      if (post.file) data.append('postfile', post.file);
+      url = `${url}/thread`;
       return sendPostPromise(url, data);
     },
-    reply: (thread, threadseqid, message, postfile) => {
-      if (!message) throw new Error('To reply this thread you need a message');
+    reply: (thread, post) => {
+      if (!post.message) throw new Error('To reply this thread you need a message');
       data.append('thread', thread);
-      data.append('message', message);
-      if (postfile) data.append('postfile', postfile);
-      url = `${url}thread/${threadseqid}/`;
+      data.append('message', post.message);
+      if (post.file) data.append('postfile', post.file);
+      url = `${url}/reply`;
       return sendPostPromise(url, data);
     },
   };

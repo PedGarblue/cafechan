@@ -19,7 +19,7 @@ const getBoardPage = catchAsync(async (req, res) => {
   };
   res.status(httpStatus.OK).format({
     html: async () => {
-      res.render('boardpage', await boardpageService.getBoardPage(board, query));
+      res.render('app');
     },
     json: async () => {
       res.json(await boardpageService.getBoardPage(board, query));
@@ -37,8 +37,7 @@ const getThread = catchAsync(async (req, res) => {
 
   res.status(httpStatus.OK).format({
     html: async () => {
-      const data = await boardpageService.getThreadPage(board, thread);
-      res.render('thread', data);
+      res.render('app');
     },
     json: async () => {
       res.json(await boardpageService.getThreadPage(board, thread));

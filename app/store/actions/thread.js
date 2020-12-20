@@ -1,0 +1,3 @@
+export const THREAD_REQUEST = 'THREAD_REQUEST';
+export const THREAD_SUCCESS = 'THREAD_SUCCESS';
+export const THREAD_ERROR = 'THREAD_ERROR';
