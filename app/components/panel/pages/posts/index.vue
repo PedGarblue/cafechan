@@ -18,10 +18,11 @@
 </template>
 
 <script>
-import { getPosts, removePost } from '@/requests/post';
 import { mapGetters } from 'vuex';
-import Loading from '@/components/lib/loading';
-import Button from '@/components/lib/button';
+
+import { getPosts, removePost } from '@/app/requests/post';
+import Loading from '@/app/components/lib/loading';
+import Button from '@/app/components/lib/button';
 import Table from '../../lib/table';
 import Page from '../../lib/page';
 import Post from '../../lib/post';

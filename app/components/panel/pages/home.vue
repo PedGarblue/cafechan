@@ -12,7 +12,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import Button from '@/components/lib/button';
+import Button from '@/app/components/lib/button';
 import Page from '../lib/page';
 
 export default {

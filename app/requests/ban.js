@@ -1,4 +1,4 @@
-import request from '@/request';
+import request from '@/app/request';
 
 export const getBans = accessToken => {
   if (!accessToken || typeof accessToken !== 'string') throw new Error('Access token is not set');

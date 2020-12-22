@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import roles from '@/config/roles';
-import { editStaff, getStaff } from '@/requests/staff';
+import roles from '@/app/config/roles';
+import { editStaff, getStaff } from '@/app/requests/staff';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';

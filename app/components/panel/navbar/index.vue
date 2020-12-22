@@ -28,8 +28,8 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { siteName } from '@/config/config';
-import Loading from '@/components/lib/loading';
+import { siteName } from '@/app/config/config';
+import Loading from '@/app/components/lib/loading';
 import UserMenu from './user-menu';
 
 export default {

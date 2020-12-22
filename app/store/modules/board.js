@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
-import request from '@/request';
-import { BOARD_REQUEST, BOARD_SUCCESS, BOARD_ERROR } from '@/store/actions/board';
+import request from '@/app/request';
+import { BOARD_REQUEST, BOARD_SUCCESS, BOARD_ERROR } from '@/app/store/actions/board';
 
 const state = {
   status: '',

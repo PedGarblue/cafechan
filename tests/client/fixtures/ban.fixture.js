@@ -1,6 +1,6 @@
 const { Types } = require('mongoose');
 const faker = require('faker');
-const banTimes = require('../../../src/config/banTimes');
+const banTimes = require('@/src/config/banTimes');
 
 const banOne = {
   _id: Types.ObjectId().toHexString(),

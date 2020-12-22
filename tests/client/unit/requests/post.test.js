@@ -1,10 +1,10 @@
-import { getPosts, removePost, sendPost } from '../../../../app/requests/post';
+import { getPosts, removePost, sendPost } from '@/app/requests/post';
+import request from '@/app/request';
 import { replyOne, threadOne, threadTwo } from '../../fixtures/posts.fixtures';
 import { boardOne } from '../../fixtures/board.fixture';
 import { adminAccessToken } from '../../fixtures/token.fixture';
-import request from '../../../../app/request';
 
-jest.mock('../../../../app/request');
+jest.mock('@/app/request');
 
 describe('Posts Requests', () => {
   describe('getPosts()', () => {

@@ -29,7 +29,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import Loading from '@/components/lib/loading';
+import Loading from '@/app/components/lib/loading';
 import config from './config';
 
 const EMPTY = 0;

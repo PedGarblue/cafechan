@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import { editBoard, getBoard } from '@/requests/board';
-import Loading from '@/components/lib/loading';
+import { editBoard, getBoard } from '@/app/requests/board';
+import Loading from '@/app/components/lib/loading';
 import Form from '../../lib/form';
 import FormBlock from '../../lib/form-block';
 

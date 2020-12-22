@@ -1,8 +1,8 @@
-import Roles from '@/config/roles';
-import BoardAdmin from '@/components/panel/pages/board';
-import BoardList from '@/components/panel/pages/board/board-list';
-import BoardAdd from '@/components/panel/pages/board/board-add';
-import BoardEdit from '@/components/panel/pages/board/board-edit';
+import Roles from '@/app/config/roles';
+import BoardAdmin from '@/app/components/panel/pages/board';
+import BoardList from '@/app/components/panel/pages/board/board-list';
+import BoardAdd from '@/app/components/panel/pages/board/board-add';
+import BoardEdit from '@/app/components/panel/pages/board/board-edit';
 
 export default {
   path: '/board',

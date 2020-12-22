@@ -8,8 +8,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
-import { AUTH_REFRESH_TOKENS } from '@/store/actions/auth';
-import { USER_REQUEST } from '@/store/actions/user';
+import { AUTH_REFRESH_TOKENS } from '@/app/store/actions/auth';
+import { USER_REQUEST } from '@/app/store/actions/user';
 import Navbar from './navbar';
 
 export default {

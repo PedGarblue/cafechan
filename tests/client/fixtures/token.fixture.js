@@ -1,6 +1,6 @@
 const moment = require('moment');
-const config = require('../../../src/config/envConfig');
-const tokenService = require('../../../src/services/token.service');
+const config = require('@/src/config/envConfig');
+const tokenService = require('@/src/services/token.service');
 const { userOne, admin } = require('./user.fixture');
 
 const accessTokenExpires = moment().add(config.jwt.accessExpirationMinutes, 'minutes');

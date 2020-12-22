@@ -2,9 +2,9 @@ const faker = require('faker');
 const { escape } = require('lodash');
 const { ObjectId } = require('mongoose').Types;
 
-const { encrypt } = require('../../../../src/utils/crypt');
-const { Thread, Reply, Board } = require('../../../../src/models');
-const appConfig = require('../../../../src/config.json');
+const { encrypt } = require('@/src/utils/crypt');
+const { Thread, Reply, Board } = require('@/src/models');
+const appConfig = require('@/src/config.json');
 // const Logger = require('../../../src/config/logger');
 const setupTestDB = require('../../utils/setupTestDB');
 

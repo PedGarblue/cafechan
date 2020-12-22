@@ -6,15 +6,15 @@ const httpStatus = require('http-status');
 const { omit } = require('lodash');
 const mcache = require('memory-cache');
 
-const app = require('../../../../src/app');
-const banTimes = require('../../../../src/config/banTimes');
+const app = require('@/src/app');
+const banTimes = require('@/src/config/banTimes');
+const { Reply, Ban } = require('@/src/models');
+const appConfig = require('@/src/config/appConfig');
+const envConfig = require('@/src/config/envConfig');
 const setupTestDB = require('../../utils/setupTestDB');
 const setupTestCache = require('../../utils/setupTestCache');
 const { createBoard } = require('../../fixtures/board.fixture');
 const { createThread, insertReplies, replyOne } = require('../../fixtures/post.fixture');
-const { Reply, Ban } = require('../../../../src/models');
-const appConfig = require('../../../../src/config/appConfig');
-const envConfig = require('../../../../src/config/envConfig');
 
 setupTestCache();
 setupTestDB();

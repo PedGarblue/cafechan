@@ -28,7 +28,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import { getThread } from '@/requests/post';
+import { getThread } from '@/app/requests/post';
 import Thread from '../lib/thread';
 import PostBox from '../lib/postbox';
 

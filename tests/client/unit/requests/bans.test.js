@@ -1,12 +1,12 @@
-import request from '../../../../app/request';
+import request from '@/app/request';
 
 const faker = require('faker');
-const banTimes = require('../../../../src/config/banTimes');
+const banTimes = require('@/src/config/banTimes');
+const { getBans, sendBan, deleteBan } = require('@/app/requests/ban');
 const { banOne, banTwo } = require('../../fixtures/ban.fixture');
 const { adminAccessToken } = require('../../fixtures/token.fixture');
-const { getBans, sendBan, deleteBan } = require('../../../../app/requests/ban');
 
-jest.mock('../../../../app/request');
+jest.mock('@/app/request');
 
 describe('Bans Requests', () => {
   afterEach(() => {

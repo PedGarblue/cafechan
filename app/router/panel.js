@@ -1,11 +1,11 @@
 import Router from 'vue-router';
 
-import store from '@/store/panel';
-import Roles from '@/config/roles';
-import Login from '@/components/panel/pages/login';
-import Home from '@/components/panel/pages/home';
-import Posts from '@/components/panel/pages/posts';
-import PageNotFound from '@/components/lib/404';
+import store from '@/app/store/panel';
+import Roles from '@/app/config/roles';
+import Login from '@/app/components/panel/pages/login';
+import Home from '@/app/components/panel/pages/home';
+import Posts from '@/app/components/panel/pages/posts';
+import PageNotFound from '@/app/components/lib/404';
 import BoardRoutes from './manage/board';
 import StaffRoutes from './manage/staff';
 import BansRoutes from './manage/bans';

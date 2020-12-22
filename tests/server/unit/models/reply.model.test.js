@@ -1,8 +1,8 @@
 const faker = require('faker');
 const { omit } = require('lodash');
 
-const { encrypt } = require('../../../../src/utils/crypt');
-const { Reply, Board } = require('../../../../src/models');
+const { encrypt } = require('@/src/utils/crypt');
+const { Reply, Board } = require('@/src/models');
 const setupTestDB = require('../../utils/setupTestDB');
 const boardFixture = require('../../fixtures/board.fixture');
 const postFixture = require('../../fixtures/post.fixture');

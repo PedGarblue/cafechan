@@ -2,15 +2,15 @@ const request = require('supertest');
 const httpStatus = require('http-status');
 const faker = require('faker');
 
-const app = require('../../../../src/app');
+const app = require('@/src/app');
+const { decrypt } = require('@/src/utils/crypt');
+const { Ban } = require('@/src/models');
+const banTimes = require('@/src/config/banTimes');
 const setupTestDB = require('../../utils/setupTestDB');
 const { banOne, banTwo, insertBans, createBan } = require('../../fixtures/ban.fixture');
 const { adminAccessToken, userOneAccessToken } = require('../../fixtures/token.fixture');
 const { admin, userOne, insertUsers } = require('../../fixtures/user.fixture');
 const { createThread } = require('../../fixtures/post.fixture');
-const { decrypt } = require('../../../../src/utils/crypt');
-const banTimes = require('../../../../src/config/banTimes');
-const { Ban } = require('../../../../src/models');
 
 setupTestDB();
 

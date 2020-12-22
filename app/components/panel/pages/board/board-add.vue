@@ -65,8 +65,8 @@
 
 <script>
 /* eslint-disable no-alert */
-import { createBoard } from '@/requests/board';
-import Loading from '@/components/lib/loading';
+import { createBoard } from '@/app/requests/board';
+import Loading from '@/app/components/lib/loading';
 import Form from '../../lib/form';
 import FormBlock from '../../lib/form-block';
 

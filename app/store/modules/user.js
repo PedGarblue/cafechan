@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
-import request from '../../request';
+import request from '@/app/request';
 import { USER_REQUEST, USER_ERROR, USER_SUCCESS, USER_LOGOUT } from '../actions/user';
 import { AUTH_LOGOUT } from '../actions/auth';
 

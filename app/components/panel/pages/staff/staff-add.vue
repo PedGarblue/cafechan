@@ -30,9 +30,9 @@
 
 <script>
 /* eslint-disable no-alert */
-import roles from '@/config/roles';
-import { createStaff } from '@/requests/staff';
-import Loading from '@/components/lib/loading';
+import roles from '@/app/config/roles';
+import { createStaff } from '@/app/requests/staff';
+import Loading from '@/app/components/lib/loading';
 import Form from '../../lib/form';
 import FormBlock from '../../lib/form-block';
 

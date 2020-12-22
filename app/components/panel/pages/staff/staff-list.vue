@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import { getStaffList, deleteStaff } from '@/requests/staff';
-import Loading from '@/components/lib/loading';
-import Button from '@/components/lib/button';
+import { getStaffList, deleteStaff } from '@/app/requests/staff';
+import Loading from '@/app/components/lib/loading';
+import Button from '@/app/components/lib/button';
 import Table from '../../lib/table';
 
 const LOADING = 'ERROR';

@@ -1,8 +1,8 @@
 const faker = require('faker');
 const httpMocks = require('node-mocks-http');
-const PostValidate = require('../../../../src/middlewares/postingValidation');
-const PostParsing = require('../../../../src/middlewares/postingParse');
-const { Post } = require('../../../../src/models');
+const PostValidate = require('@/src/middlewares/postingValidation');
+const PostParsing = require('@/src/middlewares/postingParse');
+const { Post } = require('@/src/models');
 const { threadOne, replyOne } = require('../../fixtures/post.fixture');
 const { boardOne } = require('../../fixtures/board.fixture');
 const setupTestDb = require('../../utils/setupTestDB');

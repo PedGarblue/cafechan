@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { sendPost } from '@/requests/post';
+import { sendPost } from '@/app/requests/post';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';

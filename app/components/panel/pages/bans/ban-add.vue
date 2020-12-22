@@ -30,9 +30,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import banReasons from '@/config/banReasons';
-import { sendBan } from '@/requests/ban';
-import Loading from '@/components/lib/loading';
+import banReasons from '@/app/config/banReasons';
+import { sendBan } from '@/app/requests/ban';
+import Loading from '@/app/components/lib/loading';
 import Form from '../../lib/form';
 import FormBlock from '../../lib/form-block';
 

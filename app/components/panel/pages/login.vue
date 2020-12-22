@@ -26,7 +26,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { AUTH_REQUEST } from '@/store/actions/auth';
+import { AUTH_REQUEST } from '@/app/store/actions/auth';
 
 export default {
   data() {

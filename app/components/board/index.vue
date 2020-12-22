@@ -18,8 +18,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
-import { BOARD_REQUEST } from '@/store/actions/board';
-import Loading from '@/components/lib/loading';
+import { BOARD_REQUEST } from '@/app/store/actions/board';
+import Loading from '@/app/components/lib/loading';
 import Navbar from './lib/navbar';
 import Footer from './lib/footer';
 

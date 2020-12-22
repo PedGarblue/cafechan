@@ -1,8 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VueRouter from 'vue-router';
 import Vuex from 'vuex';
-import BansList from '../../../../../app/components/bans/ban-list.vue';
-import { getBans } from '../../../../../app/requests/ban';
+
+import BansList from '@/app/components/panel/pages/bans/ban-list.vue';
+import { getBans } from '@/app/requests/ban';
 import { banOne } from '../../../fixtures/ban.fixture';
 
 const localVue = createLocalVue();
@@ -10,7 +11,7 @@ localVue.use(VueRouter);
 localVue.use(Vuex);
 const router = new VueRouter();
 
-jest.mock('../../../../../app/requests/ban');
+jest.mock('@/app/requests/ban');
 
 const createWrapper = overrides => {
   const defaults = {

@@ -1,8 +1,8 @@
-import Roles from '@/config/roles';
-import Staff from '@/components/panel/pages/staff';
-import StaffList from '@/components/panel/pages/staff/staff-list';
-import StaffAdd from '@/components/panel/pages/staff/staff-add';
-import StaffEdit from '@/components/panel/pages/staff/staff-edit';
+import Roles from '@/app/config/roles';
+import Staff from '@/app/components/panel/pages/staff';
+import StaffList from '@/app/components/panel/pages/staff/staff-list';
+import StaffAdd from '@/app/components/panel/pages/staff/staff-add';
+import StaffEdit from '@/app/components/panel/pages/staff/staff-edit';
 
 export default {
   path: '/staff',

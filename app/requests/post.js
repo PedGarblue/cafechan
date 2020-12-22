@@ -1,5 +1,5 @@
-import request from '@/request';
-import { savePost } from '@/utils/myPosts';
+import request from '@/app/request';
+import { savePost } from '@/app/utils/myPosts';
 
 export const getPosts = accessToken => {
   if (!accessToken || typeof accessToken !== 'string') throw new Error('Access token is not set');

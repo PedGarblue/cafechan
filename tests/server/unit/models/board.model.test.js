@@ -1,5 +1,5 @@
 const faker = require('faker');
-const { Board } = require('../../../../src/models');
+const { Board } = require('@/src/models');
 const setupTestDB = require('../../utils/setupTestDB');
 
 setupTestDB();

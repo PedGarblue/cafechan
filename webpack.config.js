@@ -38,7 +38,7 @@ module.exports = {
     modules: ['node_modules'],
     alias: {
       vue$: isDev ? 'vue/dist/vue.js' : 'vue/dist/vue.min.js',
-      '@': path.resolve(__dirname, 'app'),
+      '@': path.resolve(__dirname, './'),
     },
   },
   plugins: [new VueLoaderPlugin(), new DefinePlugin({ 'process.env': JSON.stringify(envClient) })],

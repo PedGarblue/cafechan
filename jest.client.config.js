@@ -13,7 +13,7 @@ module.exports = {
   coveragePathIgnorePatterns: ['node_modules', 'src/', 'tests'],
   coverageReporters: ['text', 'lcov', 'clover', 'html'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/app/$1',
+    '^@/(.*)$': '<rootDir>/$1',
   },
   roots: ['<rootDir>/tests/client/'],
 };

@@ -3,8 +3,8 @@ const { omit } = require('lodash');
 const httpStatus = require('http-status');
 const cache = require('memory-cache');
 
-const app = require('../../../../src/app');
-const { Board } = require('../../../../src/models');
+const app = require('@/src/app');
+const { Board } = require('@/src/models');
 const setupTestDB = require('../../utils/setupTestDB');
 const setupTestCache = require('../../utils/setupTestCache');
 const { boardOne, boardTwo, insertBoards } = require('../../fixtures/board.fixture');

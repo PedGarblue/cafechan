@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import { getBoards, deleteBoard } from '@/requests/board';
-import Button from '@/components/lib/button';
-import Loading from '@/components/lib/loading';
+import { getBoards, deleteBoard } from '@/app/requests/board';
+import Button from '@/app/components/lib/button';
+import Loading from '@/app/components/lib/loading';
 import Table from '../../lib/table';
 
 const LOADING = 'LOADING';

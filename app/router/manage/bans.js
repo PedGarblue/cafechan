@@ -1,7 +1,7 @@
-import Roles from '@/config/roles';
-import Ban from '@/components/panel/pages/bans';
-import BanList from '@/components/panel/pages/bans/ban-list';
-import BanAdd from '@/components/panel/pages/bans/ban-add';
+import Roles from '@/app/config/roles';
+import Ban from '@/app/components/panel/pages/bans';
+import BanList from '@/app/components/panel/pages/bans/ban-list';
+import BanAdd from '@/app/components/panel/pages/bans/ban-add';
 
 export default {
   path: '/ban',

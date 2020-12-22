@@ -1,7 +1,8 @@
 const faker = require('faker');
-const { Ban } = require('../../../../src/models');
+
+const { Ban } = require('@/src/models');
+const banTimes = require('@/src/config/banTimes');
 const { replyOne } = require('../../fixtures/post.fixture');
-const banTimes = require('../../../../src/config/banTimes');
 
 describe('Ban Model', () => {
   describe('Ban validations', () => {

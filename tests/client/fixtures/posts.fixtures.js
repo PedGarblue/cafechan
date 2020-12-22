@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongoose').Types;
 const faker = require('faker');
-const { formatTimestamp } = require('../../../src/utils/date.util');
+
+const { formatTimestamp } = require('@/src/utils/date.util');
 const { boardOne } = require('./board.fixture');
 
 export const threadOne = {

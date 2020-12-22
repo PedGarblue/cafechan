@@ -1,12 +1,13 @@
 const request = require('supertest');
 const httpStatus = require('http-status');
 const mcache = require('memory-cache');
-const app = require('../../../../src/app');
+
+const app = require('@/src/app');
+const appConfig = require('@/src/config/appConfig');
 const setupTestDB = require('../../utils/setupTestDB');
 const setupTestCache = require('../../utils/setupTestCache');
 const { createBoard } = require('../../fixtures/board.fixture');
 const { createThread, insertReplies, replyOne, replyTwo } = require('../../fixtures/post.fixture');
-const appConfig = require('../../../../src/config/appConfig');
 
 setupTestDB();
 setupTestCache();

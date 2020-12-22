@@ -1,8 +1,8 @@
 const httpMocks = require('node-mocks-http');
 const faker = require('faker');
-const ban = require('../../../../src/middlewares/ban');
-const { Ban } = require('../../../../src/models');
-const banTimes = require('../../../../src/config/banTimes');
+const ban = require('@/src/middlewares/ban');
+const { Ban } = require('@/src/models');
+const banTimes = require('@/src/config/banTimes');
 const setupTestDb = require('../../utils/setupTestDB');
 
 setupTestDb();

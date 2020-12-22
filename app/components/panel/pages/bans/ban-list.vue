@@ -37,9 +37,9 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import { getBans, deleteBan } from '@/requests/ban';
-import Button from '@/components/lib/button';
-import Loading from '@/components/lib/loading';
+import { getBans, deleteBan } from '@/app/requests/ban';
+import Button from '@/app/components/lib/button';
+import Loading from '@/app/components/lib/loading';
 import Table from '../../lib/table';
 
 const REQUEST = 'REQUEST';

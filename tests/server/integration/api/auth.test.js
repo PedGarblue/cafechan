@@ -4,14 +4,14 @@ const httpMocks = require('node-mocks-http');
 const moment = require('moment');
 const bcrypt = require('bcryptjs');
 
-const app = require('../../../../src/app');
-const config = require('../../../../src/config/envConfig');
-const auth = require('../../../../src/middlewares/auth');
-const { tokenService, emailService } = require('../../../../src/services');
-const AppError = require('../../../../src/utils/AppError');
+const app = require('@/src/app');
+const config = require('@/src/config/envConfig');
+const auth = require('@/src/middlewares/auth');
+const { tokenService, emailService } = require('@/src/services');
+const AppError = require('@/src/utils/AppError');
+const { User, Token } = require('@/src/models');
+const { roleRights } = require('@/src/config/roles');
 const setupTestDB = require('../../utils/setupTestDB');
-const { User, Token } = require('../../../../src/models');
-const { roleRights } = require('../../../../src/config/roles');
 const { userOne, admin, insertUsers } = require('../../fixtures/user.fixture');
 const { userOneAccessToken, adminAccessToken } = require('../../fixtures/token.fixture');
 

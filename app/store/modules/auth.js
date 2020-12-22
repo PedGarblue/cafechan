@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import request from '../../request';
+import request from '@/app/request';
 import {
   AUTH_REQUEST,
   AUTH_ERROR,

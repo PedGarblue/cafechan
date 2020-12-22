@@ -20,7 +20,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { AUTH_LOGOUT } from '@/store/actions/auth';
+import { AUTH_LOGOUT } from '@/app/store/actions/auth';
 
 export default {
   data() {

@@ -1,9 +1,9 @@
 const httpStatus = require('http-status');
 const httpMocks = require('node-mocks-http');
-const { errorConverter, errorHandler } = require('../../../../src/middlewares/error');
-const AppError = require('../../../../src/utils/AppError');
-const config = require('../../../../src/config/envConfig');
-const logger = require('../../../../src/config/logger');
+const { errorConverter, errorHandler } = require('@/src/middlewares/error');
+const AppError = require('@/src/utils/AppError');
+const config = require('@/src/config/envConfig');
+const logger = require('@/src/config/logger');
 
 describe('Error middlewares', () => {
   describe('Error converter', () => {

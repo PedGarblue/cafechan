@@ -1,9 +1,9 @@
 const faker = require('faker');
 const { ObjectId } = require('mongoose').Types;
 
-const { encrypt } = require('../../../../src/utils/crypt');
-const { Post } = require('../../../../src/models');
-const appConfig = require('../../../../src/config.json');
+const { encrypt } = require('@/src/utils/crypt');
+const { Post } = require('@/src/models');
+const appConfig = require('@/src/config.json');
 const setupTestDB = require('../../utils/setupTestDB');
 const postFixtures = require('../../fixtures/post.fixture');
 const boardFixtures = require('../../fixtures/board.fixture');

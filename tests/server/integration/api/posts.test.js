@@ -2,11 +2,11 @@ const request = require('supertest');
 const httpStatus = require('http-status');
 const faker = require('faker');
 
-const { encrypt } = require('../../../../src/utils/crypt');
-const app = require('../../../../src/app');
+const { encrypt } = require('@/src/utils/crypt');
+const app = require('@/src/app');
+const { Thread, Reply, Post } = require('@/src/models');
 const setupTestDB = require('../../utils/setupTestDB');
 const { admin, userOne, insertUsers } = require('../../fixtures/user.fixture');
-const { Thread, Reply, Post } = require('../../../../src/models');
 const { adminAccessToken, userOneAccessToken } = require('../../fixtures/token.fixture');
 const { insertThreads, threadOne, threadTwo, insertReplies, replyOne, replyTwo } = require('../../fixtures/post.fixture');
 const { boardOne, insertBoards } = require('../../fixtures/board.fixture');

@@ -42,7 +42,7 @@
     "import/resolver": {
       "alias": {
         "map": [
-          ["@", "./app"]
+          ["@", "./"]
         ],
         "extensions": [
           ".js",

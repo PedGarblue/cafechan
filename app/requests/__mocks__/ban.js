@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { banOne, banTwo } from '../../../tests/client/fixtures/ban.fixture';
+import { banOne, banTwo } from '@/tests/client/fixtures/ban.fixture';
 
 jest.genMockFromModule('../ban');
 

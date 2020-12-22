@@ -6,16 +6,16 @@ const mcache = require('memory-cache');
 const path = require('path');
 const fs = require('fs');
 
-const envConfig = require('../../../../src/config/envConfig');
-const app = require('../../../../src/app');
-const banTimes = require('../../../../src/config/banTimes');
+const envConfig = require('@/src/config/envConfig');
+const app = require('@/src/app');
+const banTimes = require('@/src/config/banTimes');
+const { Thread, Ban } = require('@/src/models');
+const appConfig = require('@/src/config/appConfig');
+const { encrypt } = require('@/src/utils/crypt');
 const setupTestDB = require('../../utils/setupTestDB');
 const setupTestCache = require('../../utils/setupTestCache');
 const { createBoard } = require('../../fixtures/board.fixture');
 const { insertThreads, threadOne, threadTwo } = require('../../fixtures/post.fixture');
-const { Thread, Ban } = require('../../../../src/models');
-const appConfig = require('../../../../src/config/appConfig');
-const { encrypt } = require('../../../../src/utils/crypt');
 
 setupTestDB();
 setupTestCache();

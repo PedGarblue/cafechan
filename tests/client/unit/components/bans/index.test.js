@@ -1,6 +1,6 @@
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Bans from '../../../../../app/components/bans/index.vue';
+import Bans from '@/app/components/panel/pages/bans/index.vue';
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
