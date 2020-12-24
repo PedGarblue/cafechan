@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 /* eslint-disable no-alert */
 import { createBoard } from '@/app/requests/board';
 import Loading from '@/app/components/lib/loading';
@@ -103,6 +105,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['accessToken']),
     isLoading() {
       return this.status === LOADING;
     },
@@ -124,7 +127,7 @@ export default {
       this.status = LOADING;
       const data = this.board;
       if (data.section !== 'regional') delete data.flag;
-      createBoard(data)
+      createBoard(this.accessToken.token, data)
         .then(() => {
           this.status = SUCCESS;
         })

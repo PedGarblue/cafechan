@@ -2,8 +2,8 @@ import request from '@/app/request';
 import { savePost } from '@/app/utils/myPosts';
 
 export const getPosts = accessToken => {
-  if (!accessToken || typeof accessToken !== 'string') throw new Error('Access token is not set');
   return new Promise((resolve, reject) => {
+    if (!accessToken || typeof accessToken !== 'string') reject(new Error('Access token is not set'));
     request({
       url: '/api/posts/?sortBy=created_at:desc',
       method: 'GET',
@@ -19,9 +19,9 @@ export const getPosts = accessToken => {
 };
 
 export const removePost = (accessToken, post) => {
-  if (!accessToken || typeof accessToken !== 'string') throw new Error('Access token is not set');
-  if (!post || typeof post !== 'object') throw new Error('Post is not set');
   return new Promise((resolve, reject) => {
+    if (!accessToken || typeof accessToken !== 'string') reject(new Error('Access token is not set'));
+    if (!post || typeof post !== 'object') reject(new Error('Post is not set'));
     request({ url: `/api/posts/${post.id}`, method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } })
       .then(() => {
         resolve();
@@ -34,6 +34,8 @@ export const removePost = (accessToken, post) => {
 
 export const getThread = (boardname, threadid) =>
   new Promise((resolve, reject) => {
+    if (!boardname) reject(new Error('Boardname is not set'));
+    if (!threadid) reject(new Error('Thread is not set'));
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -43,41 +45,51 @@ export const getThread = (boardname, threadid) =>
   });
 
 export const sendPost = boardid => {
-  if (!boardid || typeof boardid !== 'string') throw new Error('Invalid argument');
-  const sendPostPromise = (url, data) =>
-    new Promise((resolve, reject) => {
-      const headers = {
-        'Content-Type': 'multipart/form-data',
-      };
-      request({ url, method: 'POST', data }, headers)
-        .then(resp => {
-          savePost(resp);
-          resolve(resp);
-        })
-        .catch(err => {
-          reject(err);
-        });
+  const sendPostRequest = (url, data) => {
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+    return request({ url, method: 'POST', data }, headers).then(resp => {
+      savePost(resp);
+      return resp;
     });
+  };
+  if (typeof boardid !== 'string') throw new Error('Invalid argument');
   let url = `/api/posts`;
   const data = new FormData();
   data.append('board', boardid);
 
   return {
     thread: post => {
-      if (!post.message) throw new Error('To post a thread in this board you need a message');
-      data.append('title', post.title);
-      data.append('message', post.message);
-      if (post.file) data.append('postfile', post.file);
-      url = `${url}/thread`;
-      return sendPostPromise(url, data);
+      return new Promise((resolve, reject) => {
+        if (!post.message) reject(new Error('To post a thread in this board you need a message'));
+        data.append('title', post.title);
+        data.append('message', post.message);
+        if (post.file) data.append('postfile', post.file);
+        url = `${url}/thread`;
+        sendPostRequest(url, data)
+          .then(thread => {
+            resolve(thread);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     },
-    reply: (thread, post) => {
-      if (!post.message) throw new Error('To reply this thread you need a message');
-      data.append('thread', thread);
-      data.append('message', post.message);
-      if (post.file) data.append('postfile', post.file);
-      url = `${url}/reply`;
-      return sendPostPromise(url, data);
-    },
+    reply: (thread, { message, file }) =>
+      new Promise((resolve, reject) => {
+        if (!message) reject(new Error('To reply this thread you need a message'));
+        data.append('thread', thread);
+        data.append('message', message);
+        if (file) data.append('postfile', file);
+        url = `${url}/reply`;
+        sendPostRequest(url, data)
+          .then(reply => {
+            resolve(reply);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      }),
   };
 };

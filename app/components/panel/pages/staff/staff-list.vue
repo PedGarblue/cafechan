@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import { getStaffList, deleteStaff } from '@/app/requests/staff';
 import Loading from '@/app/components/lib/loading';
 import Button from '@/app/components/lib/button';
@@ -53,6 +55,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['accessToken']),
     isLoading() {
       return this.state === LOADING;
     },
@@ -69,7 +72,7 @@ export default {
   methods: {
     getUsers() {
       this.state = LOADING;
-      getStaffList()
+      getStaffList(this.accessToken.token)
         .then(response => {
           this.state = SUCCESS;
           this.users = response;
@@ -81,7 +84,7 @@ export default {
     },
     deleteUser(user) {
       this.state = LOADING;
-      deleteStaff(user)
+      deleteStaff(this.accessToken.token, user)
         .then(() => {
           this.state = SUCCESS;
           this.getUsers();

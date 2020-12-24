@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import { editBoard, getBoard } from '@/app/requests/board';
 import Loading from '@/app/components/lib/loading';
 import Form from '../../lib/form';
@@ -104,6 +106,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['accessToken']),
     sections() {
       return sections;
     },
@@ -126,7 +129,7 @@ export default {
   methods: {
     getBoard() {
       this.status = LOADING;
-      getBoard({ id: this.id })
+      getBoard(this.accessToken.token, { id: this.id })
         .then(resp => {
           const {
             name,
@@ -163,7 +166,7 @@ export default {
     editBoard() {
       this.status = LOADING;
       const data = this.board;
-      editBoard(this.id, data)
+      editBoard(this.accessToken.token, this.id, data)
         .then(() => {
           this.successEdit = true;
           this.status = SUCCESS;

@@ -1,10 +1,10 @@
 <template>
-  <Form return-route="/staff/" title="Edit Staff" @form-submit="editStaff">
+  <Form return-route="/staff/" title="Edit Staff" @form-submit="editUser">
     <FormBlock name="#email" title="Email">
       <input id="email" v-model="email" class="form-input" type="email" disabled placeholder="Email" />
     </FormBlock>
 
-    <FormBlock name="#username">
+    <FormBlock name="#username" title="Username">
       <input id="username" v-model="username" class="form-input" type="text" disabled placeholder="Username" />
     </FormBlock>
 
@@ -25,14 +25,24 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import roles from '@/app/config/roles';
 import { editStaff, getStaff } from '@/app/requests/staff';
+import Loading from '@/app/components/lib/loading';
+import Form from '../../lib/form';
+import FormBlock from '../../lib/form-block';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
 const ERROR = 'ERROR';
 
 export default {
+  components: {
+    Form,
+    FormBlock,
+    Loading,
+  },
   data() {
     return {
       userId: this.$route.params.userId,
@@ -45,6 +55,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['accessToken']),
     Roles() {
       return roles;
     },
@@ -58,7 +69,7 @@ export default {
       return this.status === ERROR;
     },
     userEditSuccess() {
-      return this.status === 'success' && this.hasEditedUser;
+      return this.status === SUCCESS && this.hasEditedUser;
     },
   },
   mounted() {
@@ -73,7 +84,7 @@ export default {
         email: this.email,
         role: this.role,
       };
-      getStaff(user)
+      getStaff(this.accessToken.token, user)
         .then(resp => {
           const { name, email, role } = resp;
 
@@ -94,7 +105,7 @@ export default {
         id: this.userId,
         role: this.role,
       };
-      editStaff(data)
+      editStaff(this.accessToken.token, data)
         .then(() => {
           this.hasEditedUser = true;
           this.status = SUCCESS;

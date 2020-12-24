@@ -22,13 +22,20 @@ describe('Bans Requests', () => {
       const bans = await getBans(adminAccessToken);
 
       expect(request.mock.calls.length).toBe(1);
+      expect(request.mock.calls[0][0]).toEqual({
+        url: '/api/ban/',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${adminAccessToken}`,
+        },
+      });
       expect(bans).toBeDefined();
       expect(bans).toHaveLength(2);
       expect(bans[0]).toEqual(banOne);
     });
 
-    test('should throw error if access token is not set', () => {
-      expect(() => getBans()).toThrow('Access token is not set');
+    test('should throw error if access token is not set', async () => {
+      await expect(() => getBans()).rejects.toThrow('Access token is not set');
     });
   });
 
@@ -49,19 +56,22 @@ describe('Bans Requests', () => {
       const ban = await sendBan(adminAccessToken, newBan);
       const requestOptions = request.mock.calls[0][0];
       expect(requestOptions).toMatchObject({
-        url: '/ban/',
+        url: '/api/ban/',
         method: 'POST',
         data: newBan,
+        headers: {
+          Authorization: `Bearer ${adminAccessToken}`,
+        },
       });
       expect(ban).toEqual(newBan);
     });
 
-    test('should throw error if access token is not set', () => {
-      expect(() => sendBan(newBan)).toThrow('Access token is not set');
+    test('should throw error if access token is not set', async () => {
+      await expect(() => sendBan(newBan)).rejects.toThrow('Access token is not set');
     });
 
-    test('should throw error if ban is not set', () => {
-      expect(() => sendBan(adminAccessToken)).toThrow('Ban is not set');
+    test('should throw error if ban is not set', async () => {
+      await expect(() => sendBan(adminAccessToken)).rejects.toThrow('Ban is not set');
     });
   });
 
@@ -80,17 +90,20 @@ describe('Bans Requests', () => {
       await expect(deleteBan(adminAccessToken, ban)).resolves.toBeUndefined();
       const requestOptions = request.mock.calls[0][0];
       expect(requestOptions).toMatchObject({
-        url: `/ban/${ban.id}`,
+        url: `/api/ban/${ban.id}`,
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${adminAccessToken}`,
+        },
       });
     });
 
-    test('should throw error if access token is not set', () => {
-      expect(() => deleteBan(ban)).toThrow('Access token is not set');
+    test('should throw error if access token is not set', async () => {
+      await expect(() => deleteBan(ban)).rejects.toThrow('Access token is not set');
     });
 
-    test('should throw error if ban is not set', () => {
-      expect(() => deleteBan(adminAccessToken)).toThrow('Ban is not set');
+    test('should throw error if ban is not set', async () => {
+      await expect(() => deleteBan(adminAccessToken)).rejects.toThrow('Ban is not set');
     });
   });
 });

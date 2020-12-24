@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 /* eslint-disable no-alert */
 import roles from '@/app/config/roles';
 import { createStaff } from '@/app/requests/staff';
@@ -57,6 +59,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['accessToken']),
     successRequest() {
       return this.status === SUCCESS;
     },
@@ -79,7 +82,7 @@ export default {
         password: this.password,
       };
       this.status = REQUEST;
-      createStaff(data)
+      createStaff(this.accessToken.token, data)
         .then(() => {
           this.status = SUCCESS;
         })

@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import { getBoards, deleteBoard } from '@/app/requests/board';
 import Button from '@/app/components/lib/button';
 import Loading from '@/app/components/lib/loading';
@@ -57,6 +59,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['accessToken']),
     isLoading() {
       return this.status === LOADING;
     },
@@ -73,7 +76,7 @@ export default {
   methods: {
     getBoards() {
       this.status = LOADING;
-      getBoards()
+      getBoards(this.accessToken.token)
         .then(resp => {
           this.boards = resp;
           this.status = SUCCESS;
@@ -85,7 +88,7 @@ export default {
     },
     deleteBoard(board) {
       this.status = LOADING;
-      deleteBoard({ id: board._id })
+      deleteBoard(this.accessToken.token, { id: board._id })
         .then(() => {
           this.status = SUCCESS;
           this.getBoards();
