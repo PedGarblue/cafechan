@@ -23,7 +23,6 @@
     "consistent-return": "off",
     "jest/expect-expect": "off",
     "security/detect-object-injection": "off",
-    "security/detect-non-literal-fs-filename": "off",
     "no-shadow": "off",
     "no-console": "off",
     "vue/max-attributes-per-line": ["warn",{
