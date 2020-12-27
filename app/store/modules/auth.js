@@ -72,7 +72,7 @@ const actions = {
     const expiresDate = new Date(expires).getTime();
 
     let timeUntilRefresh = expiresDate - now;
-    timeUntilRefresh -= 5 * 60 * 1000; // refrescamos 5 minutos antes de expirar el token de acceso
+    timeUntilRefresh -= 1 * 60 * 1000; // refrescamos 1 minutos antes de expirar el token de acceso
     const refreshTask = setTimeout(
       () => {
         dispatch(AUTH_REFRESH_TOKENS);

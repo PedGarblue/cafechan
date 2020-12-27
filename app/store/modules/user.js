@@ -21,8 +21,7 @@ const actions = {
     commit(USER_REQUEST);
 
     return new Promise((resolve, reject) => {
-      const tokens = JSON.parse(localStorage.getItem('user-token'));
-      const accessToken = tokens.access.token;
+      const accessToken = state.tokens.access.token;
       const userid = user.id || localStorage.getItem('user');
 
       request({ url: `/api/user/${userid}`, method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
@@ -33,8 +32,7 @@ const actions = {
           resolve(user);
         })
         .catch(err => {
-          localStorage.removeItem('user');
-          sessionStorage.removeItem('user');
+          commit(USER_LOGOUT);
           commit(USER_ERROR);
           dispatch(AUTH_LOGOUT);
           reject(err);
