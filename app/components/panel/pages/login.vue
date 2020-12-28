@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { AUTH_REQUEST } from '@/app/store/actions/auth';
 
 export default {
@@ -40,19 +40,15 @@ export default {
     ...mapGetters(['authStatus']),
   },
   methods: {
+    ...mapActions([AUTH_REQUEST]),
     login() {
       const user = {
         email: this.email,
         password: this.password,
       };
-      this.$store
-        .dispatch(AUTH_REQUEST, user)
+      return this[AUTH_REQUEST](user)
         .then(() => {
-          if (this.$route.params.nextUrl != null) {
-            this.$router.push(this.$route.params.nextUrl);
-          } else {
-            this.$router.push('/');
-          }
+          this.$router.push('/');
         })
         .catch(err => {
           this.errorMsg = err.message;

@@ -3,8 +3,8 @@ import VueRouter from 'vue-router';
 import Vuex from 'vuex';
 
 import BansList from '@/app/components/panel/pages/bans/ban-list.vue';
-import { getBans } from '@/app/requests/ban';
-import { banOne } from '../../../fixtures/ban.fixture';
+import { getBans, deleteBan } from '@/app/requests/ban';
+import { banOne } from '../../../../fixtures/ban.fixture';
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -52,31 +52,40 @@ describe('ban-list.vue Implemention tests', () => {
 
   test('calls Requests.getBans() when getBans() is called', async () => {
     await wrapper.vm.getBans();
-    expect(getBans.mock.calls.length).toEqual(1);
-    expect(getBans.mock.calls[0][0]).toEqual('some token here');
+    expect(getBans).toBeCalledWith('some token here');
   });
 
   test('emits custom event and changes state when getBans() is called', async () => {
     wrapper.vm.getBans();
     expect(wrapper.vm.status).toMatch('REQUEST');
-    expect(wrapper.emitted('table-update-request')).toBeTruthy();
-    expect(wrapper.emitted('table-update-request').length).toEqual(2);
+    expect(wrapper.emitted('table-update-request')).toHaveLength(2);
   });
 
   test('emits custom event and changes state when getBans() resolves', async () => {
     await wrapper.vm.getBans();
     expect(wrapper.vm.status).toMatch('SUCCESS');
-    expect(wrapper.emitted('table-update-success')).toBeTruthy();
-    expect(wrapper.emitted('table-update-success').length).toEqual(2);
+    expect(wrapper.emitted('table-update-success')).toHaveLength(2);
   });
 
   test('emits custom event and changes state when getBans() rejects', async () => {
     getBans.mockRejectedValue({ message: 'Bad request' });
     await wrapper.vm.getBans();
     expect(wrapper.vm.status).toMatch('ERROR');
-    expect(wrapper.emitted('table-update-failed')).toBeTruthy();
-    expect(wrapper.emitted('table-update-failed').length).toEqual(1);
+    expect(wrapper.emitted('table-update-failed')).toHaveLength(1);
     expect(wrapper.emitted('table-update-failed')[0][0]).toMatch('Bad request');
+  });
+
+  test('calls Request.deleteBan() when deleteBan() is called', async () => {
+    const ban = { id: 'some id' };
+    await wrapper.vm.deleteBan(ban);
+    expect(deleteBan).toBeCalledWith('some token here', ban);
+  });
+
+  test('calls getBans() when deleteBan() resolves', async () => {
+    const ban = { id: 'some id' };
+    const getBansSpy = jest.spyOn(wrapper.vm, 'getBans');
+    await wrapper.vm.deleteBan(ban);
+    expect(getBansSpy).toBeCalled();
   });
 });
 
@@ -95,6 +104,6 @@ describe('ban-list.vue Behavorial tests', () => {
 
   test('initializes calling getBans()', () => {
     wrapper = createWrapper();
-    expect(getBans.mock.calls.length).toEqual(1);
+    expect(getBans).toBeCalled();
   });
 });

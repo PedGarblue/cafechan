@@ -1,7 +1,7 @@
 <template>
   <div class="table">
     <div class="table-options">
-      <Button @click="getBans">Update</Button>
+      <Button id="update-button" @click="getBans">Update</Button>
       <router-link to="/ban/add">
         <Button>Add Ban</Button>
       </router-link>
@@ -36,6 +36,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import moment from 'moment';
 
 import { getBans, deleteBan } from '@/app/requests/ban';
 import Button from '@/app/components/lib/button';
@@ -65,7 +66,7 @@ export default {
       return banlist.map(ban => {
         const modifiedBan = ban;
         const banExpiration = new Date(ban.until);
-        modifiedBan.until = `${banExpiration.getHours()}:${banExpiration.getMinutes()} ${banExpiration.getDate()}/${banExpiration.getMonth()}/${banExpiration.getFullYear()}`;
+        modifiedBan.until = moment(banExpiration).format('hh:mm DD/MM/YYYY');
         return modifiedBan;
       });
     },
@@ -98,9 +99,9 @@ export default {
     },
     deleteBan(ban) {
       const data = {
-        id: ban._id,
+        id: ban.id,
       };
-      deleteBan(this.accessToken.token, data).then(() => this.getBans());
+      return deleteBan(this.accessToken.token, data).then(() => this.getBans());
     },
   },
 };
