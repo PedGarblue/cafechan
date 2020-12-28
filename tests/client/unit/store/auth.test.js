@@ -109,6 +109,7 @@ describe('Auth Global Store', () => {
       test('should create a new timeout and commit AUTH_REFRESH_TOKEN_TASK', () => {
         const now = Date.now();
         const timeoutTime = new Date(stateModules.state.tokens.access.expires).getTime() - now - 60000;
+        jest.spyOn(Date, 'now').mockReturnValue(now);
         const task = 1;
         window.setTimeout = jest.fn();
         setTimeout.mockReturnValue(task);
