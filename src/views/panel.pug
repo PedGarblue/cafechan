@@ -11,4 +11,5 @@ html(lang=es)
   body
     div#panelapp
       staff-panel
+    script(src=`/bundles/shared.bundle${env === 'development'?'.dev':''}.js`)
     script(src=`/bundles/panel.bundle${env === 'development'?'.dev':''}.js`)

@@ -17,11 +17,11 @@ const getters = {
 };
 
 const actions = {
-  [USER_REQUEST]: ({ state, commit, dispatch }, user = state.profile) => {
+  [USER_REQUEST]: ({ getters, commit, dispatch }, user = state.profile) => {
     commit(USER_REQUEST);
 
     return new Promise((resolve, reject) => {
-      const accessToken = state.tokens.access.token;
+      const accessToken = getters.accessToken.token;
       const userid = user.id || localStorage.getItem('user');
 
       request({ url: `/api/user/${userid}`, method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })

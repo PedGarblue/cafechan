@@ -10,8 +10,15 @@ const envClient = pick(config, ['site_url', 'site_name']);
 module.exports = {
   mode: config.env,
   entry: {
-    panel: './app/panel.js',
-    chan: './app/chan.js',
+    panel: {
+      import: './app/panel.js',
+      dependOn: 'shared',
+    },
+    chan: {
+      import: './app/chan.js',
+      dependOn: 'shared',
+    },
+    shared: 'moment',
   },
   output: {
     path: path.resolve(__dirname, 'public/bundles/'),

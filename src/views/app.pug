@@ -11,4 +11,5 @@ html(lang="es")
   body
     div#app
       router-view
+    script(src=`/bundles/shared.bundle${env === 'development'?'.dev':''}.js`)
     script(src=`/bundles/chan.bundle${env === 'development'?'.dev':''}.js`)
