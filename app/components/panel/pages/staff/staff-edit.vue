@@ -1,15 +1,15 @@
 <template>
   <Form return-route="/staff/" title="Edit Staff" @form-submit="editUser">
     <FormBlock name="#email" title="Email">
-      <input id="email" v-model="email" class="form-input" type="email" disabled placeholder="Email" />
+      <input id="email" v-model="user.email" class="form-input" type="email" disabled placeholder="Email" />
     </FormBlock>
 
     <FormBlock name="#username" title="Username">
-      <input id="username" v-model="username" class="form-input" type="text" disabled placeholder="Username" />
+      <input id="username" v-model="user.name" class="form-input" type="text" disabled placeholder="Username" />
     </FormBlock>
 
     <FormBlock name="#role" title="Role">
-      <select id="role" v-model="role" class="form-input">
+      <select id="role" v-model="user.role" class="form-input">
         <option v-for="(roleval, rolekey) in Roles" :key="rolekey" :value="roleval">
           {{ rolekey }}
         </option>
@@ -19,7 +19,7 @@
     <template #footer>
       <div v-if="isLoading"><Loading /></div>
       <div v-else-if="userEditSuccess" class="form-success">User edited!</div>
-      <div v-else-if="hasError" class="form-error">ERROR: {{ error_msg }}</div>
+      <div v-else-if="hasError" class="form-error">ERROR: {{ errorMsg }}</div>
     </template>
   </Form>
 </template>
@@ -45,12 +45,14 @@ export default {
   },
   data() {
     return {
-      userId: this.$route.params.userId,
-      email: '',
-      username: '',
-      role: '',
-      hasEditedUser: false,
-      error_msg: '',
+      user: {
+        id: this.$route.params.userId,
+        email: '',
+        name: '',
+        role: '',
+      },
+      successEdit: false,
+      errorMsg: '',
       status: '',
     };
   },
@@ -69,49 +71,44 @@ export default {
       return this.status === ERROR;
     },
     userEditSuccess() {
-      return this.status === SUCCESS && this.hasEditedUser;
+      return this.status === SUCCESS && this.successEdit;
     },
   },
   mounted() {
     this.getUser();
   },
   methods: {
-    getUser() {
+    async getUser() {
       this.status = LOADING;
-      const user = {
-        id: this.userId,
-        name: this.username,
-        email: this.email,
-        role: this.role,
-      };
-      getStaff(this.accessToken.token, user)
+      const data = this.user;
+      return getStaff(this.accessToken.token, data)
         .then(resp => {
           const { name, email, role } = resp;
 
-          this.username = name;
-          this.email = email;
-          this.role = role;
+          this.user.name = name;
+          this.user.email = email;
+          this.user.role = role;
 
           this.status = SUCCESS;
         })
         .catch(err => {
-          this.error_msg = err.message;
+          this.errorMsg = err.message;
           this.status = ERROR;
         });
     },
-    editUser() {
+    async editUser() {
       this.status = LOADING;
       const data = {
-        id: this.userId,
-        role: this.role,
+        id: this.user.id,
+        role: this.user.role,
       };
-      editStaff(this.accessToken.token, data)
+      return editStaff(this.accessToken.token, data)
         .then(() => {
-          this.hasEditedUser = true;
+          this.successEdit = true;
           this.status = SUCCESS;
         })
         .catch(err => {
-          this.error_msg = err.message;
+          this.errorMsg = err.message;
           this.status = ERROR;
         });
     },

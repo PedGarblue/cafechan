@@ -2,7 +2,6 @@ import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import BoardEdit from '@/app/components/panel/pages/board/board-edit.vue';
 import { getBoard, editBoard } from '@/app/requests/board';
-import boardFixtures from '../../../../fixtures/board.fixture';
 import storeFixtures from '../../../../fixtures/store.fixture';
 
 const localVue = createLocalVue();

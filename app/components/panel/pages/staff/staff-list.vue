@@ -51,46 +51,46 @@ export default {
     return {
       users: [],
       errorMsg: '',
-      state: '',
+      status: '',
     };
   },
   computed: {
     ...mapGetters(['accessToken']),
     isLoading() {
-      return this.state === LOADING;
+      return this.status === LOADING;
     },
     hasLoaded() {
-      return this.state === SUCCESS;
+      return this.status === SUCCESS;
     },
     hasError() {
-      return this.state === ERROR;
+      return this.status === ERROR;
     },
   },
   mounted() {
     this.getUsers();
   },
   methods: {
-    getUsers() {
+    async getUsers() {
       this.state = LOADING;
-      getStaffList(this.accessToken.token)
+      return getStaffList(this.accessToken.token)
         .then(response => {
-          this.state = SUCCESS;
+          this.status = SUCCESS;
           this.users = response;
         })
         .catch(err => {
-          this.state = ERROR;
+          this.status = ERROR;
           this.errorMsg = err.message || err;
         });
     },
-    deleteUser(user) {
+    async deleteUser(user) {
       this.state = LOADING;
-      deleteStaff(this.accessToken.token, user)
+      return deleteStaff(this.accessToken.token, user)
         .then(() => {
-          this.state = SUCCESS;
+          this.status = SUCCESS;
           this.getUsers();
         })
         .catch(err => {
-          this.state = ERROR;
+          this.status = ERROR;
           this.errorMsg = err.message || err;
         });
     },

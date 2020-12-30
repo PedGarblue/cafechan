@@ -1,15 +1,15 @@
 <template>
   <Form return-route="/staff" title="Create Staff" @form-submit="createUser">
     <FormBlock name="#email" title="Email">
-      <input id="email" v-model="email" class="form-input" type="email" required placeholder="Email" />
+      <input id="email" v-model="user.email" class="form-input" type="email" required placeholder="Email" />
     </FormBlock>
 
     <FormBlock name="#username" title="Username">
-      <input id="username" v-model="username" class="form-input" type="text" required placeholder="Username" />
+      <input id="username" v-model="user.name" class="form-input" type="text" required placeholder="Username" />
     </FormBlock>
 
     <FormBlock name="#role" title="Role">
-      <select id="role" v-model="role" class="form-input">
+      <select id="role" v-model="user.role" class="form-input">
         <option v-for="(roleval, rolekey) in Roles" :key="rolekey" :value="roleval">
           {{ rolekey }}
         </option>
@@ -17,7 +17,7 @@
     </FormBlock>
 
     <FormBlock name="#password" title="Password">
-      <input id="password" v-model="password" class="form-input" type="password" placeholder="Password" />
+      <input id="password" v-model="user.password" class="form-input" type="password" placeholder="Password" />
     </FormBlock>
 
     <template #footer>
@@ -50,12 +50,14 @@ export default {
   },
   data() {
     return {
-      email: '',
-      username: '',
-      role: '',
-      password: '',
+      user: {
+        email: '',
+        name: '',
+        role: '',
+        password: '',
+      },
       status: '',
-      errMsg: '',
+      errorMsg: '',
     };
   },
   computed: {
@@ -74,20 +76,14 @@ export default {
     },
   },
   methods: {
-    createUser() {
-      const data = {
-        email: this.email,
-        name: this.username,
-        role: this.role,
-        password: this.password,
-      };
+    async createUser() {
       this.status = REQUEST;
-      createStaff(this.accessToken.token, data)
+      return createStaff(this.accessToken.token, this.user)
         .then(() => {
           this.status = SUCCESS;
         })
         .catch(err => {
-          this.errMsg = err.message;
+          this.errorMsg = err.message;
           this.status = ERROR;
         });
     },
