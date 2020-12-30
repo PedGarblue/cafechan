@@ -34,7 +34,9 @@ const createWrapper = (component, localVue, overrides, shallow = true) => {
       },
     }),
     mocks: {
-      $router: {},
+      $router: {
+        push: jest.fn(),
+      },
       $route: {
         query: {},
         params: {},

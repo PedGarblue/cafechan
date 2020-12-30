@@ -6,7 +6,7 @@
     <div v-if="isLoading">
       <Loading />
     </div>
-    <div v-else-if="hasError">Error: {{ errMsg }}</div>
+    <div v-else-if="hasError">Error: {{ errorMsg }}</div>
     <Table v-else>
       <template #body>
         <tr v-for="post in posts" :key="`${post.id}`">
@@ -43,7 +43,7 @@ export default {
     return {
       posts: [],
       status: '',
-      errMsg: '',
+      errorMsg: '',
     };
   },
   computed: {
@@ -62,25 +62,25 @@ export default {
     this.updatePosts();
   },
   methods: {
-    updatePosts() {
+    async updatePosts() {
       this.status = LOADING;
-      getPosts(this.accessToken.token)
+      return getPosts(this.accessToken.token)
         .then(resp => {
           this.posts = resp;
           this.status = SUCCESS;
         })
         .catch(err => {
-          this.errMsg = err.message;
+          this.errorMsg = err.message;
           this.status = ERROR;
         });
     },
-    removePost(post) {
-      removePost(this.accessToken.token, post)
+    async removePost(post) {
+      return removePost(this.accessToken.token, post)
         .then(() => {
           this.updatePosts();
         })
         .catch(err => {
-          this.errMsg = err.message;
+          this.errorMsg = err.message;
           this.status = ERROR;
         });
     },
