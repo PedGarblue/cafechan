@@ -48,7 +48,7 @@
       <input id="nsfw" v-model="board.nsfw" class="form-input" type="checkbox" :value="board.nsfw" />
     </FormBlock>
 
-    <FormBlock v-if="board.section === 'regional'" name="#flag" title="Flag: ">
+    <FormBlock v-if="board.section === 'regional'" ref="flag-input" name="#flag" title="Flag: ">
       <input id="flag" v-model="board.flag" class="form-input" type="text" />
       <span v-if="board.flag">
         <img :src="`/assets/countryballs/${board.flag}.png`" alt="Bandera no encontrada" />
@@ -123,11 +123,11 @@ export default {
     },
   },
   methods: {
-    createBoard() {
+    async createBoard() {
       this.status = LOADING;
       const data = this.board;
       if (data.section !== 'regional') delete data.flag;
-      createBoard(this.accessToken.token, data)
+      return createBoard(this.accessToken.token, data)
         .then(() => {
           this.status = SUCCESS;
         })

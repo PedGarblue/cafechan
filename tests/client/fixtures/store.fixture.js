@@ -1,6 +1,6 @@
 import moment from 'moment';
 import Vuex from 'vuex';
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 
 const tokens = {
   refresh: {
@@ -25,7 +25,7 @@ const storeFixture = {
   commit: jest.fn(),
 };
 
-const createWrapper = (component, localVue, overrides) => {
+const createWrapper = (component, localVue, overrides, shallow = true) => {
   const defaults = {
     localVue,
     store: new Vuex.Store({
@@ -40,8 +40,10 @@ const createWrapper = (component, localVue, overrides) => {
         params: {},
       },
     },
+    stubs: ['router-link', 'router-view'],
   };
-  return shallowMount(component, Object.assign(defaults, overrides));
+  if (shallow) return shallowMount(component, Object.assign(defaults, overrides));
+  return mount(component, Object.assign(defaults, overrides));
 };
 
 module.exports = {

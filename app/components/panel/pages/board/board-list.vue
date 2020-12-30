@@ -74,9 +74,9 @@ export default {
     this.getBoards();
   },
   methods: {
-    getBoards() {
+    async getBoards() {
       this.status = LOADING;
-      getBoards(this.accessToken.token)
+      return getBoards(this.accessToken.token)
         .then(resp => {
           this.boards = resp;
           this.status = SUCCESS;
@@ -86,9 +86,9 @@ export default {
           this.status = ERROR;
         });
     },
-    deleteBoard(board) {
+    async deleteBoard(board) {
       this.status = LOADING;
-      deleteBoard(this.accessToken.token, { id: board._id })
+      return deleteBoard(this.accessToken.token, { id: board._id })
         .then(() => {
           this.status = SUCCESS;
           this.getBoards();

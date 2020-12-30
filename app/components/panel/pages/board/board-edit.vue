@@ -48,7 +48,7 @@
       <input id="nsfw" v-model="board.nsfw" class="form-input" type="checkbox" :value="board.nsfw" />
     </FormBlock>
 
-    <FormBlock v-if="board.section === 'regional'" name="#flag" title="Flag: ">
+    <FormBlock v-if="board.section === 'regional'" ref="flag-input" name="#flag" title="Flag: ">
       <input id="flag" v-model="board.flag" class="form-input" type="text" />
       <span v-if="board.flag">
         <img :src="`/assets/countryballs/${board.flag}.png`" alt="Bandera no encontrada" />
@@ -127,9 +127,9 @@ export default {
     this.getBoard();
   },
   methods: {
-    getBoard() {
+    async getBoard() {
       this.status = LOADING;
-      getBoard(this.accessToken.token, { id: this.id })
+      return getBoard(this.accessToken.token, { id: this.id })
         .then(resp => {
           const {
             name,
@@ -163,10 +163,10 @@ export default {
           this.status = ERROR;
         });
     },
-    editBoard() {
+    async editBoard() {
       this.status = LOADING;
       const data = this.board;
-      editBoard(this.accessToken.token, this.id, data)
+      return editBoard(this.accessToken.token, this.id, data)
         .then(() => {
           this.successEdit = true;
           this.status = SUCCESS;
