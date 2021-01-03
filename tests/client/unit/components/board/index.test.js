@@ -34,7 +34,7 @@ describe('Main component', () => {
       expect(footer.at(0).exists()).toBeTruthy();
     });
 
-    test('should load by default state properties "board" and "page" with the route params', async () => {
+    test('should use the route params "boardname" and "page" to default state properties', async () => {
       const $route = {
         params: {
           boardname: 'test',
