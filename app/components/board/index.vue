@@ -1,13 +1,13 @@
 <template>
   <div>
     <Navbar :sections="getSections" />
-    <div v-if="isBoardLoaded">
+    <div v-if="isBoardLoaded" ref="page-body">
       <div class="board-header">
         <h1>{{ boardTitle }}</h1>
       </div>
       <router-view />
     </div>
-    <div v-else class="full-center">
+    <div v-else ref="page-body" class="full-center">
       <Loading />
     </div>
     <Navbar :sections="getSections" />

@@ -4,11 +4,11 @@ import { shallowMount, mount } from '@vue/test-utils';
 
 const tokens = {
   refresh: {
-    token: 'some token',
+    token: 'some token here',
     expires: moment().add(1, 'days'),
   },
   access: {
-    token: 'some token',
+    token: 'some token here',
     expires: moment().add(5, 'minutes'),
   },
 };
@@ -30,7 +30,7 @@ const createWrapper = (component, localVue, overrides, shallow = true) => {
     localVue,
     store: new Vuex.Store({
       getters: {
-        accessToken: () => ({ token: 'some token here' }),
+        accessToken: () => tokens.access,
       },
     }),
     mocks: {
