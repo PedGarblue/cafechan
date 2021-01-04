@@ -3,30 +3,30 @@
     <table class="postform">
       <tbody>
         <tr>
-          <td v-if="!replyPosting" class="postblock">Título</td>
+          <td v-if="!replyPosting" class="block">Título</td>
           <td v-else></td>
           <td>
-            <input v-if="!replyPosting" v-model="post.title" type="text" name="title" class="title" />
-            <input class="enviar" type="submit" :value="isLoading ? '...' : 'Enviar'" />
+            <input v-if="!replyPosting" v-model="post.title" type="text" name="title" class="input__title" />
+            <input class="input__submit" type="submit" :value="isLoading ? '...' : 'Enviar'" />
           </td>
         </tr>
         <tr>
-          <td class="postblock">Post</td>
+          <td class="block">Post</td>
           <td>
-            <textarea v-model="post.message" cols="46" rows="9"></textarea>
+            <textarea v-model="post.message" class="input__message" cols="46" rows="9"></textarea>
           </td>
         </tr>
         <tr>
-          <td class="postblock">Archivo</td>
+          <td class="block">Archivo</td>
           <td>
-            <input ref="postfile" type="file" name="postfile" @change="handleFileUpload" />
+            <input ref="postfile" type="file" class="input__file" name="postfile" @change="handleFileUpload" />
           </td>
         </tr>
         <tr>
-          <td v-if="hasError" colspan="2" class="postblock">
+          <td v-if="hasError" colspan="2" class="block">
             {{ errorMsg }}
           </td>
-          <td v-if="succesfulRequest" colspan="2" class="postblock">
+          <td v-if="succesfulRequest" colspan="2" class="block">
             Post enviado correctamente.
           </td>
         </tr>
@@ -70,7 +70,8 @@ export default {
     threadid: {
       type: String,
       default() {
-        return '';
+        if (this.type !== 'Reply') return '';
+        throw new Error('"threadid" is required for post reply');
       },
     },
     maxfilesize: {
@@ -124,7 +125,7 @@ export default {
       const [file] = this.$refs.postfile.files;
       this.post.file = file;
     },
-    sendPost() {
+    async sendPost() {
       this.status = LOADING;
       let request = sendPost(this.boardid);
 
@@ -133,7 +134,7 @@ export default {
       } else {
         request = request.reply(this.threadid, this.post);
       }
-      request
+      return request
         .then(() => {
           this.status = SUCCESS;
           this.clean();
@@ -152,14 +153,14 @@ export default {
 table {
   margin: 1rem auto;
 }
-.postblock {
+.block {
   background: var(--primary-light-color);
   text-align: center;
   color: var(--text-color);
   padding: 5px;
   font-weight: bold;
 }
-.enviar {
+.input__submit {
   border: none;
   border-radius: 3px;
   font-size: 13px;
@@ -172,16 +173,16 @@ table {
   padding: 9px 10px 9px 10px;
   float: right;
 }
-.enviar:hover {
+.input__submit:hover {
   background-color: var(--primary-lighter-color);
 }
-input[type='text'],
-textarea {
+.input__title,
+.input__message {
   border: 1px solid #b3917b;
   border-radius: 3px;
   background-color: #ffffff;
 }
-.title {
+.input__title {
   padding: 0.6em 0.1em;
 }
 .upload-info {

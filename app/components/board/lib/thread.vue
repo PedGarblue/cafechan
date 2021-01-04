@@ -1,7 +1,7 @@
 <template>
   <div class="thread">
     <div class="thread-body" :class="{ 'open-file': openFile }">
-      <a v-if="data.file" @click="toggleFile">
+      <a v-if="data.file" class="post-file" @click="toggleFile">
         <span v-if="!openFile">
           <img :src="data.file.thumbnailUrl" />
         </span>
@@ -16,7 +16,7 @@
             {{ data.title }}
           </span>
           <span class="postername">
-            {{ data.name ? data.name : 'Anonymous' }}
+            {{ data.name }}
           </span>
           <span class="timestamp">
             {{ data.timestamp }}

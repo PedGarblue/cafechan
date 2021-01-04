@@ -5,7 +5,7 @@
       <span class="reply-info">
         <input type="checkbox" :value="data.seq_id" />
         <span class="postername">
-          {{ data.name ? data.name : 'Anonymous' }}
+          {{ data.name }}
         </span>
         <span class="timestamp">
           {{ data.timestamp }}
