@@ -18,9 +18,9 @@
       <Thread :data="thread" />
     </div>
     <div class="buttons">
-      <button v-if="isLoaded" class="button" @click="getThread">Actualizar</button>
-      <button v-else-if="isLoading" class="button">...</button>
-      <button v-else-if="error" class="button">Error!</button>
+      <button v-if="isLoaded" class="button update-button" @click="getThread">Actualizar</button>
+      <button v-else-if="isLoading" class="button update-button">...</button>
+      <button v-else-if="error" class="button update-button">Error!</button>
     </div>
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
       },
       updateStatus: '',
       status: '',
-      error: '',
+      errorMsg: '',
     };
   },
   computed: {
@@ -62,20 +62,23 @@ export default {
     isLoading() {
       return this.status === REQUEST;
     },
+    error() {
+      return this.status === ERROR;
+    },
   },
   mounted() {
     this.getThread();
   },
   methods: {
-    getThread() {
+    async getThread() {
       this.status = REQUEST;
-      getThread(this.getBoard.name, this.thread.seq_id)
+      return getThread(this.getBoard.name, this.thread.seq_id)
         .then(thread => {
           this.thread = thread;
           this.status = SUCCESS;
         })
         .catch(err => {
-          this.error = err;
+          this.errorMsg = err.message;
           this.status = ERROR;
         });
     },
