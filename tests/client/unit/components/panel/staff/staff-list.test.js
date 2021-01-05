@@ -3,8 +3,8 @@ import Vuex from 'vuex';
 
 import StaffList from '@/app/components/panel/pages/staff/staff-list.vue';
 import { getStaffList, deleteStaff } from '@/app/requests/staff';
-import storeFixtures from '../../../../fixtures/store.fixture';
-import staffFixtures from '../../../../fixtures/user.fixture';
+import storeFixtures from '@/tests/client/fixtures/store.fixture';
+import { userOne, userTwo } from '@/tests/client/fixtures/user.fixture';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -28,10 +28,10 @@ describe('staff-list.vue', () => {
     describe('getStaffList() method', () => {
       test('should call Request.getStaffList() correctly', async () => {
         wrapper = storeFixtures.createWrapper(StaffList, localVue);
-        getStaffList.mockResolvedValue([staffFixtures.userOne, staffFixtures.userTwo]);
+        getStaffList.mockResolvedValue([userOne, userTwo]);
         await wrapper.vm.getUsers();
         expect(getStaffList).toBeCalledWith('some token here');
-        expect(wrapper.vm.users).toEqual([staffFixtures.userOne, staffFixtures.userTwo]);
+        expect(wrapper.vm.users).toEqual([userOne, userTwo]);
         expect(wrapper.vm.status).toEqual('SUCCESS');
       });
 
@@ -47,8 +47,8 @@ describe('staff-list.vue', () => {
     describe('deleteStaff() method', () => {
       test('should call Request.deleteStaff() correctly', async () => {
         wrapper = storeFixtures.createWrapper(StaffList, localVue);
-        await wrapper.vm.deleteUser(staffFixtures.userOne);
-        expect(deleteStaff).toBeCalledWith('some token here', staffFixtures.userOne);
+        await wrapper.vm.deleteUser(userOne);
+        expect(deleteStaff).toBeCalledWith('some token here', userOne);
         expect(wrapper.vm.status).toEqual('SUCCESS');
       });
 

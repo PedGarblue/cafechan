@@ -1,20 +1,15 @@
-const { ObjectId } = require('mongoose').Types;
+import ObjectId from '@/tests/client/utils/objectid';
 
-const boardOne = {
-  _id: ObjectId().toHexString(),
+export const boardOne = {
+  _id: ObjectId(),
   name: 'tst',
   desc: 'test board',
   section: 'ocio',
 };
 
-const boardTwo = {
-  _id: ObjectId().toHexString(),
+export const boardTwo = {
+  _id: ObjectId(),
   name: 'pol',
   desc: 'Politica',
   section: 'ocio',
-};
-
-module.exports = {
-  boardOne,
-  boardTwo,
 };

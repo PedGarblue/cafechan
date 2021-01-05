@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isThreadLoaded">
     <div class="buttons">
       <router-link :to="`/${getBoard.name}/`" class="button">Volver</router-link>
     </div>
@@ -46,13 +46,15 @@ export default {
       thread: {
         seq_id: this.$route.params.threadid,
       },
-      updateStatus: '',
       status: '',
       errorMsg: '',
     };
   },
   computed: {
     ...mapGetters(['getBoard']),
+    isThreadLoaded() {
+      return !!this.thread.id;
+    },
     replyingToThreadTitle() {
       return `Estas en el hilo ${this.thread.seq_id} de /${this.getBoard.name}/`;
     },
