@@ -20,6 +20,3 @@ coverage
 
 # media storage
 /public/media/
-
-# assets
-public/assets/countryballs/
