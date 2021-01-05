@@ -1,9 +1,8 @@
+import faker from 'faker';
+
 import request from '@/app/request';
 import authStore from '@/app/store/modules/auth';
-
-const faker = require('faker');
-
-const {
+import {
   AUTH_SUCCESS,
   AUTH_REQUEST,
   AUTH_REFRESH_TOKENS,
@@ -11,15 +10,28 @@ const {
   AUTH_REFRESH_TOKEN_TASK,
   AUTH_LOGOUT,
   AUTH_ERROR,
-} = require('@/app/store/actions/auth');
-const { USER_REQUEST, USER_LOGOUT } = require('@/app/store/actions/user');
-const { storeFixture } = require('../../fixtures/store.fixture');
+} from '@/app/store/actions/auth';
+
+import { USER_REQUEST, USER_LOGOUT } from '@/app/store/actions/user';
+import { tokens } from '@/tests/client/fixtures/panel.store.fixture';
 
 jest.mock('@/app/request');
 Storage.prototype.setItem = jest.fn();
 Storage.prototype.removeItem = jest.fn();
 
 describe('Auth Global Store', () => {
+  let stateModules;
+
+  beforeEach(() => {
+    stateModules = {
+      state: {
+        tokens,
+      },
+      commit: jest.fn(),
+      dispatch: jest.fn(),
+    };
+  });
+
   afterEach(() => {
     Storage.prototype.setItem.mockClear();
     Storage.prototype.removeItem.mockClear();
@@ -27,17 +39,6 @@ describe('Auth Global Store', () => {
   });
 
   describe('Actions', () => {
-    let stateModules;
-
-    beforeEach(() => {
-      stateModules = storeFixture;
-    });
-
-    afterEach(() => {
-      stateModules.dispatch.mockClear();
-      stateModules.commit.mockClear();
-    });
-
     describe('AUTH_REQUEST', () => {
       let resolve;
       let userLogin;

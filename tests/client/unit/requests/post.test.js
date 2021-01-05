@@ -20,7 +20,7 @@ describe('Posts Requests', () => {
     test('should make get posts request and resolve a list of posts', async () => {
       const posts = await getPosts(adminAccessToken);
 
-      expect(request.mock.calls.length).toBe(1);
+      expect(request).toBeCalled();
       expect(posts).toBeDefined();
       expect(posts).toBeInstanceOf(Array);
       expect(posts).toHaveLength(3);
@@ -64,12 +64,13 @@ describe('Posts Requests', () => {
 
     test('should request succesfully the thread', async () => {
       await expect(getThread(boardOne.name, threadOne.seq_id)).resolves.toBe(threadOne);
-      const options = request.mock.calls[0][0];
-      expect(options).toBeInstanceOf(Object);
-      expect(options.url).toMatch(/^\/\w+\/thread\/\d+\/$/gm);
-      expect(options.method).toBe('GET');
-      const headers = request.mock.calls[0][1];
-      expect(headers['Content-Type']).toBe('application/json');
+      expect(request).toBeCalledWith(
+        {
+          url: `/${boardOne.name}/thread/${threadOne.seq_id}/`,
+          method: 'GET',
+        },
+        { 'Content-Type': 'application/json' }
+      );
     });
 
     test('should reject if boardname is not set', async () => {

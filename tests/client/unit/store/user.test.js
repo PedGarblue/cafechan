@@ -1,17 +1,31 @@
+import faker from 'faker';
+
 import request from '@/app/request';
 import userStore from '@/app/store/modules/user';
-
-const faker = require('faker');
-
-const { USER_REQUEST, USER_SUCCESS, USER_ERROR, USER_LOGOUT } = require('@/app/store/actions/user');
-const { AUTH_LOGOUT } = require('@/app/store/actions/auth');
-const { storeFixture } = require('../../fixtures/store.fixture');
+import { USER_REQUEST, USER_SUCCESS, USER_ERROR, USER_LOGOUT } from '@/app/store/actions/user';
+import { AUTH_LOGOUT } from '@/app/store/actions/auth';
+import { tokens } from '@/tests/client/fixtures/panel.store.fixture';
 
 jest.mock('@/app/request');
 Storage.prototype.setItem = jest.fn();
 Storage.prototype.removeItem = jest.fn();
 
 describe('User Global Store', () => {
+  let stateModules;
+
+  beforeEach(() => {
+    stateModules = {
+      state: {
+        tokens,
+      },
+      getters: {
+        accessToken: tokens.access,
+      },
+      dispatch: jest.fn(),
+      commit: jest.fn(),
+    };
+  });
+
   afterEach(() => {
     Storage.prototype.setItem.mockClear();
     Storage.prototype.removeItem.mockClear();
@@ -19,11 +33,9 @@ describe('User Global Store', () => {
   });
 
   describe('Actions', () => {
-    let stateModules;
     let user;
 
     beforeEach(() => {
-      stateModules = storeFixture;
       user = {
         id: faker.random.number(),
         name: faker.internet.userName(),

@@ -1,10 +1,10 @@
-import request from '@/app/request';
+import faker from 'faker';
 
-const faker = require('faker');
-const banTimes = require('@/src/config/banTimes');
-const { getBans, sendBan, deleteBan } = require('@/app/requests/ban');
-const { banOne, banTwo } = require('../../fixtures/ban.fixture');
-const { adminAccessToken } = require('../../fixtures/token.fixture');
+import banTimes from '@/src/config/banTimes';
+import request from '@/app/request';
+import { getBans, sendBan, deleteBan } from '@/app/requests/ban';
+import { banOne, banTwo } from '../../fixtures/ban.fixture';
+import { adminAccessToken } from '../../fixtures/token.fixture';
 
 jest.mock('@/app/request');
 
@@ -21,8 +21,7 @@ describe('Bans Requests', () => {
     test('should return a list of bans', async () => {
       const bans = await getBans(adminAccessToken);
 
-      expect(request.mock.calls.length).toBe(1);
-      expect(request.mock.calls[0][0]).toEqual({
+      expect(request).toBeCalledWith({
         url: '/api/ban/',
         method: 'GET',
         headers: {
@@ -54,8 +53,7 @@ describe('Bans Requests', () => {
 
     test('should send ban if data is ok', async () => {
       const ban = await sendBan(adminAccessToken, newBan);
-      const requestOptions = request.mock.calls[0][0];
-      expect(requestOptions).toMatchObject({
+      expect(request).toBeCalledWith({
         url: '/api/ban/',
         method: 'POST',
         data: newBan,
@@ -88,8 +86,7 @@ describe('Bans Requests', () => {
 
     test('should send delete ban request correctly', async () => {
       await expect(deleteBan(adminAccessToken, ban)).resolves.toBeUndefined();
-      const requestOptions = request.mock.calls[0][0];
-      expect(requestOptions).toMatchObject({
+      expect(request).toBeCalledWith({
         url: `/api/ban/${ban.id}`,
         method: 'DELETE',
         headers: {

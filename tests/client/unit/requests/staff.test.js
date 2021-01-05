@@ -1,10 +1,10 @@
+import faker from 'faker';
+import { omit } from 'lodash';
+
 import request from '@/app/request';
-
-const faker = require('faker');
-
-const { getStaffList, getStaff, createStaff, deleteStaff, editStaff } = require('@/app/requests/staff');
-const { admin, userOne, userTwo } = require('../../fixtures/user.fixture');
-const { adminAccessToken } = require('../../fixtures/token.fixture');
+import { getStaffList, getStaff, createStaff, deleteStaff, editStaff } from '@/app/requests/staff';
+import { admin, userOne, userTwo } from '../../fixtures/user.fixture';
+import { adminAccessToken } from '../../fixtures/token.fixture';
 
 jest.mock('@/app/request');
 
@@ -20,8 +20,7 @@ describe('Staff requests', () => {
 
     test('should send request and resolve successfully if data is ok', async () => {
       await expect(getStaffList(adminAccessToken)).resolves.toEqual([admin, userOne, userTwo]);
-      const options = request.mock.calls[0][0];
-      expect(options).toMatchObject({
+      expect(request).toBeCalledWith({
         url: '/api/user/?sortBy=role:desc',
         method: 'GET',
         headers: {
@@ -47,8 +46,7 @@ describe('Staff requests', () => {
 
     test('should send request and resolve successfully if data is ok', async () => {
       await expect(getStaff(adminAccessToken, user)).resolves.toEqual(userOne);
-      const options = request.mock.calls[0][0];
-      expect(options).toMatchObject({
+      expect(request).toBeCalledWith({
         url: `/api/user/${user.id}`,
         method: 'GET',
         headers: {
@@ -75,8 +73,8 @@ describe('Staff requests', () => {
 
     test('should send request and resolve successfully if data is ok', async () => {
       await expect(createStaff(adminAccessToken, newUser)).resolves.toEqual(newUser);
-      const options = request.mock.calls[0][0];
-      expect(options).toMatchObject({
+      expect(request).toBeCalledWith({
+        data: newUser,
         url: '/api/user',
         method: 'POST',
         headers: {
@@ -102,8 +100,7 @@ describe('Staff requests', () => {
 
     test('should send request and resolve successfully if data is ok', async () => {
       await expect(deleteStaff(adminAccessToken, user)).resolves.toBeUndefined();
-      const options = request.mock.calls[0][0];
-      expect(options).toMatchObject({
+      expect(request).toBeCalledWith({
         url: `/api/user/${user.id}`,
         method: 'DELETE',
         headers: {
@@ -130,8 +127,8 @@ describe('Staff requests', () => {
 
     test('should send request and resolve successfully if data is ok', async () => {
       await expect(editStaff(adminAccessToken, user)).resolves.toEqual(Object.assign(userOne, user));
-      const options = request.mock.calls[0][0];
-      expect(options).toMatchObject({
+      expect(request).toBeCalledWith({
+        data: omit(user, ['name']),
         url: `/api/user/${user.id}`,
         method: 'PATCH',
         headers: {

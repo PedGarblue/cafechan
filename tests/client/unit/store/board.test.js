@@ -1,22 +1,28 @@
 import request from '@/app/request';
 import storeModule from '@/app/store/modules/board';
 import { BOARD_REQUEST, BOARD_SUCCESS, BOARD_ERROR } from '@/app/store/actions/board';
-import { storeFixture } from '../../fixtures/store.fixture';
 
 jest.mock('@/app/request');
 
 describe('Board Global Store', () => {
+  let stateModules;
+
+  beforeEach(() => {
+    stateModules = {
+      dispatch: jest.fn(),
+      commit: jest.fn(),
+    };
+  });
+
   afterEach(() => {
     request.mockClear();
   });
 
   describe('Actions', () => {
-    let stateModules;
     let board;
     let boardpage;
 
     beforeEach(() => {
-      stateModules = storeFixture;
       board = {
         boardname: 'test',
       };

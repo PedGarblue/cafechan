@@ -4,7 +4,8 @@ import Vuex from 'vuex';
 import BansAdd from '@/app/components/panel/pages/bans/ban-add.vue';
 import banTimes from '@/src/config/banTimes';
 import { sendBan } from '@/app/requests/ban';
-import storeFixtures from '../../../../fixtures/store.fixture';
+import storeMock from '@/tests/client/fixtures/panel.store.fixture';
+import createWrapper from '@/tests/client/fixtures/wrapper';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -12,26 +13,30 @@ localVue.use(Vuex);
 jest.mock('@/app/requests/ban');
 
 describe('ban-add.vue Implementation tests', () => {
-  let wrapper;
+  let options;
   let newBan;
 
   beforeEach(() => {
-    wrapper = storeFixtures.createWrapper(BansAdd, localVue);
+    options = {
+      store: new Vuex.Store(storeMock),
+    };
     newBan = { ip: faker.internet.ip(), reason: 'Shitposting', until: banTimes.day() };
   });
 
   afterEach(() => {
-    wrapper.destroy();
+    sendBan.mockClear();
   });
 
   describe('sendBan() method', () => {
     test('makes request when sendBan() is called', () => {
+      const wrapper = createWrapper(BansAdd, localVue, options);
       wrapper.setData(newBan);
       wrapper.vm.sendBan();
       expect(sendBan).toBeCalledWith('some token here', newBan);
     });
 
     test('should set post to request if is avaliable', () => {
+      const wrapper = createWrapper(BansAdd, localVue, options);
       delete newBan.ip;
       newBan.post = {};
       wrapper.setData(newBan);
@@ -40,6 +45,7 @@ describe('ban-add.vue Implementation tests', () => {
     });
 
     test('should set ip to request if is avaliable', () => {
+      const wrapper = createWrapper(BansAdd, localVue, options);
       newBan.ip = faker.internet.ip();
       wrapper.setData(newBan);
       wrapper.vm.sendBan();
@@ -47,6 +53,7 @@ describe('ban-add.vue Implementation tests', () => {
     });
 
     test('should not allow ip if post is set', () => {
+      const wrapper = createWrapper(BansAdd, localVue, options);
       newBan.post = {};
       newBan.ip = faker.internet.ip();
       wrapper.setData(newBan);
@@ -56,6 +63,7 @@ describe('ban-add.vue Implementation tests', () => {
     });
 
     test('emits custom event and changes state when sendBan() is called', async () => {
+      const wrapper = createWrapper(BansAdd, localVue, options);
       wrapper.setData(newBan);
       wrapper.vm.sendBan();
 
@@ -64,6 +72,7 @@ describe('ban-add.vue Implementation tests', () => {
     });
 
     test('emits custom event and changes state when sendBan() resolves', async () => {
+      const wrapper = createWrapper(BansAdd, localVue, options);
       wrapper.setData(newBan);
       await wrapper.vm.sendBan();
 
@@ -73,6 +82,7 @@ describe('ban-add.vue Implementation tests', () => {
     });
 
     test('emit custom event and changes state when sendBan() rejects', async () => {
+      const wrapper = createWrapper(BansAdd, localVue, options);
       sendBan.mockRejectedValue({ message: 'Bad request' });
       await wrapper.vm.sendBan();
 
@@ -84,26 +94,27 @@ describe('ban-add.vue Implementation tests', () => {
 });
 
 describe('ban-add.vue Behavorial tests', () => {
-  let wrapper;
+  let options;
 
   beforeEach(() => {
-    wrapper = storeFixtures.createWrapper(BansAdd, localVue);
+    options = {
+      store: new Vuex.Store(storeMock),
+    };
   });
 
   afterEach(() => {
-    wrapper.destroy();
+    sendBan.mockClear();
   });
 
   test('should add post if is avaliable in the route query', () => {
-    wrapper = storeFixtures.createWrapper(BansAdd, localVue, {
-      mocks: {
-        $route: {
-          query: {
-            post: 'some post id',
-          },
+    options.mocks = {
+      $route: {
+        query: {
+          post: 'some post id',
         },
       },
-    });
+    };
+    const wrapper = createWrapper(BansAdd, localVue, options);
 
     expect(wrapper.vm.post).toEqual('some post id');
   });

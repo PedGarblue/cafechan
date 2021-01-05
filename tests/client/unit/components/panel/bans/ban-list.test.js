@@ -1,46 +1,35 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import VueRouter from 'vue-router';
+import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
 import BansList from '@/app/components/panel/pages/bans/ban-list.vue';
 import { getBans, deleteBan } from '@/app/requests/ban';
-import { banOne } from '../../../../fixtures/ban.fixture';
+import storeMock from '@/tests/client/fixtures/panel.store.fixture';
+import createWrapper from '@/tests/client/fixtures/wrapper';
+import { banOne } from '@/tests/client/fixtures/ban.fixture';
 
 const localVue = createLocalVue();
-localVue.use(VueRouter);
 localVue.use(Vuex);
-const router = new VueRouter();
 
 jest.mock('@/app/requests/ban');
 
-const createWrapper = overrides => {
-  const defaults = {
-    localVue,
-    router,
-    store: new Vuex.Store({
-      getters: {
-        accessToken: () => ({ token: 'some token here' }),
-      },
-    }),
-  };
-  return shallowMount(BansList, Object.assign(defaults, overrides));
-};
-
 describe('ban-list.vue Implemention tests', () => {
-  let wrapper;
+  let options;
 
   beforeEach(() => {
-    wrapper = createWrapper();
-    getBans.mockClear();
+    options = {
+      store: new Vuex.Store(storeMock),
+    };
   });
 
   afterEach(() => {
-    wrapper.destroy();
     getBans.mockClear();
   });
 
   test('computed property bansList returns a formatted list of bans', () => {
-    wrapper.setData({ bans: [banOne] });
+    options.data = function() {
+      return { bans: [banOne] };
+    };
+    const wrapper = createWrapper(BansList, localVue, options);
     const { bansList } = wrapper.vm;
     expect(bansList).toBeInstanceOf(Array);
     expect(bansList).toHaveLength(1);
@@ -51,23 +40,27 @@ describe('ban-list.vue Implemention tests', () => {
   });
 
   test('calls Requests.getBans() when getBans() is called', async () => {
+    const wrapper = createWrapper(BansList, localVue, options);
     await wrapper.vm.getBans();
     expect(getBans).toBeCalledWith('some token here');
   });
 
   test('emits custom event and changes state when getBans() is called', async () => {
+    const wrapper = createWrapper(BansList, localVue, options);
     wrapper.vm.getBans();
     expect(wrapper.vm.status).toMatch('REQUEST');
     expect(wrapper.emitted('table-update-request')).toHaveLength(2);
   });
 
   test('emits custom event and changes state when getBans() resolves', async () => {
+    const wrapper = createWrapper(BansList, localVue, options);
     await wrapper.vm.getBans();
     expect(wrapper.vm.status).toMatch('SUCCESS');
     expect(wrapper.emitted('table-update-success')).toHaveLength(2);
   });
 
   test('emits custom event and changes state when getBans() rejects', async () => {
+    const wrapper = createWrapper(BansList, localVue, options);
     getBans.mockRejectedValue({ message: 'Bad request' });
     await wrapper.vm.getBans();
     expect(wrapper.vm.status).toMatch('ERROR');
@@ -76,12 +69,14 @@ describe('ban-list.vue Implemention tests', () => {
   });
 
   test('calls Request.deleteBan() when deleteBan() is called', async () => {
+    const wrapper = createWrapper(BansList, localVue, options);
     const ban = { id: 'some id' };
     await wrapper.vm.deleteBan(ban);
     expect(deleteBan).toBeCalledWith('some token here', ban);
   });
 
   test('calls getBans() when deleteBan() resolves', async () => {
+    const wrapper = createWrapper(BansList, localVue, options);
     const ban = { id: 'some id' };
     const getBansSpy = jest.spyOn(wrapper.vm, 'getBans');
     await wrapper.vm.deleteBan(ban);
@@ -90,20 +85,21 @@ describe('ban-list.vue Implemention tests', () => {
 });
 
 describe('ban-list.vue Behavorial tests', () => {
-  let wrapper;
+  let options;
 
   beforeEach(() => {
-    wrapper = createWrapper();
+    options = {
+      store: new Vuex.Store(storeMock),
+    };
     getBans.mockClear();
   });
 
   afterEach(() => {
-    wrapper.destroy();
     getBans.mockClear();
   });
 
   test('initializes calling getBans()', () => {
-    wrapper = createWrapper();
+    createWrapper(BansList, localVue, options);
     expect(getBans).toBeCalled();
   });
 });

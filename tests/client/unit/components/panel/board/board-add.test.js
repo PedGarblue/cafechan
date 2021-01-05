@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 import BoardAdd from '@/app/components/panel/pages/board/board-add.vue';
 import { createBoard } from '@/app/requests/board';
 import { omit } from 'lodash';
-import storeFixtures from '../../../../fixtures/store.fixture';
+import storeMock from '@/tests/client/fixtures/panel.store.fixture';
+import createWrapper from '@/tests/client/fixtures/wrapper';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -11,9 +12,29 @@ localVue.use(Vuex);
 jest.mock('@/app/requests/board');
 
 describe('board-add.vue', () => {
-  let wrapper;
+  let options;
+  let newBoard;
 
   beforeEach(() => {
+    newBoard = {
+      name: 'test',
+      desc: 'Testing',
+      section: 'ocio',
+      allowedfiletypes: [],
+      maxfilesize: 10000000,
+      locked: false,
+      maxpages: 7,
+      maxreplies: 200,
+      postsperpage: 10,
+      nsfw: false,
+      flag: '',
+    };
+    options = {
+      data() {
+        return { board: newBoard };
+      },
+      store: new Vuex.Store(storeMock),
+    };
     createBoard.mockResolvedValue();
   });
 
@@ -23,30 +44,10 @@ describe('board-add.vue', () => {
 
   describe('Implementation tests', () => {
     describe('sendBoard() method', () => {
-      let newBoard;
-
-      beforeEach(() => {
-        newBoard = {
-          name: 'test',
-          desc: 'Testing',
-          section: 'ocio',
-          allowedfiletypes: [],
-          maxfilesize: 10000000,
-          locked: false,
-          maxpages: 7,
-          maxreplies: 200,
-          postsperpage: 10,
-          nsfw: false,
-          flag: '',
-        };
-      });
+      beforeEach(() => {});
 
       test('should call Request.createBoard() correctly', async () => {
-        wrapper = storeFixtures.createWrapper(BoardAdd, localVue, {
-          data() {
-            return { board: newBoard };
-          },
-        });
+        const wrapper = createWrapper(BoardAdd, localVue, options);
         await wrapper.vm.createBoard();
         expect(createBoard).toBeCalledWith('some token here', newBoard);
         expect(wrapper.vm.status).toEqual('SUCCESS');
@@ -54,11 +55,7 @@ describe('board-add.vue', () => {
 
       test('should set state to ERROR if Request.createBoard() fails', async () => {
         createBoard.mockRejectedValue(new Error('some error'));
-        wrapper = storeFixtures.createWrapper(BoardAdd, localVue, {
-          data() {
-            return { board: newBoard };
-          },
-        });
+        const wrapper = createWrapper(BoardAdd, localVue, options);
         await wrapper.vm.createBoard();
         expect(wrapper.vm.status).toEqual('ERROR');
         expect(wrapper.vm.errorMsg).toEqual('some error');
@@ -66,11 +63,7 @@ describe('board-add.vue', () => {
 
       test('should omit flag if board section is not regional', async () => {
         newBoard.flag = 'test';
-        wrapper = storeFixtures.createWrapper(BoardAdd, localVue, {
-          data() {
-            return { board: newBoard };
-          },
-        });
+        const wrapper = createWrapper(BoardAdd, localVue, options);
         await wrapper.vm.createBoard();
         expect(createBoard).toBeCalledWith('some token here', omit(newBoard, ['flag']));
       });
@@ -78,32 +71,10 @@ describe('board-add.vue', () => {
   });
 
   describe('Behavorial tests', () => {
-    let newBoard;
-
-    beforeEach(() => {
-      newBoard = {
-        name: 'test',
-        desc: 'Testing',
-        section: 'ocio',
-        allowedfiletypes: [],
-        maxfilesize: 10000000,
-        locked: false,
-        maxpages: 7,
-        maxreplies: 200,
-        postsperpage: 10,
-        nsfw: false,
-        flag: '',
-      };
-    });
-
     test('should enable flag input block if board section is regional', async () => {
       let flagInput;
 
-      wrapper = storeFixtures.createWrapper(BoardAdd, localVue, {
-        data() {
-          return { board: newBoard };
-        },
-      });
+      const wrapper = createWrapper(BoardAdd, localVue, options);
 
       flagInput = wrapper.findComponent({ ref: 'flag-input' });
       expect(flagInput.exists()).toBeFalsy();

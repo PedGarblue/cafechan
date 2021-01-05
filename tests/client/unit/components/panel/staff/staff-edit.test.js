@@ -3,10 +3,10 @@ import Vuex from 'vuex';
 import faker from 'faker';
 import { pick } from 'lodash';
 
-
 import StaffEdit from '@/app/components/panel/pages/staff/staff-edit.vue';
 import { getStaff, editStaff } from '@/app/requests/staff';
-import storeFixtures from '../../../../fixtures/store.fixture';
+import storeMock from '@/tests/client/fixtures/panel.store.fixture';
+import createWrapper from '@/tests/client/fixtures/wrapper';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -14,8 +14,8 @@ localVue.use(Vuex);
 jest.mock('@/app/requests/staff');
 
 describe('board-edit.vue', () => {
-  let wrapper;
   let newStaff;
+  let options;
 
   beforeEach(() => {
     newStaff = {
@@ -23,6 +23,10 @@ describe('board-edit.vue', () => {
       role: 'admin',
       name: faker.internet.userName(),
       email: faker.internet.email(),
+    };
+
+    options = {
+      store: new Vuex.Store(storeMock),
     };
 
     getStaff.mockResolvedValue();
@@ -43,15 +47,13 @@ describe('board-edit.vue', () => {
           role: '',
           name: '',
         };
-        const overrides = {
-          data() {
-            return {
-              user: emptyStaff,
-            };
-          },
+        options.data = function() {
+          return {
+            user: emptyStaff,
+          };
         };
         getStaff.mockResolvedValue(newStaff);
-        wrapper = storeFixtures.createWrapper(StaffEdit, localVue, overrides);
+        const wrapper = createWrapper(StaffEdit, localVue, options);
         await wrapper.vm.getUser();
         expect(getStaff).toBeCalledWith('some token here', emptyStaff);
         expect(wrapper.vm.user).toEqual(newStaff);
@@ -60,7 +62,7 @@ describe('board-edit.vue', () => {
 
       test('should set state to ERROR if Request.getBoard() fails', async () => {
         getStaff.mockRejectedValue(new Error('some error'));
-        wrapper = storeFixtures.createWrapper(StaffEdit, localVue);
+        const wrapper = createWrapper(StaffEdit, localVue, options);
         await wrapper.vm.getUser();
         expect(wrapper.vm.status).toEqual('ERROR');
         expect(wrapper.vm.errorMsg).toEqual('some error');
@@ -69,7 +71,7 @@ describe('board-edit.vue', () => {
 
     describe('editBoard() method', () => {
       test('should call Request.editStaff correctly', async () => {
-        wrapper = storeFixtures.createWrapper(StaffEdit, localVue);
+        const wrapper = createWrapper(StaffEdit, localVue, options);
         newStaff.role = 'mod';
         await wrapper.setData({
           user: newStaff,
@@ -82,7 +84,7 @@ describe('board-edit.vue', () => {
 
       test('should set state to ERROR if Request.editBoard() fails', async () => {
         editStaff.mockRejectedValue(new Error('some error'));
-        wrapper = storeFixtures.createWrapper(StaffEdit, localVue);
+        const wrapper = createWrapper(StaffEdit, localVue, options);
         await wrapper.vm.editUser();
         expect(wrapper.vm.status).toEqual('ERROR');
         expect(wrapper.vm.errorMsg).toEqual('some error');

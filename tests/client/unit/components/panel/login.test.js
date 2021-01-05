@@ -3,9 +3,8 @@ import Vuex from 'vuex';
 
 import { AUTH_REQUEST } from '@/app/store/actions/auth';
 import Login from '@/app/components/panel/pages/login.vue';
-import storeFixtures from '../../../fixtures/store.fixture';
+import createWrapper from '../../../fixtures/wrapper';
 
-const { createWrapper } = storeFixtures;
 const localVue = createLocalVue();
 localVue.use(Vuex);
 

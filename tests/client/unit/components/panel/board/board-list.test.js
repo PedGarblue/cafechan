@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 
 import BoardList from '@/app/components/panel/pages/board/board-list.vue';
 import { getBoards, deleteBoard } from '@/app/requests/board';
-import storeFixtures from '@/tests/client/fixtures/store.fixture';
+import storeMock from '@/tests/client/fixtures/panel.store.fixture';
+import createWrapper from '@/tests/client/fixtures/wrapper';
 import { boardOne, boardTwo } from '@/tests/client/fixtures/board.fixture';
 
 const localVue = createLocalVue();
@@ -12,9 +13,13 @@ localVue.use(Vuex);
 jest.mock('@/app/requests/board');
 
 describe('ban-list.vue', () => {
-  let wrapper;
+  let options;
 
   beforeEach(() => {
+    options = {
+      store: new Vuex.Store(storeMock),
+    };
+
     getBoards.mockResolvedValue();
     deleteBoard.mockResolvedValue();
   });
@@ -27,7 +32,7 @@ describe('ban-list.vue', () => {
   describe('Implementation tests', () => {
     describe('getBoards() method', () => {
       test('should call Request.getBoards() correctly', async () => {
-        wrapper = storeFixtures.createWrapper(BoardList, localVue);
+        const wrapper = createWrapper(BoardList, localVue, options);
         getBoards.mockResolvedValue([boardOne, boardTwo]);
         await wrapper.vm.getBoards();
         expect(getBoards).toBeCalledWith('some token here');
@@ -36,7 +41,7 @@ describe('ban-list.vue', () => {
       });
 
       test('should change status to error and set errorMsg if Request.getBoards() fails', async () => {
-        wrapper = storeFixtures.createWrapper(BoardList, localVue);
+        const wrapper = createWrapper(BoardList, localVue, options);
         getBoards.mockRejectedValue(new Error('some error'));
         await wrapper.vm.getBoards();
         expect(getBoards).toBeCalledWith('some token here');
@@ -47,7 +52,7 @@ describe('ban-list.vue', () => {
 
     describe('deleteBoard() method', () => {
       test('should call Request.deleteBoard() correctly', async () => {
-        wrapper = storeFixtures.createWrapper(BoardList, localVue);
+        const wrapper = createWrapper(BoardList, localVue, options);
         deleteBoard.mockResolvedValue();
         await wrapper.vm.deleteBoard(boardOne);
         expect(deleteBoard).toBeCalledWith('some token here', { id: boardOne._id });
@@ -55,7 +60,7 @@ describe('ban-list.vue', () => {
       });
 
       test('should call getBoards on success', async () => {
-        wrapper = storeFixtures.createWrapper(BoardList, localVue);
+        const wrapper = createWrapper(BoardList, localVue, options);
         deleteBoard.mockResolvedValue();
         const getBoardsSpy = jest.spyOn(wrapper.vm, 'getBoards');
         await wrapper.vm.deleteBoard(boardOne);
@@ -63,7 +68,7 @@ describe('ban-list.vue', () => {
       });
 
       test('should change status to error and set errorMsg if Request.deleteBan() fails', async () => {
-        wrapper = storeFixtures.createWrapper(BoardList, localVue);
+        const wrapper = createWrapper(BoardList, localVue, options);
         deleteBoard.mockRejectedValue(new Error('some error'));
         await wrapper.vm.deleteBoard(boardOne);
         expect(wrapper.vm.errorMsg).toEqual('some error');
@@ -74,7 +79,7 @@ describe('ban-list.vue', () => {
 
   describe('Behavorial tests', () => {
     test('should call getBoards() when mounted', () => {
-      wrapper = storeFixtures.createWrapper(BoardList, localVue);
+      createWrapper(BoardList, localVue, options);
       expect(getBoards).toBeCalledWith('some token here');
     });
   });

@@ -1,8 +1,8 @@
 import request from '@/app/request';
 
-const { getBoards, getBoard, createBoard, editBoard, deleteBoard } = require('@/app/requests/board');
-const { boardOne, boardTwo } = require('../../fixtures/board.fixture');
-const { adminAccessToken } = require('../../fixtures/token.fixture');
+import { getBoards, getBoard, createBoard, editBoard, deleteBoard } from '@/app/requests/board';
+import { boardOne, boardTwo } from '../../fixtures/board.fixture';
+import { adminAccessToken } from '../../fixtures/token.fixture';
 
 jest.mock('@/app/request');
 
@@ -18,8 +18,7 @@ describe('Bans request', () => {
 
     test('should send request to get a list of boards', async () => {
       await expect(getBoards(adminAccessToken)).resolves.toEqual([boardOne, boardTwo]);
-      const options = request.mock.calls[0][0];
-      expect(options).toMatchObject({
+      expect(request).toBeCalledWith({
         url: '/api/board/?sortBy=name:desc',
         method: 'GET',
         headers: {
@@ -40,8 +39,7 @@ describe('Bans request', () => {
 
     test('should send request to get single board succesfully', async () => {
       await expect(getBoard(adminAccessToken, { id: boardOne._id })).resolves.toBe(boardOne);
-      const options = request.mock.calls[0][0];
-      expect(options).toMatchObject({
+      expect(request).toBeCalledWith({
         url: `/api/board/${boardOne._id}`,
         method: 'GET',
         headers: {
