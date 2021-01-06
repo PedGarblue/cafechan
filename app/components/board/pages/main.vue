@@ -1,14 +1,14 @@
 <template>
   <div>
     <PostBox
-      type="Thread"
-      :boardid="getBoard.id"
-      :maxfilesize="getBoard.max_file_size"
-      :allowedfiletypes="getBoard.allowed_filetypes"
+      :type="posting.type"
+      :board="getBoard"
+      :thread="posting.thread"
+      @close-quick-reply="unsetQuickReply"
       @posted="updateThreads"
     />
     <div class="threads">
-      <Thread v-for="thread in getThreads" :key="thread.id" :data="thread" />
+      <Thread v-for="thread in getThreads" :key="thread.id" :data="thread" @set-reply="setQuickReply" />
     </div>
     <Pagination :actual-page="getPagination.actual" :total-pages="getPagination.totalpages" />
   </div>
@@ -28,6 +28,14 @@ export default {
     Thread,
     Pagination,
   },
+  data() {
+    return {
+      posting: {
+        type: 'Thread',
+        thread: {},
+      },
+    };
+  },
   computed: {
     ...mapGetters(['getBoard', 'getThreads', 'getPagination']),
   },
@@ -35,6 +43,14 @@ export default {
     ...mapActions([BOARD_REQUEST]),
     updateThreads() {
       this[BOARD_REQUEST]({ boardname: this.getBoard.name, page: this.getPagination.actual });
+    },
+    setQuickReply(thread) {
+      this.posting.type = 'QuickReply';
+      this.posting.thread = thread;
+    },
+    unsetQuickReply() {
+      this.posting.type = 'Thread';
+      this.posting.thread = {};
     },
   },
 };

@@ -91,5 +91,32 @@ describe('ThreadPage component', () => {
       await button.trigger('click');
       expect(getThread).toBeCalledWith(boardOne.name, threadOne.seq_id);
     });
+
+    test('setQuickReply method should set QuickReply params in the PostBox', async () => {
+      const wrapper = createWrapper(ThreadPage, localVue, options);
+      const postbox = wrapper.findComponent(PostBox);
+
+      await wrapper.vm.setQuickReply(threadOne);
+
+      expect(postbox.vm.type).toEqual('QuickReply');
+    });
+
+    test('unsetQuickReply method should set postbox to thread posting mode', async () => {
+      options.data = function() {
+        return {
+          posting: {
+            type: 'QuickReply',
+          },
+          thread: threadOne,
+          status,
+        };
+      };
+      const wrapper = createWrapper(ThreadPage, localVue, options);
+      const postbox = wrapper.findComponent(PostBox);
+
+      await wrapper.vm.unsetQuickReply();
+
+      expect(postbox.vm.type).toEqual('Reply');
+    });
   });
 });

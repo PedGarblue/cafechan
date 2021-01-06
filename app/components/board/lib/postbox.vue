@@ -1,19 +1,33 @@
 <template>
-  <form @submit.prevent="sendPost">
+  <form :class="{ 'block-floating': isQuickReply }" @submit.prevent="sendPost">
     <table class="postform">
       <tbody>
+        <tr v-if="isQuickReply">
+          <td colspan="2">
+            <button class="close-button button button--right" @click="closeQuickReply">X</button>
+          </td>
+        </tr>
+        <tr v-if="isQuickReply" class="header">
+          <td class="block" colspan="2">
+            {{ `Respondiendo al hilo ${thread.seq_id} de /${board.name}/` }}
+          </td>
+        </tr>
         <tr>
           <td v-if="!replyPosting" class="block">Título</td>
           <td v-else></td>
           <td>
             <input v-if="!replyPosting" v-model="post.title" type="text" name="title" class="input__title" />
-            <input class="input__submit" type="submit" :value="isLoading ? '...' : 'Enviar'" />
+            <input
+              class="input__submit button button--right button--medium"
+              type="submit"
+              :value="isLoading ? '...' : 'Enviar'"
+            />
           </td>
         </tr>
         <tr>
           <td class="block">Post</td>
           <td>
-            <textarea v-model="post.message" class="input__message" cols="46" rows="9"></textarea>
+            <textarea v-model="post.message" class="input__message" rows="9"></textarea>
           </td>
         </tr>
         <tr>
@@ -34,7 +48,7 @@
           <td colspan="2">
             <div class="upload-info">
               <span>Tipos de archivo: {{ filetypes }}.</span>
-              <span>Tamaño máximo: {{ maxfilesize }}.</span>
+              <span>Tamaño máximo: {{ board.max_file_size }}.</span>
             </div>
           </td>
         </tr>
@@ -58,32 +72,18 @@ export default {
         return 'Thread';
       },
       validator(type) {
-        return type === 'Thread' || type === 'Reply';
+        return ['Thread', 'Reply', 'QuickReply'].indexOf(type) !== -1;
       },
     },
-    boardid: {
-      type: String,
-      default() {
-        return '';
-      },
+    board: {
+      type: Object,
+      required: true,
     },
-    threadid: {
-      type: String,
+    thread: {
+      type: Object,
       default() {
-        if (this.type !== 'Reply') return '';
-        throw new Error('"threadid" is required for post reply');
-      },
-    },
-    maxfilesize: {
-      type: String,
-      default() {
-        return '10 MB';
-      },
-    },
-    allowedfiletypes: {
-      type: Array,
-      default() {
-        return [];
+        if (this.type !== 'Reply') return {};
+        throw new Error('"thread" is required for post reply');
       },
     },
   },
@@ -100,10 +100,16 @@ export default {
   },
   computed: {
     filetypes() {
-      return this.allowedfiletypes.join(', ');
+      return this.board.allowed_filetypes.join(', ');
+    },
+    threadPosting() {
+      return this.type === 'Thread';
     },
     replyPosting() {
-      return this.type === 'Reply';
+      return ['Reply', 'QuickReply'].indexOf(this.type) !== -1;
+    },
+    isQuickReply() {
+      return this.type === 'QuickReply';
     },
     isLoading() {
       return this.status === LOADING;
@@ -125,14 +131,17 @@ export default {
       const [file] = this.$refs.postfile.files;
       this.post.file = file;
     },
+    closeQuickReply() {
+      this.$emit('close-quick-reply');
+    },
     async sendPost() {
       this.status = LOADING;
-      let request = sendPost(this.boardid);
+      let request = sendPost(this.board.id);
 
       if (this.type === 'Thread') {
         request = request.thread(this.post);
       } else {
-        request = request.reply(this.threadid, this.post);
+        request = request.reply(this.thread.id, this.post);
       }
       return request
         .then(() => {
@@ -153,6 +162,33 @@ export default {
 table {
   margin: 1rem auto;
 }
+.button {
+  border: none;
+  font-size: 13px;
+  color: var(--text-color);
+  font-weight: bold;
+  background-color: var(--primary-light-color);
+  cursor: pointer;
+}
+.button--right {
+  float: right;
+  margin-left: auto;
+}
+.button--medium {
+  padding: 0.7em 0.8em;
+}
+.button:hover {
+  background-color: var(--primary-lighter-color);
+}
+.block-floating {
+  position: fixed;
+  left: 51%;
+  background-color: #7d715a;
+  border: solid 1px var(--primary-lighter-color);
+}
+.block-floating table {
+  margin: 0 auto;
+}
 .block {
   background: var(--primary-light-color);
   text-align: center;
@@ -160,27 +196,19 @@ table {
   padding: 5px;
   font-weight: bold;
 }
-.input__submit {
-  border: none;
-  border-radius: 3px;
-  font-size: 13px;
-  color: var(--text-color);
-  font-weight: bold;
-  padding: 3px 9px;
-  background-color: var(--primary-light-color);
-  cursor: pointer;
-  margin-left: 10px;
-  padding: 9px 10px 9px 10px;
+.close-button {
   float: right;
 }
-.input__submit:hover {
-  background-color: var(--primary-lighter-color);
+.input__submit {
 }
 .input__title,
 .input__message {
   border: 1px solid #b3917b;
   border-radius: 3px;
   background-color: #ffffff;
+}
+.input__message {
+  min-width: 23.6rem;
 }
 .input__title {
   padding: 0.6em 0.1em;

@@ -22,7 +22,7 @@
             {{ data.timestamp }}
           </span>
           <span class="reflink">
-            <a>#{{ data.seq_id }}</a>
+            <a @click.prevent="setReply">#{{ data.seq_id }}</a>
           </span>
           <span class="response-btn">
             <router-link :to="`/${getBoard.name}/thread/${data.seq_id}/`">Responder</router-link>
@@ -32,7 +32,7 @@
       </span>
     </div>
     <div v-if="hasReplies" class="replies">
-      <Reply v-for="reply in data.replies" :key="reply.id" :data="reply" />
+      <Reply v-for="reply in data.replies" :key="reply.id" :data="reply" @set-reply="setReply" />
     </div>
   </div>
 </template>
@@ -67,6 +67,9 @@ export default {
     toggleFile() {
       this.openFile = !this.openFile;
     },
+    setReply() {
+      this.$emit('set-reply', this.data);
+    },
   },
 };
 </script>
@@ -95,6 +98,10 @@ export default {
 
 .reflink * {
   margin: 0 0.3em 0 0;
+}
+
+.reflink a {
+  cursor: pointer;
 }
 
 .thread-body {

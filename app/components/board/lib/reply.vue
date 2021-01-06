@@ -11,7 +11,7 @@
           {{ data.timestamp }}
         </span>
         <span class="reflink">
-          <a> #{{ data.seq_id }} </a>
+          <a @click="setReply"> #{{ data.seq_id }} </a>
         </span>
       </span>
       <div class="post-contents" :class="{ 'open-file': openfile }">
@@ -46,11 +46,17 @@ export default {
     toggleFile() {
       this.openfile = !this.openfile;
     },
+    setReply() {
+      this.$emit('set-reply');
+    },
   },
 };
 </script>
 
 <style scoped>
+.reflink {
+  cursor: pointer;
+}
 .post-contents {
   display: flex;
 }

@@ -98,4 +98,21 @@ describe('Thread component', () => {
 
     expect(repliesContainer.exists()).toBeFalsy();
   });
+
+  test('should emit custom event when reflink is clicked', async () => {
+    const wrapper = createWrapper(Thread, localVue, options);
+    const reflink = wrapper.find('.reflink a');
+    await reflink.trigger('click');
+    expect(wrapper.emitted('set-reply')).toHaveLength(1);
+    expect(wrapper.emitted('set-reply')[0]).toEqual([threadOne]);
+  });
+
+  test('should emit custom event when a Reply is emitting set-reply', async () => {
+    options.propsData.data.replies = [replyOne, replyTwo];
+    const wrapper = createWrapper(Thread, localVue, options);
+    const replies = wrapper.findAllComponents(Reply);
+    await replies.at(0).vm.$emit('set-reply');
+    expect(wrapper.emitted('set-reply')).toHaveLength(1);
+    expect(wrapper.emitted('set-reply')[0]).toEqual([threadOne]);
+  });
 });

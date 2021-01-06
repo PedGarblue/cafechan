@@ -7,15 +7,14 @@
       {{ replyingToThreadTitle }}
     </div>
     <PostBox
-      type="Reply"
-      :boardid="getBoard.id"
-      :threadid="thread.id"
-      :maxfilesize="getBoard.max_file_size"
-      :allowedfiletypes="getBoard.allowed_filetypes"
+      :type="posting.type"
+      :board="getBoard"
+      :thread="thread"
       @posted="getThread"
+      @close-quick-reply="unsetQuickReply"
     />
     <div class="threads">
-      <Thread :data="thread" />
+      <Thread :data="thread" @set-reply="setQuickReply"/>
     </div>
     <div class="buttons">
       <button v-if="isLoaded" class="button update-button" @click="getThread">Actualizar</button>
@@ -45,6 +44,9 @@ export default {
     return {
       thread: {
         seq_id: this.$route.params.threadid,
+      },
+      posting: {
+        type: 'Reply',
       },
       status: '',
       errorMsg: '',
@@ -83,6 +85,12 @@ export default {
           this.errorMsg = err.message;
           this.status = ERROR;
         });
+    },
+    setQuickReply() {
+      this.posting.type = 'QuickReply';
+    },
+    unsetQuickReply() {
+      this.posting.type = 'Reply';
     },
   },
 };

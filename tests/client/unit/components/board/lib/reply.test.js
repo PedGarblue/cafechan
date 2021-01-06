@@ -80,4 +80,11 @@ describe('Thread component', () => {
     expect(postContents.classes()).not.toContain('open-file');
     expect(file.element.src).toEqual('http://localhost:3000/some-thumb-url');
   });
+
+  test('should emit custom event when reflink is clicked', async () => {
+    const wrapper = createWrapper(Reply, localVue, options);
+    const reflink = wrapper.find('.reflink a');
+    await reflink.trigger('click');
+    expect(wrapper.emitted('set-reply')).toHaveLength(1);
+  });
 });

@@ -16,8 +16,28 @@ localVue.use(Vuex);
 describe('PostBox component', () => {
   const sendThread = jest.fn();
   const sendReply = jest.fn();
+  let post;
+  let options;
 
   beforeEach(() => {
+    post = {
+      title: faker.lorem.words(4),
+      message: faker.lorem.paragraph(),
+      file: '',
+    };
+    const data = function() {
+      return {
+        post,
+      };
+    };
+    const propsData = {
+      type: 'Thread',
+      board: boardOne,
+    };
+    options = {
+      propsData,
+      data,
+    };
     sendThread.mockResolvedValue();
     sendReply.mockResolvedValue();
     sendPost.mockReturnValue({
@@ -33,7 +53,11 @@ describe('PostBox component', () => {
   });
 
   test('initializes as thread with correct elements', () => {
-    const wrapper = createWrapper(PostBox, localVue);
+    options.propsData = {
+      type: 'Thread',
+      board: boardOne,
+    };
+    const wrapper = createWrapper(PostBox, localVue, options);
     const titleInput = wrapper.find('.input__title');
     const messageInput = wrapper.find('.input__message');
     const fileInput = wrapper.find('.input__file');
@@ -43,12 +67,12 @@ describe('PostBox component', () => {
   });
 
   test('initializes as reply with correct elements', () => {
-    const propsData = {
+    options.propsData = {
       type: 'Reply',
-      boardid: boardOne._id,
-      threadid: threadOne._id,
+      board: boardOne,
+      thread: threadOne,
     };
-    const wrapper = createWrapper(PostBox, localVue, { propsData });
+    const wrapper = createWrapper(PostBox, localVue, options);
     const titleInput = wrapper.find('.input__title');
     const messageInput = wrapper.find('.input__message');
     const fileInput = wrapper.find('.input__file');
@@ -59,30 +83,6 @@ describe('PostBox component', () => {
   });
 
   describe('sendPost method', () => {
-    let post;
-    let options;
-
-    beforeEach(() => {
-      post = {
-        title: faker.lorem.words(4),
-        message: faker.lorem.paragraph(),
-        file: '',
-      };
-      const data = function() {
-        return {
-          post,
-        };
-      };
-      const propsData = {
-        type: 'Thread',
-        boardid: boardOne._id,
-      };
-      options = {
-        propsData,
-        data,
-      };
-    });
-
     test('should send post thread request correctly', async () => {
       const wrapper = createWrapper(PostBox, localVue, options);
       const request = wrapper.vm.sendPost();
@@ -95,7 +95,7 @@ describe('PostBox component', () => {
 
     test('should send post reply request correctly', async () => {
       options.propsData.type = 'Reply';
-      options.propsData.threadid = threadOne._id;
+      options.propsData.thread = threadOne;
       post = {
         message: faker.lorem.paragraph(),
       };
@@ -134,7 +134,7 @@ describe('PostBox component', () => {
     let localImageInputFilesGet;
 
     beforeEach(() => {
-      wrapper = createWrapper(PostBox, localVue);
+      wrapper = createWrapper(PostBox, localVue, options);
       // we dont have DataTransfer object in jest jsdom, so, we will mock it
       localImageInput = wrapper.findComponent({ ref: 'postfile' });
       localImageInputFilesGet = jest.fn();
@@ -163,6 +163,33 @@ describe('PostBox component', () => {
         width: 300,
         height: 200,
       });
+    });
+  });
+
+  describe('quick reply mode', () => {
+    test('initializes as quick reply correctly', () => {
+      options.propsData.type = 'QuickReply';
+      options.propsData.thread = threadOne;
+      const wrapper = createWrapper(PostBox, localVue, options);
+      const form = wrapper.find('form');
+      const closeButton = wrapper.find('.close-button');
+      const header = wrapper.find('.header td');
+
+      expect(form.classes()).toContain('block-floating');
+      expect(closeButton.exists()).toBeTruthy();
+      expect(header.exists()).toBeTruthy();
+      expect(header.text()).toEqual(`Respondiendo al hilo ${threadOne.seq_id} de /${boardOne.name}/`);
+    });
+
+    test('should emit custom event when close button is clicked', async () => {
+      options.propsData.type = 'QuickReply';
+      options.propsData.thread = threadOne;
+      const wrapper = createWrapper(PostBox, localVue, options);
+      const closeButton = wrapper.find('.close-button');
+
+      await closeButton.trigger('click');
+
+      expect(wrapper.emitted('close-quick-reply')).toHaveLength(1);
     });
   });
 });

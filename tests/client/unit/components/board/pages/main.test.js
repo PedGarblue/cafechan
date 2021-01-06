@@ -32,6 +32,10 @@ describe('Board component', () => {
     expect(postbox.exists()).toBeTruthy();
     expect(paginate.exists()).toBeTruthy();
     expect(threadList.exists()).toBeTruthy();
+    expect(wrapper.vm.posting).toMatchObject({
+      type: 'Thread',
+      thread: {},
+    });
   });
 
   test('renders thread list correctly', () => {
@@ -52,5 +56,33 @@ describe('Board component', () => {
     await wrapper.vm.$nextTick();
 
     expect(storeMock.actions.BOARD_REQUEST).toBeCalledWith(expect.anything(), { boardname: boardOne.name, page: 1 });
+  });
+
+  test('setQuickReply method should set QuickReply params in the PostBox', async () => {
+    storeMock.getters.getThreads.mockReturnValue([threadOne, threadTwo]);
+    options.store = new Vuex.Store(storeMock);
+    const wrapper = createWrapper(Board, localVue, options);
+    const postbox = wrapper.findComponent(PostBox);
+
+    await wrapper.vm.setQuickReply(threadOne);
+
+    expect(postbox.vm.type).toEqual('QuickReply');
+    expect(postbox.vm.thread).toEqual(threadOne);
+  });
+
+  test('unsetQuickReply method should set postbox to thread posting mode', async () => {
+    options.data = function() {
+      return {
+        posting: {
+          type: 'QuickReply',
+          thread: threadOne,
+        },
+      };
+    };
+    const wrapper = createWrapper(Board, localVue, options);
+    const postbox = wrapper.findComponent(PostBox);
+    await wrapper.vm.unsetQuickReply();
+    expect(postbox.vm.type).toEqual('Thread');
+    expect(postbox.vm.thread).toEqual({});
   });
 });

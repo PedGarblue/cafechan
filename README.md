@@ -80,10 +80,9 @@ yarn coverage
 
 I have already done a lot of changes that i not going to list here. These are the pending changes for version v0.1.0:
 
-- [ ] Add quick reply
-- [ ] Add Assets to a compressed file (or find some way that fonts and images don't get corrupted when downloaded/uploaded it)
-- [ ] Add more unit tests and integration tests in client app
+- [x] Add quick reply
+- [x] Add more unit tests and integration tests in client app
 - [x] Migrate boardpages to Vue
-- [ ] Add flags and limit posting by geolocalization in regional boards
+- [ ] Add responsivity in frontpage and boardpage 
 
 * Basic html pages with SSR will be added in posterior version for those anons that doesn't like javascript.
