@@ -3,7 +3,6 @@
     <div class="doubledash">&gt;&gt;</div>
     <div class="reply">
       <span class="reply-info">
-        <input type="checkbox" :value="data.seq_id" />
         <span class="postername">
           {{ data.name }}
         </span>

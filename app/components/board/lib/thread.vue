@@ -11,7 +11,6 @@
       </a>
       <span class="thread-contents">
         <span class="thread-info">
-          <input type="checkbox" :value="data.id" />
           <span class="title">
             {{ data.title }}
           </span>
