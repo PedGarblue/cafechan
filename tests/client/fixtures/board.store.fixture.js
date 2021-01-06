@@ -1,18 +1,14 @@
-const board = {
-  id: 'some id',
-  max_file_size: '10 MB',
-  allowed_filetypes: ['PNG', 'JPG'],
-  name: 'test',
-  desc: 'Testing',
-};
+import { boardOne } from './board.fixture';
+
 const pagination = {
   actual: 1,
   totalpages: 10,
 };
+
 export default {
   getters: {
     isBoardLoaded: jest.fn(() => false),
-    getBoard: jest.fn(() => board),
+    getBoard: jest.fn(() => boardOne),
     getThreads: jest.fn(() => []),
     getSections: jest.fn(() => []),
     getPagination: jest.fn(() => pagination),

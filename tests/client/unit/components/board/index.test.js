@@ -11,10 +11,19 @@ import createWrapper from '@/tests/client/fixtures/wrapper';
 
 describe('Main component', () => {
   let localVue;
+  let options;
 
   beforeEach(() => {
     localVue = createLocalVue();
     localVue.use(Vuex);
+    options = {
+      store: new Vuex.Store(storeMock),
+      mocks: {
+        $route: {
+          params: {},
+        },
+      },
+    };
   });
 
   afterEach(() => {
@@ -23,7 +32,7 @@ describe('Main component', () => {
 
   describe('Implementation tests', () => {
     test('Initalizes with correct elements', async () => {
-      const wrapper = createWrapper(Main, localVue, { store: new Vuex.Store(storeMock) });
+      const wrapper = createWrapper(Main, localVue, options);
       const navbars = wrapper.findAllComponents(Navbar);
       const pageBody = wrapper.findAllComponents({ ref: 'page-body' });
       const footer = wrapper.findAllComponents(Footer);
@@ -35,13 +44,11 @@ describe('Main component', () => {
     });
 
     test('should use the route params "boardname" and "page" to default state properties', async () => {
-      const $route = {
-        params: {
-          boardname: 'test',
-          page: '1',
-        },
+      options.mocks.$route.params = {
+        boardname: 'test',
+        page: '1',
       };
-      const wrapper = createWrapper(Main, localVue, { store: new Vuex.Store(storeMock), mocks: { $route } });
+      const wrapper = createWrapper(Main, localVue, options);
 
       expect(wrapper.vm.boardname).toEqual('test');
       expect(wrapper.vm.page).toEqual('1');
@@ -50,14 +57,14 @@ describe('Main component', () => {
 
   describe('Behavorial tests', () => {
     test('should call BOARD_REQUEST correctly when mounted', async () => {
-      const data = function() {
+      options.data = function() {
         return {
           boardname: 'test',
           page: '1',
         };
       };
       storeMock.actions.BOARD_REQUEST.mockResolvedValue({ board: {}, page: {}, sections: [], threads: [] });
-      createWrapper(Main, localVue, { data, store: new Vuex.Store(storeMock) });
+      createWrapper(Main, localVue, options);
       const requestCalls = storeMock.actions.BOARD_REQUEST.mock.calls;
 
       expect(requestCalls).toHaveLength(1);
@@ -66,9 +73,11 @@ describe('Main component', () => {
     });
 
     test('should call BOARD_REQUEST when route changes', async () => {
+      delete options.mocks.$route;
       const router = new VueRouter({ routes: [{ path: '/:boardname/:page' }] });
+      options.router = router;
       localVue.use(VueRouter);
-      const wrapper = createWrapper(Main, localVue, { router, store: new Vuex.Store(storeMock), mocks: {} });
+      const wrapper = createWrapper(Main, localVue, options);
 
       router.push('/test/1');
       await wrapper.vm.$nextTick();
@@ -80,14 +89,16 @@ describe('Main component', () => {
 
     test('should show board header and board view when isBoardLoaded is true', async () => {
       storeMock.getters.isBoardLoaded = () => true;
-      const wrapper = createWrapper(Main, localVue, { store: new Vuex.Store(storeMock) });
+      options.store = new Vuex.Store(storeMock);
+      const wrapper = createWrapper(Main, localVue, options);
       const boardHeader = wrapper.find('.board-header');
       expect(boardHeader.exists()).toBeTruthy();
     });
 
     test('should show Loading component when isBoardLoaded is false', async () => {
       storeMock.getters.isBoardLoaded = () => false;
-      const wrapper = createWrapper(Main, localVue, { store: new Vuex.Store(storeMock) });
+      options.store = new Vuex.Store(storeMock);
+      const wrapper = createWrapper(Main, localVue, options);
       const loading = wrapper.findAllComponents(Loading);
       expect(loading).toHaveLength(1);
       expect(loading.at(0).exists()).toBeTruthy();
