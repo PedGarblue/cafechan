@@ -68,4 +68,7 @@ export default {
 .reply-info * {
   margin: 0 0.2em;
 }
+.post-message {
+  word-wrap: anywhere;
+}
 </style>

@@ -31,8 +31,7 @@
           </td>
         </tr>
         <tr>
-          <td class="block">Archivo</td>
-          <td>
+          <td colspan="2">
             <input ref="postfile" type="file" class="input__file" name="postfile" @change="handleFileUpload" />
           </td>
         </tr>
@@ -208,13 +207,22 @@ table {
   background-color: #ffffff;
 }
 .input__message {
-  min-width: 23.6rem;
+  width: 99%;
 }
 .input__title {
   padding: 0.6em 0.1em;
 }
+.input__file {
+  width: 100%;
+}
 .upload-info {
   text-align: center;
   font-size: 0.9em;
+}
+
+@media screen and (max-width: 720px) {
+  .block-floating {
+    left: auto;
+  }
 }
 </style>

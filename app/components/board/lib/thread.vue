@@ -1,32 +1,22 @@
 <template>
   <div class="thread">
-    <div class="thread-body" :class="{ 'open-file': openFile }">
-      <a v-if="data.file" class="post-file" @click="toggleFile">
-        <span v-if="!openFile">
-          <img :src="data.file.thumbnailUrl" />
-        </span>
-        <span v-else>
-          <img :src="data.file.url" />
-        </span>
-      </a>
+    <div class="thread-body">
       <span class="thread-contents">
+        <a v-if="data.file" class="post-file" :class="{ 'open-file': openFile }" @click="toggleFile">
+          <span v-if="!openFile"> <img :src="data.file.thumbnailUrl" /> </span>
+          <span v-else> <img :src="data.file.url" /> </span>
+        </a>
         <span class="thread-info">
-          <span class="title">
-            {{ data.title }}
-          </span>
-          <span class="postername">
-            {{ data.name }}
-          </span>
-          <span class="timestamp">
-            {{ data.timestamp }}
-          </span>
+          <span class="postername"> {{ data.name }} </span>
+          <span class="timestamp"> {{ data.timestamp }} </span>
           <span class="reflink">
             <a @click.prevent="setReply">#{{ data.seq_id }}</a>
           </span>
           <span class="response-btn">
-            <router-link :to="`/${getBoard.name}/thread/${data.seq_id}/`">Responder</router-link>
+            <router-link :to="`/${getBoard.name}/thread/${data.seq_id}/`">Ir al Hilo</router-link>
           </span>
         </span>
+        <span class="title"> {{ data.title }} </span>
         <blockquote class="post-message" v-html="data.message"></blockquote>
       </span>
     </div>
@@ -95,6 +85,10 @@ export default {
   margin: 0 0.2em;
 }
 
+.thread-info *:first-child {
+  margin-left: 0;
+}
+
 .reflink * {
   margin: 0 0.3em 0 0;
 }
@@ -105,18 +99,28 @@ export default {
 
 .thread-body {
   display: flex;
-}
-
-.thread-body.open-file {
   flex-direction: column;
 }
+.post-file {
+  padding: 0 1rem 0 0.2rem;
+  float: left;
+}
+.open-file {
+  float: none;
+}
 
-blockquote {
-  word-wrap: break-word;
+.post-message {
+  word-wrap: anywhere;
   white-space: pre-line;
 }
 
 .replies {
   margin-top: 2rem;
+}
+
+@media screen and (max-width: 720px) {
+  .post-file {
+    float: none;
+  }
 }
 </style>
