@@ -30,7 +30,7 @@ body {
   background: #ffffee;
   color: #800000;
   margin: 0 auto;
-  max-width: 1000px;
+  margin: 0 15%;
   font-size: 14px;
 }
 .site-name {
@@ -168,25 +168,6 @@ h3 {
   font-weight: bold;
 }
 
-/* Nombre de archivo en el panel de reportas y posts recientes */
-.modnamefile {
-  padding-top: 4px;
-  opacity: 0.7;
-  font-size: 85%;
-}
-
-.navbar-mobile {
-  background: #bd0003;
-  color: #fff9c4;
-}
-
-.divboardphp {
-  font-family: sans-serif;
-  font-size: 140%;
-  line-height: 130%;
-  padding-top: 10px;
-}
-
 .filetitle {
   background: inherit;
   color: #a60000;
@@ -300,7 +281,6 @@ h3 {
 }
 
 .boards-footer {
-  max-width: 969px;
   border-radius: 4px;
   padding: 12px;
   border: 1px solid #ddbeab;
@@ -342,4 +322,29 @@ h3 {
 .board-name {
   font-size: 85%;
   opacity: 0.8;
+}
+
+@media screen and (max-width: 1000px) {
+  body {
+    margin: 0 8%;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  body {
+    margin: 0 2%;
+  }
+
+  .boards-body {
+    flex-direction: column-reverse;
+  }
+
+  .sections {
+    flex-direction: column;
+    padding-left: 0;
+  }
+
+  .section {
+    margin: 0.2em 0;
+  }
 }
