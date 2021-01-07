@@ -335,6 +335,10 @@ h3 {
     margin: 0 2%;
   }
 
+  .logo-container {
+    font-size: 0.7rem;
+  }
+
   .boards-body {
     flex-direction: column-reverse;
   }
