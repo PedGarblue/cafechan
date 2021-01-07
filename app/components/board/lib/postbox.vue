@@ -223,6 +223,8 @@ table {
 @media screen and (max-width: 720px) {
   .block-floating {
     left: auto;
+    width: 95%;
+    top: 5%;
   }
 }
 </style>
