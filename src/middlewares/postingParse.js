@@ -10,7 +10,7 @@ const parseGreentext = post =>
     const regex = /^(&gt;).+\r?\n?/gm;
     const _post = post;
     _post.message = post.message.replace(regex, match => {
-      const textFiltered = match.replace(/\r\n$/gm, '');
+      const textFiltered = match.replace(/\r?\n$/gm, '');
       return `<span class="greentext">${textFiltered}</span>\r\n`;
     });
     resolve(_post);
@@ -21,7 +21,7 @@ const parseRedtext = post =>
     const regex = /^(&lt;).+\r?\n?/gm;
     const _post = post;
     _post.message = post.message.replace(regex, match => {
-      const textFiltered = match.replace(/\r\n$/gm, '');
+      const textFiltered = match.replace(/\r?\n$/gm, '');
       return `<span class="redtext">${textFiltered}</span>\r\n`;
     });
     resolve(_post);

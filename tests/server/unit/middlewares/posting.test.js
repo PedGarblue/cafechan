@@ -138,8 +138,15 @@ describe('Post Parsing middleware', () => {
     const req = httpMocks.createRequest();
     const res = httpMocks.createResponse();
     const next = jest.fn();
-
+    // CRLF end of line
     post.message = '>test\r\n';
+    req.body = post;
+
+    await expect(PostParsing(req, res, next)).resolves.toBeUndefined();
+    expect(req.body.message).toMatch('<span class="greentext">&gt;test</span>\r\n');
+
+    // LF end of line
+    post.message = '>test\n';
     req.body = post;
 
     await expect(PostParsing(req, res, next)).resolves.toBeUndefined();
@@ -150,8 +157,15 @@ describe('Post Parsing middleware', () => {
     const req = httpMocks.createRequest();
     const res = httpMocks.createResponse();
     const next = jest.fn();
-
+    // CRLF end of line
     post.message = '<test\r\n';
+    req.body = post;
+
+    await expect(PostParsing(req, res, next)).resolves.toBeUndefined();
+    expect(req.body.message).toMatch('<span class="redtext">&lt;test</span>\r\n');
+
+    // LF end of line
+    post.message = '<test\n';
     req.body = post;
 
     await expect(PostParsing(req, res, next)).resolves.toBeUndefined();
