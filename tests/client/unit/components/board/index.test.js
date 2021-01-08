@@ -5,6 +5,7 @@ import { createLocalVue } from '@vue/test-utils';
 import Main from '@/app/components/board/index.vue';
 import Loading from '@/app/components/lib/loading.vue';
 import Navbar from '@/app/components/board/lib/navbar.vue';
+import NavbarMobile from '@/app/components/board/lib/navbar-mobile.vue';
 import Footer from '@/app/components/board/lib/footer.vue';
 import storeMock from '@/tests/client/fixtures/board.store.fixture';
 import createWrapper from '@/tests/client/fixtures/wrapper';
@@ -34,9 +35,12 @@ describe('Main component', () => {
     test('Initalizes with correct elements', async () => {
       const wrapper = createWrapper(Main, localVue, options);
       const navbars = wrapper.findAllComponents(Navbar);
+      const navbarMobile = wrapper.findComponent(NavbarMobile);
       const pageBody = wrapper.findAllComponents({ ref: 'page-body' });
       const footer = wrapper.findAllComponents(Footer);
+
       expect(navbars).toHaveLength(2);
+      expect(navbarMobile.exists()).toBeTruthy();
       expect(pageBody).toHaveLength(1);
       expect(pageBody.at(0).exists()).toBeTruthy();
       expect(footer).toHaveLength(1);

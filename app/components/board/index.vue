@@ -1,7 +1,8 @@
 <template>
   <div>
     <Navbar :sections="getSections" />
-    <div v-if="isBoardLoaded" ref="page-body">
+    <NavbarMobile :sections="getSections" :actual="boardname" />
+    <div v-if="isBoardLoaded" ref="page-body" class="page-body">
       <div class="board-header">
         <h1>{{ boardTitle }}</h1>
       </div>
@@ -21,11 +22,13 @@ import { mapGetters, mapActions } from 'vuex';
 import { BOARD_REQUEST } from '@/app/store/actions/board';
 import Loading from '@/app/components/lib/loading';
 import Navbar from './lib/navbar';
+import NavbarMobile from './lib/navbar-mobile';
 import Footer from './lib/footer';
 
 export default {
   components: {
     Navbar,
+    NavbarMobile,
     Footer,
     Loading,
   },
@@ -58,6 +61,9 @@ export default {
 </script>
 
 <style scoped>
+.page-body {
+  padding: 0 0.6rem;
+}
 .board-header {
   text-align: center;
   margin: 3rem 0;

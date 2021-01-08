@@ -55,7 +55,6 @@ describe('Thread component', () => {
 
   test('toggles file thumbnail correctly', async () => {
     let file;
-    let threadBody;
     options.propsData.data.file = {
       thumbnailUrl: 'http://localhost:3000/some-thumb-url',
       url: 'http://localhost:3000/some-url',
@@ -65,19 +64,17 @@ describe('Thread component', () => {
     expect(wrapper.vm.openFile).toBeFalsy();
 
     await fileContainer.trigger('click');
-    threadBody = wrapper.find('.thread-body');
     file = wrapper.find('img');
 
     expect(wrapper.vm.openFile).toBeTruthy();
-    expect(threadBody.classes()).toContain('open-file');
+    expect(fileContainer.classes()).toContain('open-file');
     expect(file.element.src).toEqual('http://localhost:3000/some-url');
 
     await fileContainer.trigger('click');
-    threadBody = wrapper.find('.thread-body');
     file = wrapper.find('img');
 
     expect(wrapper.vm.openFile).toBeFalsy();
-    expect(threadBody.classes()).not.toContain('open-file');
+    expect(fileContainer.classes()).not.toContain('open-file');
     expect(file.element.src).toEqual('http://localhost:3000/some-thumb-url');
   });
 

@@ -48,4 +48,9 @@ export default {
   color: var(--text-color);
   background-color: var(--primary-lighter-color);
 }
+@media screen and (max-width: 720px) {
+  .navbar {
+    display: none;
+  }
+}
 </style>
