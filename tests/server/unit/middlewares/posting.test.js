@@ -122,16 +122,28 @@ describe('Post Parsing middleware', () => {
     };
   });
 
+  test('converts to htmlentities "<" and ">"', async () => {
+    const req = httpMocks.createRequest();
+    const res = httpMocks.createResponse();
+    const next = jest.fn();
+
+    post.message = 'test <div>';
+    req.body = post;
+
+    await expect(PostParsing(req, res, next)).resolves.toBeUndefined();
+    expect(req.body.message).toMatch('test &lt;div&gt;');
+  });
+
   test('should add <span> with green text color to every line that stars with ">"', async () => {
     const req = httpMocks.createRequest();
     const res = httpMocks.createResponse();
     const next = jest.fn();
 
-    post.message = '>test';
+    post.message = '>test\r\n';
     req.body = post;
 
     await expect(PostParsing(req, res, next)).resolves.toBeUndefined();
-    expect(req.body.message).toMatch('<span class="greentext">>test</span>');
+    expect(req.body.message).toMatch('<span class="greentext">&gt;test</span>\r\n');
   });
 
   test('should add <span> with red text color to every line that stars with "<"', async () => {
@@ -139,10 +151,10 @@ describe('Post Parsing middleware', () => {
     const res = httpMocks.createResponse();
     const next = jest.fn();
 
-    post.message = '<test';
+    post.message = '<test\r\n';
     req.body = post;
 
     await expect(PostParsing(req, res, next)).resolves.toBeUndefined();
-    expect(req.body.message).toMatch('<span class="redtext">&lt;test</span>');
+    expect(req.body.message).toMatch('<span class="redtext">&lt;test</span>\r\n');
   });
 });
