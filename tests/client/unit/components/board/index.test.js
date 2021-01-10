@@ -4,6 +4,7 @@ import { createLocalVue } from '@vue/test-utils';
 
 import Main from '@/app/components/board/index.vue';
 import Loading from '@/app/components/lib/loading.vue';
+import Error from '@/app/components/lib/404.vue';
 import Navbar from '@/app/components/board/lib/navbar.vue';
 import NavbarMobile from '@/app/components/board/lib/navbar-mobile.vue';
 import Footer from '@/app/components/board/lib/footer.vue';
@@ -91,6 +92,21 @@ describe('Main component', () => {
       expect(storeMock.actions.BOARD_REQUEST).nthCalledWith(2, expect.anything(), { boardname: 'test', page: '1' });
     });
 
+    test('should show error component where hasBoardError is true', async () => {
+      storeMock.getters.hasBoardError.mockReturnValue(true);
+      options.data = function() {
+        return {
+          errorMsg: 'some error',
+        };
+      };
+      const wrapper = await createWrapper(Main, localVue, options);
+
+      const error = wrapper.findComponent(Error);
+      expect(wrapper.vm.errorMsg).toEqual('some error');
+      expect(error.exists()).toBeTruthy();
+      expect(error.vm.message).toEqual('some error');
+    });
+
     test('should show board header and board view when isBoardLoaded is true', async () => {
       storeMock.getters.isBoardLoaded = () => true;
       options.store = new Vuex.Store(storeMock);
@@ -101,6 +117,7 @@ describe('Main component', () => {
 
     test('should show Loading component when isBoardLoaded is false', async () => {
       storeMock.getters.isBoardLoaded = () => false;
+      storeMock.getters.hasBoardError = () => false;
       options.store = new Vuex.Store(storeMock);
       const wrapper = createWrapper(Main, localVue, options);
       const loading = wrapper.findAllComponents(Loading);

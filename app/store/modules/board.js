@@ -16,6 +16,7 @@ const getters = {
   getThreads: state => state.threads,
   getPagination: state => state.page,
   isBoardLoaded: state => !!state.board.id && state.status === 'SUCCESS',
+  hasBoardError: state => state.status === 'ERROR',
 };
 
 const actions = {

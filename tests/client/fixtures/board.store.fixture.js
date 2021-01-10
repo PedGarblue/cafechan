@@ -12,6 +12,7 @@ export default {
     getThreads: jest.fn(() => []),
     getSections: jest.fn(() => []),
     getPagination: jest.fn(() => pagination),
+    hasBoardError: jest.fn(() => false),
   },
   actions: {
     BOARD_REQUEST: jest.fn(),
