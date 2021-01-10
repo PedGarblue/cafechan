@@ -14,12 +14,17 @@
       @close-quick-reply="unsetQuickReply"
     />
     <div class="threads">
-      <Thread :data="thread" @set-reply="setQuickReply"/>
+      <Thread :data="thread" @set-reply="setQuickReply" />
     </div>
     <div class="buttons">
       <button v-if="isLoaded" class="button update-button" @click="getThread">Actualizar</button>
       <button v-else-if="isLoading" class="button update-button">...</button>
       <button v-else-if="error" class="button update-button">Error!</button>
+    </div>
+  </div>
+  <div v-else-if="isThreadLoading">
+    <div class="full-center">
+      <Loading />
     </div>
   </div>
 </template>
@@ -28,6 +33,7 @@
 import { mapGetters } from 'vuex';
 
 import { getThread } from '@/app/requests/post';
+import Loading from '@/app/components/lib/loading';
 import Thread from '../lib/thread';
 import PostBox from '../lib/postbox';
 
@@ -39,6 +45,7 @@ export default {
   components: {
     PostBox,
     Thread,
+    Loading,
   },
   data() {
     return {
@@ -56,6 +63,9 @@ export default {
     ...mapGetters(['getBoard']),
     isThreadLoaded() {
       return !!this.thread.id;
+    },
+    isThreadLoading() {
+      return !this.thread.id && this.status === REQUEST;
     },
     replyingToThreadTitle() {
       return `Estas en el hilo ${this.thread.seq_id} de /${this.getBoard.name}/`;
@@ -115,5 +125,10 @@ export default {
 }
 .button:hover {
   background-color: var(--primary-lighter-color);
+}
+.full-center {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
 }
 </style>
