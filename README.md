@@ -2,11 +2,11 @@
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-A imageboard engine, just that.
+A imageboard engine with modern things, just that.
 
 Uses Node and Express for the API, Pug for rendering pages and Vue for the panel.
 
-This proyect still unstable for now, there are some bugs and shitcode that needs to be fixed.
+This proyect stills unstable for production, there are some bugs and ~~shit~~code to be fixed.
 
 ### Installation
 
@@ -75,17 +75,3 @@ yarn test:watch
 # run test coverage
 yarn coverage
 ```
-
-## TO DOs
-
-I have already done a lot of changes that i not going to list here. These are the pending changes for version v0.1.0:
-
-- [x] Add quick reply
-- ~~[ ] Add Assets to a compressed file (or find some way that fonts and images don't get corrupted when downloaded/uploaded it)~~
-  * solved deleting .gitattributes, git was forcing CRLF which corrupts images and fonts when you push it to github
-- [x] Add more unit tests and integration tests in client app
-- [x] Migrate boardpages to Vue
-- ~~[ ] Add flags and limit posting by geolocalization in regional boards~~
-  * will be added in a posterior version
-- [ ] Add responsivity in frontpage and boardpage.
-* Basic html pages with SSR will be added in posterior version for those anons that doesn't like javascript.
