@@ -1,6 +1,8 @@
 const faker = require('faker');
 const { omit } = require('lodash');
-const { Reply, Board } = require('../../../../src/models');
+
+const { encrypt } = require('@/src/utils/crypt');
+const { Reply, Board } = require('@/src/models');
 const setupTestDB = require('../../utils/setupTestDB');
 const boardFixture = require('../../fixtures/board.fixture');
 const postFixture = require('../../fixtures/post.fixture');
@@ -24,9 +26,8 @@ describe('Reply Model', () => {
     newReply = {
       board: boardFixture.boardOne._id,
       thread: postFixture.threadOne._id,
-      ip: faker.internet.ip(),
+      ip: encrypt(faker.internet.ip()),
       timestamp: Date.now() / 1000,
-      password: 'asd123dsa',
     };
   });
 
@@ -46,8 +47,10 @@ describe('Reply Model', () => {
       expect(new Reply(newReply).toJSON()).not.toHaveProperty('password');
     });
 
-    test('should not return ip when toJSON is called', () => {
-      expect(new Reply(newReply).toJSON()).not.toHaveProperty('ip');
+    test('should return ip hash when toJSON is called', () => {
+      const reply = new Reply(newReply).toJSON();
+      expect(reply).toBeDefined();
+      expect(reply.ip).toEqual(newReply.ip.content);
     });
   });
 });

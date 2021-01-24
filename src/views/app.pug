@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title 
+      = `${_siteName} - Imageboard`
+    link(rel="stylesheet", href="/css/icons.css")
+    link(rel="stylesheet", href="/css/cafechan.css")
+    link(rel="stylesheet", href="/css/img_global.css")
+  body
+    div#app
+      router-view
+    script(src=`/bundles/shared.bundle${env === 'development'?'.dev':''}.js`)
+    script(src=`/bundles/chan.bundle${env === 'development'?'.dev':''}.js`)

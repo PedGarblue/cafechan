@@ -1,12 +1,12 @@
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
-import request from '../../request';
+import request from '@/app/request';
 import { USER_REQUEST, USER_ERROR, USER_SUCCESS, USER_LOGOUT } from '../actions/user';
 import { AUTH_LOGOUT } from '../actions/auth';
 
 const state = {
   status: '',
-  profile: {},
+  profile: JSON.parse(sessionStorage.getItem('user')) || {},
   hasLoadedOnce: false,
 };
 
@@ -17,22 +17,22 @@ const getters = {
 };
 
 const actions = {
-  [USER_REQUEST]: ({ state, commit, dispatch }, user = state.profile) => {
+  [USER_REQUEST]: ({ getters, commit, dispatch }, user = state.profile) => {
     commit(USER_REQUEST);
 
     return new Promise((resolve, reject) => {
-      const tokens = JSON.parse(localStorage.getItem('user-token'));
-      const accessToken = tokens.access.token;
+      const accessToken = getters.accessToken.token;
       const userid = user.id || localStorage.getItem('user');
 
-      request({ url: `/user/${userid}`, method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
+      request({ url: `/api/user/${userid}`, method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
         .then(user => {
           localStorage.setItem('user', user.id);
+          sessionStorage.setItem('user', JSON.stringify(user));
           commit(USER_SUCCESS, user);
           resolve(user);
         })
         .catch(err => {
-          localStorage.removeItem('user');
+          commit(USER_LOGOUT);
           commit(USER_ERROR);
           dispatch(AUTH_LOGOUT);
           reject(err);
@@ -41,6 +41,7 @@ const actions = {
   },
   [USER_LOGOUT]: ({ commit }) => {
     localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
     commit(USER_LOGOUT);
   },
 };

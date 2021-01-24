@@ -11,16 +11,17 @@ const onSuccess = function(response) {
 };
 
 const onError = function(error) {
+  const { response } = error;
   console.error('Request Failed:', error.config);
-  if (error.response) {
-    console.error('Status:', error.response.status);
-    console.error('Data:', error.response.data);
-    console.error('Headers:', error.response.headers);
+  if (response) {
+    console.error('Status:', response.status);
+    console.error('Data:', response.data);
+    console.error('Headers:', response.headers);
   } else {
     console.error('Error Message:', error.message);
   }
 
-  return Promise.reject(error.response || error.message);
+  return Promise.reject(response ? response.data : error);
 };
 
 const request = options => {

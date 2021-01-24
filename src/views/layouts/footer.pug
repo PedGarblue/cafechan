@@ -1,10 +1,9 @@
 div.footer
     include navbar.pug
     div.footer-desc 
-        | Si eres menor de 18 años, abandona Hispachan. Todas las marcas y copyrights en esta página son propiedad de sus respectivos autores. 
-        | <br>Las opiniones publicadas en Hispachan no tienen por qué reflejar las opiniones de la administración. Hispachan está dirigido a personas habituadas al humor y la ironía. Nada de lo escrito en este sitio debe ser tomado en serio.
+      include ./disclaimer.pug
     div.copyright
         a(href=`/contacto`) Contacto
         |  | 
-        a(href=`/`) Cacochan.org 
-        | &copy; 2020
+        a(href=`/`)= _siteName 
+        | &nbsp;&copy; 2020

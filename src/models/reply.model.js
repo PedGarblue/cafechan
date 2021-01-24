@@ -1,4 +1,3 @@
-const { omit } = require('lodash');
 const { Schema, SchemaTypes } = require('mongoose');
 const Post = require('./post.model');
 
@@ -17,8 +16,9 @@ const replySchema = new Schema(
 );
 
 replySchema.methods.toJSON = function() {
-  const post = this;
-  return omit(post.toObject({ virtuals: true }), ['ip', 'password']);
+  const post = this.toObject({ virtuals: true });
+  post.ip = this.ip.content;
+  return post;
 };
 
 const Reply = Post.discriminator('Reply', replySchema);

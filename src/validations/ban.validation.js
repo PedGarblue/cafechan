@@ -19,9 +19,7 @@ const deleteBan = {
 
 const addBan = {
   body: Joi.object().keys({
-    ip: Joi.string()
-      .ip()
-      .required(),
+    ip: Joi.alternatives().try(Joi.string().ip(), Joi.string().pattern(/^[a-z0-9]{32}$/m)),
     post: Joi.string().custom(objectId),
     reason: Joi.string()
       .valid(...banReasons)

@@ -1,12 +1,21 @@
-const { ObjectId } = require('mongoose').Types;
+import ObjectId from '@/tests/client/utils/objectid';
+
 const faker = require('faker');
-const { formatTimestamp } = require('../../../src/utils/date.util');
+
+const { formatTimestamp } = require('@/src/utils/date.util');
 const { boardOne } = require('./board.fixture');
+
+const id = {
+  one: ObjectId(),
+  two: ObjectId(),
+  three: ObjectId(),
+  four: ObjectId(),
+};
 
 export const threadOne = {
   __v: 0,
-  _id: ObjectId().toHexString(),
-  id: ObjectId().toHexString(),
+  _id: id.one,
+  id: id.one,
   board: boardOne._id,
   created_at: Date.now() - 20000,
   timestamp: formatTimestamp(Date.now() - 20000),
@@ -20,8 +29,8 @@ export const threadOne = {
 
 export const threadTwo = {
   __v: 0,
-  _id: ObjectId().toHexString(),
-  id: ObjectId().toHexString(),
+  _id: id.two,
+  id: id.two,
   board: boardOne._id,
   created_at: Date.now() - 10000,
   timestamp: formatTimestamp(Date.now() - 10000),
@@ -35,8 +44,8 @@ export const threadTwo = {
 
 export const replyOne = {
   __v: 0,
-  _id: ObjectId().toHexString(),
-  id: ObjectId().toHexString(),
+  _id: id.three,
+  id: id.three,
   board: boardOne._id,
   thread: threadOne.id,
   timestamp: formatTimestamp(Date.now() - 9000),
@@ -50,8 +59,8 @@ export const replyOne = {
 
 export const replyTwo = {
   __v: 0,
-  _id: ObjectId().toHexString(),
-  id: ObjectId().toHexString(),
+  _id: id.four,
+  id: id.four,
   board: boardOne._id,
   thread: threadOne.id,
   timestamp: formatTimestamp(Date.now() - 7000),

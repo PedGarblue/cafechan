@@ -1,8 +1,9 @@
 const faker = require('faker');
 const { ObjectId } = require('mongoose').Types;
-const { escape } = require('lodash');
-const { Post } = require('../../../../src/models');
-const appConfig = require('../../../../src/config.json');
+
+const { encrypt } = require('@/src/utils/crypt');
+const { Post } = require('@/src/models');
+const appConfig = require('@/src/config.json');
 const setupTestDB = require('../../utils/setupTestDB');
 const postFixtures = require('../../fixtures/post.fixture');
 const boardFixtures = require('../../fixtures/board.fixture');
@@ -17,7 +18,7 @@ describe('Post model', () => {
       newPost = {
         board: boardFixtures.boardOne._id,
         thread: postFixtures.threadOne._id,
-        ip: faker.internet.ip(),
+        ip: encrypt(faker.internet.ip()),
         timestamp: Date.now() / 1000,
       };
     });
@@ -62,36 +63,18 @@ describe('Post model', () => {
     const newPost = {
       board: ObjectId(),
       thread: ObjectId(),
-      ip: faker.internet.ip(),
+      ip: encrypt(faker.internet.ip()),
       timestamp: Date.now() / 1000,
-      password: 'A232dksa2',
     };
 
     test('should not return post password when toJSON is called', () => {
       expect(new Post(newPost).toJSON()).not.toHaveProperty('password');
     });
 
-    test('should not return ip when toJSON is called', () => {
-      expect(new Post(newPost).toJSON()).not.toHaveProperty('ip');
-    });
-  });
-
-  describe('Post transform()', () => {
-    const newPost = {
-      board: ObjectId(),
-      thread: ObjectId(),
-      ip: faker.internet.ip(),
-      timestamp: Date.now() / 1000,
-      password: 'A232dksa2',
-    };
-
-    test('should unescape message when tranform is called', async () => {
-      let isUnescaped = false;
-      const unescapedStr = '</tag>';
-      const post = new Post(newPost);
-      post.message = escape(unescapedStr);
-      isUnescaped = unescapedStr.localeCompare(post.transform().message) === 0;
-      expect(isUnescaped).toBeTruthy();
+    test('should return only the ip hash when toJSON is called', () => {
+      const post = new Post(newPost).toJSON();
+      expect(post).toBeDefined();
+      expect(post.ip).toEqual(newPost.ip.content);
     });
   });
 });

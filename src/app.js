@@ -8,6 +8,7 @@ const passport = require('passport');
 const httpStatus = require('http-status');
 const path = require('path');
 const forceTrailingSlash = require('express-slash');
+const fileupload = require('express-fileupload');
 const serveStatic = require('serve-static');
 const cookieParser = require('cookie-parser');
 const config = require('./config/envConfig');
@@ -22,6 +23,8 @@ const app = express();
 
 // express global variables
 app.locals.env = config.env;
+app.locals._siteName = config.site_name;
+app.locals._siteUrl = config.site_url;
 
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
@@ -61,6 +64,13 @@ app.use(serveStatic(path.join(__dirname, '../public')));
 if (config.env === 'production') {
   app.use('/auth', authLimiter);
 }
+
+// enable fileuploading
+app.use(
+  fileupload({
+    createParentPath: true,
+  })
+);
 
 // allow trust proxy only for testing
 if (config.env === 'test') {

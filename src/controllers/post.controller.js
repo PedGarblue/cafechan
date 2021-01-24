@@ -1,7 +1,7 @@
 const { pick } = require('lodash');
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { postService, boardService, boardpageService, cacheService } = require('../services');
+const { uploadService, postService, boardService, boardpageService, cacheService } = require('../services');
 
 const getPosts = catchAsync(async (req, res) => {
   const posts = await postService.getPosts(req.query);
@@ -19,7 +19,7 @@ const getBoardPage = catchAsync(async (req, res) => {
   };
   res.status(httpStatus.OK).format({
     html: async () => {
-      res.render('boardpage', await boardpageService.getBoardPage(board, query));
+      res.render('app');
     },
     json: async () => {
       res.json(await boardpageService.getBoardPage(board, query));
@@ -37,8 +37,7 @@ const getThread = catchAsync(async (req, res) => {
 
   res.status(httpStatus.OK).format({
     html: async () => {
-      const data = await boardpageService.getThreadPage(board, thread);
-      res.render('thread', data);
+      res.render('app');
     },
     json: async () => {
       res.json(await boardpageService.getThreadPage(board, thread));
@@ -50,6 +49,7 @@ const getThread = catchAsync(async (req, res) => {
 });
 
 const postThread = catchAsync(async (req, res) => {
+  let fileData;
   const { boardname } = req.params;
   const { board: boardid } = req.body;
   const board = await boardService.getBoardById(boardid);
@@ -57,8 +57,14 @@ const postThread = catchAsync(async (req, res) => {
   const posterData = { ip: req.ip };
   const threadBody = Object.assign(postData, posterData);
 
-  const thread = await postService.createThread(board, threadBody);
+  if (req.files) {
+    fileData = await uploadService.uploadFile(req.files.postfile, {
+      storagePath: `/media/${board.name}`,
+    });
+    threadBody.file = fileData;
+  }
 
+  const thread = await postService.createThread(board, threadBody);
   await cacheService.refreshBoardCache(board);
 
   res.status(httpStatus.CREATED).format({
@@ -82,9 +88,15 @@ const postReply = catchAsync(async (req, res) => {
   const posterData = { ip: req.ip };
   const replyBody = Object.assign(postData, posterData);
   const thread = await postService.getThreadById(threadid);
+  let fileData;
 
+  if (req.files) {
+    fileData = await uploadService.uploadFile(req.files.postfile, {
+      storagePath: `/media/${board.name}`,
+    });
+    replyBody.file = fileData;
+  }
   const reply = await postService.createReply(board, thread, replyBody);
-
   await cacheService.refreshBoardCache(board);
   await cacheService.refreshThreadCache(thread, board);
 

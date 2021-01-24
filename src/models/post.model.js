@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-sequence')(mongoose);
-const { omit, unescape } = require('lodash');
+const { omit } = require('lodash');
+
 const dateUtil = require('../utils/date.util');
 const appConfig = require('../config/appConfig');
 
@@ -32,20 +33,24 @@ const postSchema = new Schema(
     },
     file: {
       name: String,
-      file_md5: String,
-      file_type: String,
-      name_original: String,
-      file_size: Number,
-      file_size_formatted: String,
-      image_w: Number,
-      image_h: Number,
-      thumb_w: Number,
-      thumb_h: Number,
+      mimeType: String,
+      url: String,
+      size: String,
+      thumbnailUrl: String,
     },
     tripcode: String,
     email: String,
     password: String,
-    ip: String,
+    ip: {
+      iv: {
+        type: String,
+        required: true,
+      },
+      content: {
+        type: String,
+        required: true,
+      },
+    },
     created_at: {
       type: Number,
       alias: 'timestamp',
@@ -71,15 +76,15 @@ postSchema.methods.delete = async function() {
 };
 
 postSchema.methods.toJSON = function() {
-  const post = this;
-  return omit(post.toObject(), ['ip', 'password']);
+  const post = this.toObject();
+  post.ip = this.ip.content;
+  return post;
 };
 
 postSchema.methods.transform = function() {
   let post = this;
   post = post.toJSON();
   post.timestamp = dateUtil.formatTimestamp(post.created_at);
-  post.message = unescape(post.message);
   return post;
 };
 

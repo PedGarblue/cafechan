@@ -1,29 +1,23 @@
-const mongoose = require('mongoose');
-const faker = require('faker');
+import ObjectId from '@/tests/client/utils/objectid';
+import faker from 'faker';
 
-const userOne = {
-  _id: mongoose.Types.ObjectId().toHexString(),
+export const userOne = {
+  _id: ObjectId(),
   name: faker.name.findName(),
   email: faker.internet.email().toLowerCase(),
   role: 'guest',
 };
 
-const userTwo = {
-  _id: mongoose.Types.ObjectId().toHexString(),
+export const userTwo = {
+  _id: ObjectId(),
   name: faker.name.findName(),
   email: faker.internet.email().toLowerCase(),
   role: 'guest',
 };
 
-const admin = {
-  _id: mongoose.Types.ObjectId().toHexString(),
+export const admin = {
+  _id: ObjectId(),
   name: faker.name.findName(),
   email: faker.internet.email().toLowerCase(),
   role: 'admin',
-};
-
-module.exports = {
-  userOne,
-  userTwo,
-  admin,
 };

@@ -1,13 +1,11 @@
 /* eslint-disable no-param-reassign */
 const { pick } = require('lodash');
-const bcrypt = require('bcryptjs');
 const httpStatus = require('http-status');
-// const boardService = require('./board.service');
+
+const { encrypt, decrypt } = require('../utils/crypt');
 const { getQueryOptions } = require('../utils/service.util');
 const { Post, Thread, Reply } = require('../models');
 const AppError = require('../utils/AppError');
-const postValidate = require('../utils/postValidation');
-// const Logger = require('../config/logger');
 
 const getPosts = async query => {
   const filter = pick(query, ['board', 'kind', 'stickied', 'locked']);
@@ -48,15 +46,10 @@ const getThread = async (board, _id, addReplies = true) => {
 const createThread = async (board, threadBody) => {
   if (board.locked) throw new AppError(httpStatus.FORBIDDEN, 'The board is closed');
   const cryptedData = {
-    ip: await bcrypt.hash(threadBody.ip, 8),
+    ip: pick(encrypt(threadBody.ip), ['iv', 'content']),
     board,
   };
   const thread = new Thread(Object.assign(threadBody, cryptedData));
-  try {
-    (await postValidate.validate(thread)).inPostRatio(60 * 1000).notDuplicated();
-  } catch (error) {
-    throw new AppError(httpStatus.BAD_REQUEST, error.message);
-  }
   await thread.save();
   return thread.transform();
 };
@@ -64,16 +57,11 @@ const createThread = async (board, threadBody) => {
 const createReply = async (board, thread, replyBody) => {
   if (board.locked) throw new AppError(httpStatus.FORBIDDEN, 'The board is closed');
   const parsedData = {
-    ip: await bcrypt.hash(replyBody.ip, 8),
+    ip: pick(encrypt(replyBody.ip), ['iv', 'content']),
     board,
     thread,
   };
   const reply = new Reply(Object.assign(replyBody, parsedData));
-  try {
-    (await postValidate.validate(reply)).inPostRatio(30 * 1000).notDuplicated();
-  } catch (error) {
-    throw new AppError(httpStatus.BAD_REQUEST, error.message);
-  }
   await reply.save();
   thread.lastbump = Date.now();
   await thread.save();
@@ -83,7 +71,8 @@ const createReply = async (board, thread, replyBody) => {
 const deleteThread = async (threadid, ip) => {
   const thread = await Thread.findById(threadid);
   if (!thread) throw new AppError(httpStatus.NOT_FOUND, 'Thread not found');
-  if (!bcrypt.compareSync(ip, thread.ip)) throw new AppError(httpStatus.FORBIDDEN, `No puedes borrar este post`);
+  if (ip !== decrypt(pick(thread.ip, ['iv', 'content'])))
+    throw new AppError(httpStatus.FORBIDDEN, `No puedes borrar este post`);
   await thread.delete();
   return thread;
 };
@@ -91,7 +80,8 @@ const deleteThread = async (threadid, ip) => {
 const deleteReply = async (replyid, ip) => {
   const reply = await Reply.findById(replyid);
   if (!reply) throw new AppError(httpStatus.NOT_FOUND, 'Reply not found');
-  if (!bcrypt.compareSync(ip, reply.ip)) throw new AppError(httpStatus.FORBIDDEN, `No puedes borrar este post`);
+  if (ip !== decrypt(pick(reply.ip, ['iv', 'content'])))
+    throw new AppError(httpStatus.FORBIDDEN, `No puedes borrar este post`);
   await reply.delete();
   return reply;
 };

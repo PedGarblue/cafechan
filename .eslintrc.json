@@ -16,5 +16,17 @@
     "jest/expect-expect": "off",
     "security/detect-object-injection": "off",
     "security/detect-non-literal-fs-filename": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["@", "./"]
+        ],
+        "extensions": [
+          ".js"
+        ]
+      }
+    }
   }
 }

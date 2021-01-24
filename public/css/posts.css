@@ -1,0 +1,48 @@
+.thread {
+    overflow: auto;
+}
+
+.threadinfo, .replyinfo {
+  display: flex;
+}
+
+.threadinfo {
+  margin-left: 0.59em;
+}
+
+.threadinfo *, .replyinfo * {
+    margin: 0 0.2em;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.post-id {
+  cursor: pointer;
+}
+.thumb {
+	border: none;
+	float: left;
+	margin: 2px;
+	margin-left: 1em;
+  margin-right: 1em;
+	margin-bottom: 10px !important;
+	border-radius: 5px;
+	max-height: 250px;
+	position: relative;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+.reply .thumb {
+  margin-right: 0;
+  margin-top: 1em;
+}
+
+.post-message {
+  margin-left: 1em;
+  float: left;
+}
+
+.thread .post-message {
+  float: none;
+}

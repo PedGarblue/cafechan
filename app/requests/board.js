@@ -1,11 +1,9 @@
-import request from '@/request';
-import store from '../store';
+import request from '@/app/request';
 
-export const getBoards = () => {
-  const accessToken = store.getters.accessToken.token;
-
+export const getBoards = accessToken => {
   return new Promise((resolve, reject) => {
-    request({ url: '/board/?sortBy=name:desc', method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
+    if (accessToken === undefined) reject(new Error('Access token is not set'));
+    request({ url: '/api/board/?sortBy=name:desc', method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
       .then(resp => {
         resolve(resp);
       })
@@ -15,11 +13,10 @@ export const getBoards = () => {
   });
 };
 
-export const getBoard = board => {
-  const accessToken = store.getters.accessToken.token;
-
+export const getBoard = (accessToken, board) => {
   return new Promise((resolve, reject) => {
-    request({ url: `/board/${board.id}`, method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
+    if (accessToken === undefined) reject(new Error('Access token is not set'));
+    request({ url: `/api/board/${board.id}`, method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } })
       .then(resp => {
         resolve(resp);
       })
@@ -29,11 +26,10 @@ export const getBoard = board => {
   });
 };
 
-export const createBoard = board => {
-  const accessToken = store.getters.accessToken.token;
-
+export const createBoard = (accessToken, board) => {
   return new Promise((resolve, reject) => {
-    request({ url: `/board/`, method: 'POST', data: board, headers: { Authorization: `Bearer ${accessToken}` } })
+    if (accessToken === undefined) reject(new Error('Access token is not set'));
+    request({ url: `/api/board/`, method: 'POST', data: board, headers: { Authorization: `Bearer ${accessToken}` } })
       .then(resp => {
         resolve(resp);
       })
@@ -43,16 +39,10 @@ export const createBoard = board => {
   });
 };
 
-export const editBoard = board => {
-  const accessToken = store.getters.accessToken.token;
-  const data = {
-    name: board.name,
-    desc: board.desc,
-    section: board.section,
-  };
-
+export const editBoard = (accessToken, id, data) => {
   return new Promise((resolve, reject) => {
-    request({ url: `/board/${board.id}`, method: 'PATCH', data, headers: { Authorization: `Bearer ${accessToken}` } })
+    if (accessToken === undefined) reject(new Error('Access token is not set'));
+    request({ url: `/api/board/${id}`, method: 'PATCH', data, headers: { Authorization: `Bearer ${accessToken}` } })
       .then(resp => {
         resolve(resp);
       })
@@ -62,11 +52,10 @@ export const editBoard = board => {
   });
 };
 
-export const deleteBoard = board => {
-  const accessToken = store.getters.accessToken.token;
-
+export const deleteBoard = (accessToken, board) => {
   return new Promise((resolve, reject) => {
-    request({ url: `/board/${board.id}`, method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } })
+    if (accessToken === undefined) reject(new Error('Access token is not set'));
+    request({ url: `/api/board/${board.id}`, method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } })
       .then(resp => {
         resolve(resp);
       })
