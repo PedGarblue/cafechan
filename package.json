@@ -1,7 +1,7 @@
 {
   "name": "cafechan",
   "version": "0.1.0",
-  "description": "An imageboard, just that.",
+  "description": "An imageboard engine build in vue and express",
   "main": "src/index.js",
   "repository": "https://github.com/PedGarblue/cafechan",
   "author": "PedGarblue",
